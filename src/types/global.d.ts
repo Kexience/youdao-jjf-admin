@@ -29,6 +29,20 @@ declare global {
 
   /** 解析后的实际主题（只可能是浅/深） */
   type ResolvedTheme = 'light' | 'dark'
+
+  /** POST /admin/auth/login 入参（见文档 AdminLoginDto） */
+  interface AdminLoginParams {
+    username: string
+    password: string
+  }
+
+  /** 管理员登录成功响应（见文档 AdminLoginVo） */
+  interface AdminLoginResult {
+    /** 管理员 access token */
+    accessToken: string
+    /** 令牌有效期（秒） */
+    expiresIn: number
+  }
 }
 
 export {}

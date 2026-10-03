@@ -1,6 +1,8 @@
 import axios from 'axios'
 import type { AxiosError, AxiosRequestConfig } from 'axios'
 
+import { useAuthStore } from '../stores/auth'
+
 /**
  * 后端统一信封见全局类型 ApiResult（src/types/global.d.ts）：
  * 线上文档（https://dev-1.ydndd.com/v3/api-docs）全接口均为
@@ -25,37 +27,12 @@ export class ApiError extends Error {
   }
 }
 
-const TOKEN_KEY = 'jjf-admin-token'
-
-export function getToken(): string | null {
-  try {
-    return localStorage.getItem(TOKEN_KEY)
-  } catch {
-    return null
-  }
-}
-
-export function setToken(token: string) {
-  try {
-    localStorage.setItem(TOKEN_KEY, token)
-  } catch {
-    // 忽略（如隐私模式）：仅本次会话生效
-  }
-}
-
-export function clearToken() {
-  try {
-    localStorage.removeItem(TOKEN_KEY)
-  } catch {
-    // 忽略
-  }
-}
-
 function resolveBaseURL(): string {
   const fromEnv = import.meta.env.VITE_API_BASE_URL
   if (typeof fromEnv === 'string' && fromEnv.length > 0) return fromEnv
-  // 文档 servers 写的是 http，页面多为 https，默认用 https 避免混合内容被拦截
-  return 'https://dev-1.ydndd.com'
+  // 兜底同源 /api：开发环境经 vite 代理转到 VITE_API_PROXY_TARGET，
+  // 生产构建由部署层把 /api/** 转到后端地址/**；换环境只改 .env
+  return '/api'
 }
 
 /** 全局 axios 实例：业务代码请用下面的 get/post/put/patch/del，不要直接用它 */
@@ -65,7 +42,8 @@ export const request = axios.create({
 })
 
 request.interceptors.request.use((config) => {
-  const token = getToken()
+  // 拦截器在 React 之外，用 getState() 读 token
+  const token = useAuthStore.getState().token
   if (token) {
     config.headers.set('Authorization', `Bearer ${token}`)
   }
@@ -81,7 +59,7 @@ request.interceptors.response.use(
     }
     const status = error.response.status
     if (status === 401) {
-      clearToken()
+      useAuthStore.getState().clearToken()
       if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
         window.location.assign('/login')
       }
