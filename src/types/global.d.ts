@@ -43,6 +43,61 @@ declare global {
     /** 令牌有效期（秒） */
     expiresIn: number
   }
+
+  /** 菜单节点类型（见文档 AdminMenuSaveRequest.menuType）：M 目录 / C 菜单 / A 按钮 */
+  type AdminMenuType = 'M' | 'C' | 'A'
+
+  /** 菜单树节点（见文档 AdminMenuTreeVo） */
+  interface AdminMenuTreeNode {
+    /** 节点 id */
+    id: number
+    /** 父级节点 id，顶级为 0 */
+    pid: number
+    /** 节点名称 */
+    name: string
+    /** 图标 */
+    icon?: string
+    /** 节点类型：M 目录 / C 菜单 / A 按钮 */
+    menuType: AdminMenuType
+    /** 前端路由/组件路径 */
+    component?: string
+    /** 同级排序 */
+    sort: number
+    /** 是否进菜单树 */
+    show: boolean
+    /** 引用的权限码，目录可空 */
+    permissionCode?: string
+    /** 子节点 */
+    children?: AdminMenuTreeNode[]
+  }
+
+  /** 新建/编辑菜单节点入参（见文档 AdminMenuSaveRequest） */
+  interface AdminMenuSaveParams {
+    /** 父级节点 id，顶级为 0 */
+    pid: number
+    /** 节点名称 */
+    name: string
+    /** 节点类型：M 目录 / C 菜单 / A 按钮 */
+    menuType: AdminMenuType
+    /** 图标 */
+    icon?: string
+    /** 前端路由/组件路径 */
+    component?: string
+    /** 同级排序，小值在前 */
+    sort?: number
+    /** 是否进菜单树：1 显示 0 隐藏；为空默认显示 */
+    isShow?: 0 | 1
+    /** 引用的权限码，目录可空 */
+    permissionCode?: string
+  }
+
+  /** 当前管理员可见菜单树与权限码集合（见文档 AdminMenuMineVo） */
+  interface AdminMenuMineResult {
+    /** 可见菜单树 */
+    menus: AdminMenuTreeNode[]
+    /** 当前管理员权限码集合 */
+    codes: string[]
+  }
 }
 
 export {}
