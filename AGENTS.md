@@ -18,6 +18,24 @@
 
 - 若内容过长无法一次读完，可先检索（grep）与当前任务相关的组件章节精读，但**每次会话至少执行一次上述获取动作**，确保知识来自官方最新文档而非过期记忆。
 
+## ⚠️ 线上 API 文档（Swagger / OpenAPI）
+
+**接口的唯一权威来源：https://dev-1.ydndd.com/v3/api-docs**
+
+- 这是线上环境（dev-1）的 **OpenAPI 3.1 规范**（springdoc 生成，标题 `Youdao API`，约 170KB JSON），含全部接口路径、请求/响应 Schema、枚举与认证方式（`bearerAuth` JWT）。
+- **编写任何接口调用代码前，先抓取该文档并检索相关接口**，不要凭记忆猜测 URL、参数名、字段类型或响应结构：
+
+  ```bash
+  curl -s https://dev-1.ydndd.com/v3/api-docs -o /tmp/yd-api-docs.json
+  # 按接口名/路径/模型名检索
+  grep -o '"/[^"]*"' /tmp/yd-api-docs.json | sort -u   # 所有接口路径
+  python3 -m json.tool /tmp/yd-api-docs.json | grep -A5 "门店"
+  ```
+
+- 若需要更可读的界面，可访问 Swagger UI：https://dev-1.ydndd.com/swagger-ui/index.html（如不可用以 `/v3/api-docs` 原文为准）。
+- 字段命名、枚举值、必填项等一律以该文档为准；文档与代码/记忆冲突时，**以文档为准**并在提交信息中说明。
+- 后续若接入 TypeScript 类型生成（如 `openapi-typescript`），从该 URL 生成类型后即可替代手动检索。
+
 ## 项目概述
 
 - 独立 git 子模块（挂载于根仓库 `jjf-fronted` 的 `apps/admin`），远程：`git@github.com:Kexience/youdao-jjf-admin.git`，分支 `main`。
