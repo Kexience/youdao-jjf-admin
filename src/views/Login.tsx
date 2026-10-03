@@ -16,13 +16,10 @@ interface LoginProps {
 
 /**
  * 登录页（演示：未对接接口，提交仅本地提示）
+ * 注意：全局已有 ThemeProvider 内置的 <App>，此处直接用 App.useApp() 即可。
  */
 export function Login({ logo }: LoginProps) {
-  return (
-    <App>
-      <LoginContent logo={logo} />
-    </App>
-  )
+  return <LoginContent logo={logo} />
 }
 
 function LoginContent({ logo }: LoginProps) {
