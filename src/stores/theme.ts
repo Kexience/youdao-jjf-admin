@@ -1,11 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-/** 主题模式：浅色 / 深色 / 跟随系统 */
-export type ThemeMode = 'light' | 'dark' | 'system'
-
-/** 解析后的实际主题（只可能是浅/深） */
-export type ResolvedTheme = 'light' | 'dark'
+// ThemeMode / ResolvedTheme 见全局类型（src/types/global.d.ts）
 
 const STORAGE_KEY = 'jjf-admin-theme'
 

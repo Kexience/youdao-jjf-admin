@@ -3,7 +3,6 @@ import { Link, Outlet, createFileRoute } from '@tanstack/react-router'
 import { Segmented, theme } from 'antd'
 
 import { useThemeStore } from '../stores/theme'
-import type { ThemeMode } from '../stores/theme'
 
 export const Route = createFileRoute('/_main')({
   component: MainLayout,
