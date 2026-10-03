@@ -1,12 +1,14 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components'
-import { App, Alert, Space, theme } from 'antd'
+import { useNavigate } from '@tanstack/react-router'
+import { App, theme } from 'antd'
 import type { ReactNode } from 'react'
 
-/** 登录表单值类型 */
-interface LoginParams {
-  username: string
-  password: string
+import { login } from '../api/auth'
+import { ApiError } from '../lib/request'
+
+/** 登录表单值：全局 AdminLoginParams + 记住我（仅 UI，不影响 token 持久化） */
+type LoginFormValues = AdminLoginParams & {
   autoLogin?: boolean
 }
 
@@ -15,7 +17,7 @@ interface LoginProps {
 }
 
 /**
- * 登录页（演示：未对接接口，提交仅本地提示）
+ * 登录页：调用 POST /admin/auth/login，成功后持久化 token 并跳首页。
  * 注意：全局已有 ThemeProvider 内置的 <App>，此处直接用 App.useApp() 即可。
  */
 export function Login({ logo }: LoginProps) {
@@ -25,11 +27,16 @@ export function Login({ logo }: LoginProps) {
 function LoginContent({ logo }: LoginProps) {
   const { token } = theme.useToken()
   const { message } = App.useApp()
+  const navigate = useNavigate()
 
-  // TODO: 未对接接口，后续在此调用登录 API
-  const onFinish = async (values: LoginParams) => {
-    console.log('登录提交（演示，未对接接口）：', values)
-    message.success('登录成功（演示环境，未对接接口）')
+  const onFinish = async (values: LoginFormValues) => {
+    try {
+      await login({ username: values.username, password: values.password })
+      message.success('登录成功')
+      await navigate({ to: '/' })
+    } catch (error) {
+      message.error(error instanceof ApiError ? error.message : '登录失败，请重试')
+    }
   }
 
   return (
@@ -42,7 +49,7 @@ function LoginContent({ logo }: LoginProps) {
         background: token.colorBgLayout,
       }}
     >
-      <LoginForm<LoginParams>
+      <LoginForm<LoginFormValues>
         logo={
           logo ?? (
             <span
@@ -65,21 +72,7 @@ function LoginContent({ logo }: LoginProps) {
         }
         title="优道管理端"
         subTitle="Youdao JJF Admin Console"
-        message={
-          <Alert
-            type="info"
-            showIcon
-            style={{ marginBottom: 16 }}
-            message="演示环境：账号密码任意填写即可登录"
-          />
-        }
         onFinish={onFinish}
-        actions={
-          <Space>
-            还没有账号？
-            <a>立即注册</a>
-          </Space>
-        }
       >
         <ProFormText
           name="username"
@@ -103,14 +96,12 @@ function LoginContent({ logo }: LoginProps) {
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
             marginBlockEnd: 24,
           }}
         >
           <ProFormCheckbox name="autoLogin" noStyle>
             记住我
           </ProFormCheckbox>
-          <a>忘记密码</a>
         </div>
       </LoginForm>
     </div>
