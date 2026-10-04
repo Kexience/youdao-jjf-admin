@@ -45,6 +45,7 @@ function MainLayout() {
           <Link to="/" activeOptions={{ exact: true }}>
             首页
           </Link>
+          <Link to="/menus">菜单管理</Link>
           <Link to="/about">关于</Link>
           <Link to="/login">登录</Link>
         </nav>

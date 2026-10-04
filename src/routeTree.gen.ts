@@ -13,6 +13,7 @@ import { Route as MainRouteImport } from './routes/_main'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
+import { Route as MainMenusRouteImport } from './routes/_main/menus'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -33,15 +34,22 @@ const MainAboutRoute = MainAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => MainRoute,
 } as any)
+const MainMenusRoute = MainMenusRouteImport.update({
+  id: '/menus',
+  path: '/menus',
+  getParentRoute: () => MainRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
+  '/menus': typeof MainMenusRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
+  '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
 }
 export interface FileRoutesById {
@@ -49,14 +57,21 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteWithChildren
   '/login': typeof LoginRoute
   '/_main/about': typeof MainAboutRoute
+  '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/about'
+  fullPaths: '/' | '/login' | '/about' | '/menus'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/about' | '/'
-  id: '__root__' | '/_main' | '/login' | '/_main/about' | '/_main/'
+  to: '/login' | '/about' | '/menus' | '/'
+  id:
+    | '__root__'
+    | '/_main'
+    | '/login'
+    | '/_main/about'
+    | '/_main/menus'
+    | '/_main/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,16 +109,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainAboutRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/menus': {
+      id: '/_main/menus'
+      path: '/menus'
+      fullPath: '/menus'
+      preLoaderRoute: typeof MainMenusRouteImport
+      parentRoute: typeof MainRoute
+    }
   }
 }
 
 interface MainRouteChildren {
   MainAboutRoute: typeof MainAboutRoute
+  MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
   MainAboutRoute: MainAboutRoute,
+  MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
 }
 
