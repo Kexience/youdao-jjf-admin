@@ -2,9 +2,7 @@ import {
   HomeOutlined,
   LogoutOutlined,
   MoonOutlined,
-  PlusCircleFilled,
   QuestionCircleOutlined,
-  SearchOutlined,
   SettingOutlined,
   SunOutlined,
 } from '@ant-design/icons'
@@ -12,9 +10,9 @@ import type { MenuDataItem } from '@ant-design/pro-components'
 import { ProLayout } from '@ant-design/pro-components'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { Button, Input, Space, Tooltip, theme } from 'antd'
+import { Button, Tooltip } from 'antd'
 import type { ReactNode } from 'react'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import { getMyMenus } from '../api/menus'
 import { useAuthStore } from '../stores/auth'
@@ -52,42 +50,21 @@ function toMenuItems(nodes: AdminMenuTreeNode[]): MenuDataItem[] {
     })
 }
 
-/** 按关键字过滤菜单（命中自身则保留整棵子树，命中后代则保留过滤后的链路） */
-function filterByMenuData(data: MenuDataItem[], keyWord: string): MenuDataItem[] {
-  const word = keyWord.trim()
-  if (!word) return data
-  return data
-    .map((item) => {
-      if (item.name?.includes(word)) {
-        return { ...item }
-      }
-      const children = filterByMenuData(item.children || [], word)
-      if (children.length > 0) {
-        return { ...item, children }
-      }
-      return undefined
-    })
-    .filter((item) => item !== undefined)
-}
-
 interface AdminLayoutProps {
   children: ReactNode
 }
 
 /**
- * 管理端主布局（ProLayout side 模式 + 菜单搜索）：
+ * 管理端主布局（ProLayout side 模式）：
  * - 菜单优先用当前管理员可见树（GET /admin/menus/mine），失败/为空时回退本地路由菜单；
- * - 侧边栏顶部搜索框 + 新建快捷入口（示例中的 menuExtraRender 写法）；
  * - 菜单点击走 TanStack Router 的 Link，头部右侧放主题切换与退出登录。
  */
 export function AdminLayout({ children }: AdminLayoutProps) {
-  const { token } = theme.useToken()
   const navigate = useNavigate()
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const resolved = useResolvedTheme()
   const toggleTheme = useThemeStore((s) => s.toggle)
   const clearToken = useAuthStore((s) => s.clearToken)
-  const [keyWord, setKeyWord] = useState('')
 
   const myMenusQuery = useQuery({
     queryKey: ['admin-my-menus'],
@@ -117,28 +94,6 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         onMenuHeaderClick={() => void navigate({ to: '/' })}
         menu={{ hideMenuWhenCollapsed: true }}
         menuDataRender={() => menuData}
-        postMenuData={(menus) => filterByMenuData(menus || [], keyWord)}
-        menuExtraRender={({ collapsed }) =>
-          !collapsed && (
-            <Space align="center" style={{ marginBlockStart: 16, paddingInline: 12 }}>
-              <Input
-                allowClear
-                placeholder="搜索菜单"
-                variant="borderless"
-                style={{ borderRadius: 4, backgroundColor: 'rgba(0,0,0,0.03)' }}
-                prefix={<SearchOutlined style={{ color: 'rgba(0, 0, 0, 0.15)' }} />}
-                onPressEnter={(e) => setKeyWord((e.target as HTMLInputElement).value)}
-                onClear={() => setKeyWord('')}
-              />
-              <Tooltip title="新建菜单">
-                <PlusCircleFilled
-                  onClick={() => void navigate({ to: '/menus' })}
-                  style={{ color: token.colorPrimary, fontSize: 24, cursor: 'pointer' }}
-                />
-              </Tooltip>
-            </Space>
-          )
-        }
         menuItemRender={(item, defaultDom) => {
           // 外链 / 无 path 的分组保持默认渲染，只有站内路由才走 Router Link
           if (!item.path || item.isUrl || /^https?:\/\//.test(item.path)) {
