@@ -1,6 +1,6 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components'
-import { useNavigate } from '@tanstack/react-router'
+import { getRouteApi, useRouter } from '@tanstack/react-router'
 import { App, theme } from 'antd'
 import type { ReactNode } from 'react'
 
@@ -27,13 +27,16 @@ export function Login({ logo }: LoginProps) {
 function LoginContent({ logo }: LoginProps) {
   const { token } = theme.useToken()
   const { message } = App.useApp()
-  const navigate = useNavigate()
+  const router = useRouter()
+  const search = getRouteApi('/login').useSearch()
 
   const onFinish = async (values: LoginFormValues) => {
     try {
       await login({ username: values.username, password: values.password })
       message.success('登录成功')
-      await navigate({ to: '/' })
+      // 过期跳过来时会带 ?redirect=原路径，登录成功后跳回；否则回首页
+      // redirect 可能自带 query（如 /menus?page=1），走 history.push 原样跳转
+      await router.history.push(search.redirect ?? '/')
     } catch (error) {
       message.error(error instanceof ApiError ? error.message : '登录失败，请重试')
     }

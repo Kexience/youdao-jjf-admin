@@ -1,10 +1,20 @@
 import { DesktopOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons'
-import { Link, Outlet, createFileRoute } from '@tanstack/react-router'
+import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { Segmented, theme } from 'antd'
 
 import { useThemeStore } from '../stores/theme'
+import { useAuthStore } from '../stores/auth'
 
 export const Route = createFileRoute('/_main')({
+  beforeLoad: ({ location }) => {
+    // 无 token 直接进业务页：踢回 /login 并记住原路径，登录成功后跳回
+    if (!useAuthStore.getState().token) {
+      throw redirect({
+        to: '/login',
+        search: location.pathname === '/' ? undefined : { redirect: location.href },
+      })
+    }
+  },
   component: MainLayout,
 })
 

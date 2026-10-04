@@ -12,6 +12,35 @@ import { useAuthStore } from '../stores/auth'
 // 成功码：文档未明确成功码取值，按常见约定兼容 0 / 200，联调时以实际为准
 const SUCCESS_CODES = new Set([0, 200])
 
+/**
+ * 登录失效码：后端鉴权失败不一定走 HTTP 401，
+ * 实测过期返回的是 HTTP 200 + 信封 `{code: 40202, message: '登录已过期，请重新登录'}`，
+ * 因此 HTTP 状态码和业务 code 都要处理。
+ */
+const UNAUTHORIZED_CODES = new Set([401, 40202])
+
+/** 并发请求同时过期时只跳一次，避免多次 assign */
+let redirectingToLogin = false
+
+/** 清 token 并跳 /login（保留原路径，登录成功后可跳回） */
+function handleUnauthorized(): void {
+  if (typeof window === 'undefined') return
+  useAuthStore.getState().clearToken()
+  const pathname = window.location.pathname
+  if (pathname.startsWith('/login') || redirectingToLogin) return
+  redirectingToLogin = true
+  const redirect = `${pathname}${window.location.search}`
+  const target =
+    redirect && redirect !== '/'
+      ? `/login?redirect=${encodeURIComponent(redirect)}`
+      : '/login'
+  window.location.assign(target)
+  // 下一轮事件循环后复位（页面一般已跳转，复位仅防单页未跳转时卡死）
+  setTimeout(() => {
+    redirectingToLogin = false
+  }, 1000)
+}
+
 /** 业务 / 网络错误统一类型 */
 export class ApiError extends Error {
   /** 后端信封 code（网络异常时为 -1） */
@@ -58,14 +87,22 @@ request.interceptors.response.use(
       throw new ApiError('网络异常，请检查网络后重试', -1)
     }
     const status = error.response.status
-    if (status === 401) {
-      useAuthStore.getState().clearToken()
-      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
-        window.location.assign('/login')
-      }
-      throw new ApiError('登录已过期，请重新登录', 401, 401)
-    }
     const payload = error.response.data
+    const payloadCode =
+      payload && typeof payload === 'object' && typeof payload.code === 'number'
+        ? payload.code
+        : undefined
+    // HTTP 401 或信封业务码为登录失效码：清 token 并跳 /login
+    if (status === 401 || (payloadCode !== undefined && UNAUTHORIZED_CODES.has(payloadCode))) {
+      handleUnauthorized()
+      const message =
+        (payload &&
+          typeof payload === 'object' &&
+          typeof payload.message === 'string' &&
+          payload.message) ||
+        '登录已过期，请重新登录'
+      throw new ApiError(message, payloadCode ?? status, status)
+    }
     const message =
       (payload &&
         typeof payload === 'object' &&
@@ -85,6 +122,10 @@ function unwrap<T>(payload: ApiResult<T> | T): T {
   if (payload !== null && typeof payload === 'object' && 'code' in payload) {
     const envelope = payload as ApiResult<T>
     if (SUCCESS_CODES.has(envelope.code)) return envelope.data
+    // HTTP 200 但业务码表示登录失效（如 40202）：同样清 token 并跳 /login
+    if (UNAUTHORIZED_CODES.has(envelope.code)) {
+      handleUnauthorized()
+    }
     throw new ApiError(envelope.message || '请求失败', envelope.code)
   }
   return payload as T
