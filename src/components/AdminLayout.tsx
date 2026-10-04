@@ -1,0 +1,174 @@
+import {
+  HomeOutlined,
+  LogoutOutlined,
+  MoonOutlined,
+  PlusCircleFilled,
+  QuestionCircleOutlined,
+  SearchOutlined,
+  SettingOutlined,
+  SunOutlined,
+} from '@ant-design/icons'
+import type { MenuDataItem } from '@ant-design/pro-components'
+import { ProLayout } from '@ant-design/pro-components'
+import { useQuery } from '@tanstack/react-query'
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
+import { Button, Input, Space, Tooltip, theme } from 'antd'
+import type { ReactNode } from 'react'
+import { useMemo, useState } from 'react'
+
+import { getMyMenus } from '../api/menus'
+import { useAuthStore } from '../stores/auth'
+import { useResolvedTheme, useThemeStore } from '../stores/theme'
+
+/** 本地兜底菜单：与 TanStack 文件路由一一对应，保证点击一定能跳到真实页面 */
+const LOCAL_MENUS: MenuDataItem[] = [
+  { path: '/', name: '首页', icon: <HomeOutlined /> },
+  { path: '/menus', name: '菜单管理', icon: <SettingOutlined /> },
+  { path: '/about', name: '关于', icon: <QuestionCircleOutlined /> },
+]
+
+/**
+ * 后端菜单树 → ProLayout MenuDataItem。
+ * - 按钮类型（A）不进侧边栏，直接丢弃；
+ * - 目录（M）无 component 时 path 置空，只做折叠分组；
+ * - 同级按 sort 升序排列。
+ */
+function toMenuItems(nodes: AdminMenuTreeNode[]): MenuDataItem[] {
+  return [...nodes]
+    .sort((a, b) => a.sort - b.sort)
+    .flatMap((node): MenuDataItem[] => {
+      if (node.menuType === 'A') return []
+      const children = node.children?.length ? toMenuItems(node.children) : undefined
+      const path = node.component?.trim() || undefined
+      return [
+        {
+          key: String(node.id),
+          name: node.name,
+          // 目录节点无路由地址时留空，ProLayout 会渲染为可展开的分组
+          path,
+          children,
+        },
+      ]
+    })
+}
+
+/** 按关键字过滤菜单（命中自身则保留整棵子树，命中后代则保留过滤后的链路） */
+function filterByMenuData(data: MenuDataItem[], keyWord: string): MenuDataItem[] {
+  const word = keyWord.trim()
+  if (!word) return data
+  return data
+    .map((item) => {
+      if (item.name?.includes(word)) {
+        return { ...item }
+      }
+      const children = filterByMenuData(item.children || [], word)
+      if (children.length > 0) {
+        return { ...item, children }
+      }
+      return undefined
+    })
+    .filter((item) => item !== undefined)
+}
+
+interface AdminLayoutProps {
+  children: ReactNode
+}
+
+/**
+ * 管理端主布局（ProLayout side 模式 + 菜单搜索）：
+ * - 菜单优先用当前管理员可见树（GET /admin/menus/mine），失败/为空时回退本地路由菜单；
+ * - 侧边栏顶部搜索框 + 新建快捷入口（示例中的 menuExtraRender 写法）；
+ * - 菜单点击走 TanStack Router 的 Link，头部右侧放主题切换与退出登录。
+ */
+export function AdminLayout({ children }: AdminLayoutProps) {
+  const { token } = theme.useToken()
+  const navigate = useNavigate()
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const resolved = useResolvedTheme()
+  const toggleTheme = useThemeStore((s) => s.toggle)
+  const clearToken = useAuthStore((s) => s.clearToken)
+  const [keyWord, setKeyWord] = useState('')
+
+  const myMenusQuery = useQuery({
+    queryKey: ['admin-my-menus'],
+    queryFn: getMyMenus,
+    // 布局级数据：短时间复用，避免每次切换路由都重新拉菜单
+    staleTime: 60_000,
+    retry: false,
+  })
+
+  const menuData = useMemo<MenuDataItem[]>(() => {
+    const nodes = myMenusQuery.data?.menus
+    if (nodes?.length) {
+      const converted = toMenuItems(nodes)
+      if (converted.length) return converted
+    }
+    return LOCAL_MENUS
+  }, [myMenusQuery.data])
+
+  return (
+    <div style={{ height: '100vh' }}>
+      <ProLayout
+        title="优道"
+        logo={false}
+        location={{ pathname }}
+        layout="side"
+        navTheme={resolved === 'dark' ? 'realDark' : 'light'}
+        onMenuHeaderClick={() => void navigate({ to: '/' })}
+        menu={{ hideMenuWhenCollapsed: true }}
+        menuDataRender={() => menuData}
+        postMenuData={(menus) => filterByMenuData(menus || [], keyWord)}
+        menuExtraRender={({ collapsed }) =>
+          !collapsed && (
+            <Space align="center" style={{ marginBlockStart: 16, paddingInline: 12 }}>
+              <Input
+                allowClear
+                placeholder="搜索菜单"
+                variant="borderless"
+                style={{ borderRadius: 4, backgroundColor: 'rgba(0,0,0,0.03)' }}
+                prefix={<SearchOutlined style={{ color: 'rgba(0, 0, 0, 0.15)' }} />}
+                onPressEnter={(e) => setKeyWord((e.target as HTMLInputElement).value)}
+                onClear={() => setKeyWord('')}
+              />
+              <Tooltip title="新建菜单">
+                <PlusCircleFilled
+                  onClick={() => void navigate({ to: '/menus' })}
+                  style={{ color: token.colorPrimary, fontSize: 24, cursor: 'pointer' }}
+                />
+              </Tooltip>
+            </Space>
+          )
+        }
+        menuItemRender={(item, defaultDom) => {
+          // 外链 / 无 path 的分组保持默认渲染，只有站内路由才走 Router Link
+          if (!item.path || item.isUrl || /^https?:\/\//.test(item.path)) {
+            return defaultDom
+          }
+          return <Link to={item.path as '/'}>{defaultDom}</Link>
+        }}
+        actionsRender={() => [
+          <Tooltip key="theme" title={resolved === 'dark' ? '切换浅色' : '切换深色'}>
+            <Button
+              type="text"
+              icon={resolved === 'dark' ? <SunOutlined /> : <MoonOutlined />}
+              onClick={toggleTheme}
+            />
+          </Tooltip>,
+          <Button
+            key="logout"
+            type="text"
+            icon={<LogoutOutlined />}
+            onClick={() => {
+              clearToken()
+              void navigate({ to: '/login' })
+            }}
+          >
+            退出
+          </Button>,
+        ]}
+      >
+        <div style={{ padding: 24 }}>{children}</div>
+      </ProLayout>
+    </div>
+  )
+}
