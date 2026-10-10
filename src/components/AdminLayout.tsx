@@ -1,48 +1,42 @@
-import {
-  DatabaseOutlined,
-  FileSearchOutlined,
-  FolderOutlined,
-  HomeOutlined,
-  LogoutOutlined,
-  MailOutlined,
-  MessageOutlined,
-  MoonOutlined,
-  QuestionCircleOutlined,
-  SearchOutlined,
-  SettingOutlined,
-  SunOutlined,
-  UserOutlined,
-} from '@ant-design/icons'
+import * as AntdIcons from '@ant-design/icons'
 import type { MenuDataItem } from '@ant-design/pro-components'
 import { ProLayout } from '@ant-design/pro-components'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { Button, Tooltip } from 'antd'
-import type { ReactNode } from 'react'
-import { useMemo } from 'react'
+import { Button, Dropdown, Tooltip } from 'antd'
+import type { ComponentType, ReactNode } from 'react'
+import { createElement, useMemo } from 'react'
 
 import { useGetMyMenus } from '../api/menus'
 import { useAuthStore } from '../stores/auth'
 import { useResolvedTheme, useThemeStore } from '../stores/theme'
 
-/** 本地兜底菜单：与 TanStack 文件路由一一对应，保证点击一定能跳到真实页面 */
-const LOCAL_MENUS: MenuDataItem[] = [
-  { path: '/', name: '首页', icon: <HomeOutlined /> },
-  { path: '/members', name: '会员管理', icon: <UserOutlined /> },
-  { path: '/menus', name: '菜单管理', icon: <SettingOutlined /> },
-  { path: '/sms/config', name: '短信配置', icon: <SettingOutlined /> },
-  { path: '/sms/channels', name: '短信通道', icon: <MessageOutlined /> },
-  { path: '/sms/templates', name: '短信模板', icon: <MailOutlined /> },
-  { path: '/sms/records', name: '短信发送记录', icon: <SearchOutlined /> },
-  { path: '/storage/channels', name: '存储通道', icon: <DatabaseOutlined /> },
-  { path: '/storage/zones', name: '存储 Zone', icon: <FolderOutlined /> },
-  { path: '/storage/records', name: '存储上传记录', icon: <FileSearchOutlined /> },
-  { path: '/about', name: '关于', icon: <QuestionCircleOutlined /> },
-]
+/**
+ * 后端 icon 字符串 → Antd 图标组件（自动映射 @ant-design/icons 全量图标）。
+ * 支持 MenuOutlined / menu / menu-outlined / Menu 等写法，大小写、分隔符不敏感；
+ * 无后缀时默认找 Outlined（如 menu → MenuOutlined）；填错返回 undefined（无图标不报错）。
+ */
+const ICONS_BY_KEY = new Map<string, ComponentType>()
+for (const [name, component] of Object.entries(AntdIcons)) {
+  if (!/^[A-Z][\dA-Za-z]*((Outlined)|(Filled)|(TwoTone))$/.test(name)) continue
+  if (typeof component !== 'function' && typeof component !== 'object') continue
+  ICONS_BY_KEY.set(name.toLowerCase(), component as ComponentType)
+}
+
+function resolveMenuIcon(icon?: string): ReactNode | undefined {
+  const raw = icon?.trim().toLowerCase().replace(/[-_\s]+/g, '')
+  if (!raw) return undefined
+  const component =
+    ICONS_BY_KEY.get(raw) ??
+    (!/(outlined|filled|twotone)$/.test(raw) ? ICONS_BY_KEY.get(`${raw}outlined`) : undefined)
+  if (!component) return undefined
+  return createElement(component)
+}
 
 /**
  * 后端菜单树 → ProLayout MenuDataItem。
  * - 按钮类型（A）不进侧边栏，直接丢弃；
  * - 目录（M）无 component 时 path 置空，只做折叠分组；
+ * - icon 自动映射 @ant-design/icons，填 MenuOutlined / menu 都能显示，填错则无图标；
  * - 同级按 sort 升序排列。
  */
 function toMenuItems(nodes: AdminMenuTreeNode[]): MenuDataItem[] {
@@ -56,6 +50,7 @@ function toMenuItems(nodes: AdminMenuTreeNode[]): MenuDataItem[] {
         {
           key: String(node.id),
           name: node.name,
+          icon: resolveMenuIcon(node.icon),
           // 目录节点无路由地址时留空，ProLayout 会渲染为可展开的分组
           path,
           children,
@@ -70,8 +65,10 @@ interface AdminLayoutProps {
 
 /**
  * 管理端主布局（ProLayout side 模式）：
- * - 菜单优先用当前管理员可见树（GET /admin/menus/mine），失败/为空时回退本地路由菜单；
- * - 菜单点击走 TanStack Router 的 Link，头部右侧放主题切换与退出登录。
+ * - 菜单直接使用当前管理员可见树（GET /admin/menus/mine），无本地兜底；
+ * - 菜单点击走 TanStack Router 的 Link；
+ * - 用户信息走 avatarProps（后端 AdminLoginVo 暂无用户名/头像字段，先用占位，有接口后再接真数据）；
+ * - 头部操作区（actionsRender）只放白色/深色切换。
  */
 export function AdminLayout({ children }: AdminLayoutProps) {
   const navigate = useNavigate()
@@ -82,14 +79,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
   const myMenusQuery = useGetMyMenus()
 
-  const menuData = useMemo<MenuDataItem[]>(() => {
-    const nodes = myMenusQuery.data?.menus
-    if (nodes?.length) {
-      const converted = toMenuItems(nodes)
-      if (converted.length) return converted
-    }
-    return LOCAL_MENUS
-  }, [myMenusQuery.data])
+  const menuData = useMemo<MenuDataItem[]>(
+    () => toMenuItems(myMenusQuery.data?.menus ?? []),
+    [myMenusQuery.data],
+  )
 
   return (
     <div style={{ height: '100vh' }}>
@@ -110,25 +103,42 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           return <Link to={item.path as '/'}>{defaultDom}</Link>
         }}
         actionsRender={() => [
-          <Tooltip key="theme" title={resolved === 'dark' ? '切换浅色' : '切换深色'}>
+          <Tooltip key="theme" title="切换白色/深色">
             <Button
               type="text"
-              icon={resolved === 'dark' ? <SunOutlined /> : <MoonOutlined />}
+              icon={resolved === 'dark' ? <AntdIcons.SunOutlined /> : <AntdIcons.MoonOutlined />}
               onClick={toggleTheme}
-            />
+            >
+              {resolved === 'dark' ? '白色' : '深色'}
+            </Button>
           </Tooltip>,
-          <Button
-            key="logout"
-            type="text"
-            icon={<LogoutOutlined />}
-            onClick={() => {
-              clearToken()
-              void navigate({ to: '/login' })
-            }}
-          >
-            退出
-          </Button>,
         ]}
+        avatarProps={{
+          size: 'small',
+          icon: <AntdIcons.UserOutlined />,
+          title: '管理员',
+          render: (_, defaultDom) => (
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 'logout',
+                    label: '退出登录',
+                    icon: <AntdIcons.LogoutOutlined />,
+                  },
+                ],
+                onClick: ({ key }) => {
+                  if (key === 'logout') {
+                    clearToken()
+                    void navigate({ to: '/login' })
+                  }
+                },
+              }}
+            >
+              {defaultDom}
+            </Dropdown>
+          ),
+        }}
       >
         <div style={{ padding: 24 }}>{children}</div>
       </ProLayout>
