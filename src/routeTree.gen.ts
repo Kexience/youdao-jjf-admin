@@ -15,7 +15,10 @@ import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainMembersRouteImport } from './routes/_main/members'
 import { Route as MainMenusRouteImport } from './routes/_main/menus'
+import { Route as MainRolesRouteRouteImport } from './routes/_main/roles/route'
 import { Route as MainMembersMemberIdRouteImport } from './routes/_main/members.$memberId'
+import { Route as MainRolesIndexRouteImport } from './routes/_main/roles/index'
+import { Route as MainRolesRoleIdRouteImport } from './routes/_main/roles/$roleId'
 import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels'
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
 import { Route as MainSmsRecordsRouteImport } from './routes/_main/sms/records'
@@ -53,10 +56,25 @@ const MainMenusRoute = MainMenusRouteImport.update({
   path: '/menus',
   getParentRoute: () => MainRoute,
 } as any)
+const MainRolesRouteRoute = MainRolesRouteRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainMembersMemberIdRoute = MainMembersMemberIdRouteImport.update({
   id: '/$memberId',
   path: '/$memberId',
   getParentRoute: () => MainMembersRoute,
+} as any)
+const MainRolesIndexRoute = MainRolesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainRolesRouteRoute,
+} as any)
+const MainRolesRoleIdRoute = MainRolesRoleIdRouteImport.update({
+  id: '/$roleId',
+  path: '/$roleId',
+  getParentRoute: () => MainRolesRouteRoute,
 } as any)
 const MainSmsChannelsRoute = MainSmsChannelsRouteImport.update({
   id: '/sms/channels',
@@ -97,10 +115,12 @@ const MainStorageZonesRoute = MainStorageZonesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
   '/login': typeof LoginRoute
+  '/roles': typeof MainRolesRouteRouteWithChildren
   '/about': typeof MainAboutRoute
   '/members': typeof MainMembersRouteWithChildren
   '/menus': typeof MainMenusRoute
   '/members/$memberId': typeof MainMembersMemberIdRoute
+  '/roles/$roleId': typeof MainRolesRoleIdRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
@@ -108,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/storage/channels': typeof MainStorageChannelsRoute
   '/storage/records': typeof MainStorageRecordsRoute
   '/storage/zones': typeof MainStorageZonesRoute
+  '/roles/': typeof MainRolesIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -116,6 +137,7 @@ export interface FileRoutesByTo {
   '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
   '/members/$memberId': typeof MainMembersMemberIdRoute
+  '/roles/$roleId': typeof MainRolesRoleIdRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
@@ -123,16 +145,19 @@ export interface FileRoutesByTo {
   '/storage/channels': typeof MainStorageChannelsRoute
   '/storage/records': typeof MainStorageRecordsRoute
   '/storage/zones': typeof MainStorageZonesRoute
+  '/roles': typeof MainRolesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_main': typeof MainRouteWithChildren
   '/login': typeof LoginRoute
+  '/_main/roles': typeof MainRolesRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
   '/_main/members': typeof MainMembersRouteWithChildren
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
   '/_main/members/$memberId': typeof MainMembersMemberIdRoute
+  '/_main/roles/$roleId': typeof MainRolesRoleIdRoute
   '/_main/sms/channels': typeof MainSmsChannelsRoute
   '/_main/sms/config': typeof MainSmsConfigRoute
   '/_main/sms/records': typeof MainSmsRecordsRoute
@@ -140,16 +165,19 @@ export interface FileRoutesById {
   '/_main/storage/channels': typeof MainStorageChannelsRoute
   '/_main/storage/records': typeof MainStorageRecordsRoute
   '/_main/storage/zones': typeof MainStorageZonesRoute
+  '/_main/roles/': typeof MainRolesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
+    | '/roles'
     | '/about'
     | '/members'
     | '/menus'
     | '/members/$memberId'
+    | '/roles/$roleId'
     | '/sms/channels'
     | '/sms/config'
     | '/sms/records'
@@ -157,6 +185,7 @@ export interface FileRouteTypes {
     | '/storage/channels'
     | '/storage/records'
     | '/storage/zones'
+    | '/roles/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -165,6 +194,7 @@ export interface FileRouteTypes {
     | '/menus'
     | '/'
     | '/members/$memberId'
+    | '/roles/$roleId'
     | '/sms/channels'
     | '/sms/config'
     | '/sms/records'
@@ -172,15 +202,18 @@ export interface FileRouteTypes {
     | '/storage/channels'
     | '/storage/records'
     | '/storage/zones'
+    | '/roles'
   id:
     | '__root__'
     | '/_main'
     | '/login'
+    | '/_main/roles'
     | '/_main/about'
     | '/_main/members'
     | '/_main/menus'
     | '/_main/'
     | '/_main/members/$memberId'
+    | '/_main/roles/$roleId'
     | '/_main/sms/channels'
     | '/_main/sms/config'
     | '/_main/sms/records'
@@ -188,6 +221,7 @@ export interface FileRouteTypes {
     | '/_main/storage/channels'
     | '/_main/storage/records'
     | '/_main/storage/zones'
+    | '/_main/roles/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -239,12 +273,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainMenusRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/roles': {
+      id: '/_main/roles'
+      path: '/roles'
+      fullPath: '/roles'
+      preLoaderRoute: typeof MainRolesRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/members/$memberId': {
       id: '/_main/members/$memberId'
       path: '/$memberId'
       fullPath: '/members/$memberId'
       preLoaderRoute: typeof MainMembersMemberIdRouteImport
       parentRoute: typeof MainMembersRoute
+    }
+    '/_main/roles/': {
+      id: '/_main/roles/'
+      path: '/'
+      fullPath: '/roles/'
+      preLoaderRoute: typeof MainRolesIndexRouteImport
+      parentRoute: typeof MainRolesRouteRoute
+    }
+    '/_main/roles/$roleId': {
+      id: '/_main/roles/$roleId'
+      path: '/$roleId'
+      fullPath: '/roles/$roleId'
+      preLoaderRoute: typeof MainRolesRoleIdRouteImport
+      parentRoute: typeof MainRolesRouteRoute
     }
     '/_main/sms/channels': {
       id: '/_main/sms/channels'
@@ -298,6 +353,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MainRolesRouteRouteChildren {
+  MainRolesRoleIdRoute: typeof MainRolesRoleIdRoute
+  MainRolesIndexRoute: typeof MainRolesIndexRoute
+}
+
+const MainRolesRouteRouteChildren: MainRolesRouteRouteChildren = {
+  MainRolesRoleIdRoute: MainRolesRoleIdRoute,
+  MainRolesIndexRoute: MainRolesIndexRoute,
+}
+
+const MainRolesRouteRouteWithChildren = MainRolesRouteRoute._addFileChildren(
+  MainRolesRouteRouteChildren,
+)
+
 interface MainMembersRouteChildren {
   MainMembersMemberIdRoute: typeof MainMembersMemberIdRoute
 }
@@ -311,6 +380,7 @@ const MainMembersRouteWithChildren = MainMembersRoute._addFileChildren(
 )
 
 interface MainRouteChildren {
+  MainRolesRouteRoute: typeof MainRolesRouteRouteWithChildren
   MainAboutRoute: typeof MainAboutRoute
   MainMembersRoute: typeof MainMembersRouteWithChildren
   MainMenusRoute: typeof MainMenusRoute
@@ -325,6 +395,7 @@ interface MainRouteChildren {
 }
 
 const MainRouteChildren: MainRouteChildren = {
+  MainRolesRouteRoute: MainRolesRouteRouteWithChildren,
   MainAboutRoute: MainAboutRoute,
   MainMembersRoute: MainMembersRouteWithChildren,
   MainMenusRoute: MainMenusRoute,

@@ -512,6 +512,47 @@ declare global {
     /** 归属该档的未删除会员数 */
     memberCount?: number
   }
+
+  /** 后台角色（见文档 AdminRoleVo：GET /admin/roles，含内置与停用角色） */
+  interface AdminRole {
+    /** 角色 id */
+    id: number
+    /** 角色名 */
+    roleName: string
+    /** 内置角色标识，自建角色为空串 */
+    keyword?: string
+    /** 是否内置受保护角色 */
+    builtin?: boolean
+    /** 状态：1 启用 0 停用 */
+    status?: number
+    /** 创建时间 */
+    createdAt?: string
+    /** 更新时间 */
+    updatedAt?: string
+  }
+
+  /** 后台角色保存入参（见文档 AdminRoleSaveRequest：POST /admin/roles 新建） */
+  interface AdminRoleSaveParams {
+    /** 角色名，全局唯一，必填 */
+    roleName: string
+    /** 状态：1 启用 0 停用；为空新建时默认启用 */
+    status?: 0 | 1
+  }
+
+  /** 后台角色详情（含已授予权限码，见文档 AdminRoleDetailVo：GET /admin/roles/{id}） */
+  interface AdminRoleDetail extends AdminRole {
+    /** 已授予的权限码集合 */
+    permissionCodes?: string[]
+  }
+
+  /**
+   * 后台角色授权入参（见文档 AdminRoleGrantRequest：
+   * PUT /admin/roles/{id}/permissions 整体重写，空数组=清空）。
+   */
+  interface AdminRoleGrantParams {
+    /** 权限码集合 */
+    permissionCodes: string[]
+  }
 }
 
 export {}
