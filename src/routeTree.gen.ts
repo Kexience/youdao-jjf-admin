@@ -14,6 +14,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainMenusRouteImport } from './routes/_main/menus'
+import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels'
+import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -39,18 +41,32 @@ const MainMenusRoute = MainMenusRouteImport.update({
   path: '/menus',
   getParentRoute: () => MainRoute,
 } as any)
+const MainSmsChannelsRoute = MainSmsChannelsRouteImport.update({
+  id: '/sms/channels',
+  path: '/sms/channels',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainSmsConfigRoute = MainSmsConfigRouteImport.update({
+  id: '/sms/config',
+  path: '/sms/config',
+  getParentRoute: () => MainRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
   '/menus': typeof MainMenusRoute
+  '/sms/channels': typeof MainSmsChannelsRoute
+  '/sms/config': typeof MainSmsConfigRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
   '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
+  '/sms/channels': typeof MainSmsChannelsRoute
+  '/sms/config': typeof MainSmsConfigRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,12 +75,15 @@ export interface FileRoutesById {
   '/_main/about': typeof MainAboutRoute
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
+  '/_main/sms/channels': typeof MainSmsChannelsRoute
+  '/_main/sms/config': typeof MainSmsConfigRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/about' | '/menus'
+  fullPaths:
+    '/' | '/login' | '/about' | '/menus' | '/sms/channels' | '/sms/config'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/about' | '/menus' | '/'
+  to: '/login' | '/about' | '/menus' | '/' | '/sms/channels' | '/sms/config'
   id:
     | '__root__'
     | '/_main'
@@ -72,6 +91,8 @@ export interface FileRouteTypes {
     | '/_main/about'
     | '/_main/menus'
     | '/_main/'
+    | '/_main/sms/channels'
+    | '/_main/sms/config'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -116,6 +137,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainMenusRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/sms/channels': {
+      id: '/_main/sms/channels'
+      path: '/sms/channels'
+      fullPath: '/sms/channels'
+      preLoaderRoute: typeof MainSmsChannelsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/sms/config': {
+      id: '/_main/sms/config'
+      path: '/sms/config'
+      fullPath: '/sms/config'
+      preLoaderRoute: typeof MainSmsConfigRouteImport
+      parentRoute: typeof MainRoute
+    }
   }
 }
 
@@ -123,12 +158,16 @@ interface MainRouteChildren {
   MainAboutRoute: typeof MainAboutRoute
   MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainSmsChannelsRoute: typeof MainSmsChannelsRoute
+  MainSmsConfigRoute: typeof MainSmsConfigRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
   MainAboutRoute: MainAboutRoute,
   MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
+  MainSmsChannelsRoute: MainSmsChannelsRoute,
+  MainSmsConfigRoute: MainSmsConfigRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)

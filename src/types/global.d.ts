@@ -98,6 +98,66 @@ declare global {
     /** 当前管理员权限码集合 */
     codes: string[]
   }
+
+  /** 短信全局配置（见文档 SmsConfigVo：GET /admin/sms/config） */
+  interface SmsConfig {
+    /** 短信总开关 */
+    enabled: boolean
+    /** 日预算(元)，空=不限 */
+    dailyBudget?: number
+  }
+
+  /** 短信全局配置保存入参（见文档 SmsConfigSaveDto：PUT /admin/sms/config） */
+  interface SmsConfigSaveParams {
+    /** 短信总开关，必填 */
+    enabled: boolean
+    /** 日预算(元)，空=不限 */
+    dailyBudget?: number
+  }
+
+  /** 短信通道（见文档 SmsChannelVo：GET /admin/sms/channels） */
+  interface SmsChannel {
+    /** 通道 id */
+    id: number
+    /** 厂商标识 */
+    vendor: string
+    /** AccessKey ID */
+    accessKeyId?: string
+    /** AccessKey Secret 掩码 */
+    accessKeySecret?: string
+    /** 短信签名 */
+    signName?: string
+    /** 优先级，1 最高 */
+    priority: number
+    /** 单条单价(元) */
+    unitPrice?: number
+    /** 启用状态 */
+    enabled: boolean
+    /** 加密开关（只管写，新增默认 true） */
+    accessKeySecretEncrypted?: boolean
+    /** 实际存储形态：true=密文 false=明文 */
+    secretStoredEncrypted?: boolean
+  }
+
+  /** 短信通道保存入参（见文档 SmsChannelSaveDto：POST /admin/sms/channels） */
+  interface SmsChannelSaveParams {
+    /** 厂商标识：aliyun 等，必填 */
+    vendor: string
+    /** AccessKey ID */
+    accessKeyId?: string
+    /** AccessKey Secret */
+    accessKeySecret?: string
+    /** 短信签名 */
+    signName?: string
+    /** 优先级，1 最高全局唯一，必填 */
+    priority: number
+    /** 单条单价(元) */
+    unitPrice?: number
+    /** 启用状态，不传视为 false */
+    enabled?: boolean
+    /** Secret 是否加密存储，不传=新增默认加密 */
+    accessKeySecretEncrypted?: boolean
+  }
 }
 
 export {}

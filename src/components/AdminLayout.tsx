@@ -1,6 +1,7 @@
 import {
   HomeOutlined,
   LogoutOutlined,
+  MessageOutlined,
   MoonOutlined,
   QuestionCircleOutlined,
   SettingOutlined,
@@ -21,6 +22,8 @@ import { useResolvedTheme, useThemeStore } from '../stores/theme'
 const LOCAL_MENUS: MenuDataItem[] = [
   { path: '/', name: '首页', icon: <HomeOutlined /> },
   { path: '/menus', name: '菜单管理', icon: <SettingOutlined /> },
+  { path: '/sms/config', name: '短信配置', icon: <SettingOutlined /> },
+  { path: '/sms/channels', name: '短信通道', icon: <MessageOutlined /> },
   { path: '/about', name: '关于', icon: <QuestionCircleOutlined /> },
 ]
 
