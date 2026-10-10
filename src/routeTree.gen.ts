@@ -18,6 +18,9 @@ import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
 import { Route as MainSmsRecordsRouteImport } from './routes/_main/sms/records'
 import { Route as MainSmsTemplatesRouteImport } from './routes/_main/sms/templates'
+import { Route as MainStorageChannelsRouteImport } from './routes/_main/storage/channels'
+import { Route as MainStorageRecordsRouteImport } from './routes/_main/storage/records'
+import { Route as MainStorageZonesRouteImport } from './routes/_main/storage/zones'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -63,6 +66,21 @@ const MainSmsTemplatesRoute = MainSmsTemplatesRouteImport.update({
   path: '/sms/templates',
   getParentRoute: () => MainRoute,
 } as any)
+const MainStorageChannelsRoute = MainStorageChannelsRouteImport.update({
+  id: '/storage/channels',
+  path: '/storage/channels',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainStorageRecordsRoute = MainStorageRecordsRouteImport.update({
+  id: '/storage/records',
+  path: '/storage/records',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainStorageZonesRoute = MainStorageZonesRouteImport.update({
+  id: '/storage/zones',
+  path: '/storage/zones',
+  getParentRoute: () => MainRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
@@ -73,6 +91,9 @@ export interface FileRoutesByFullPath {
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
   '/sms/templates': typeof MainSmsTemplatesRoute
+  '/storage/channels': typeof MainStorageChannelsRoute
+  '/storage/records': typeof MainStorageRecordsRoute
+  '/storage/zones': typeof MainStorageZonesRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -83,6 +104,9 @@ export interface FileRoutesByTo {
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
   '/sms/templates': typeof MainSmsTemplatesRoute
+  '/storage/channels': typeof MainStorageChannelsRoute
+  '/storage/records': typeof MainStorageRecordsRoute
+  '/storage/zones': typeof MainStorageZonesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,6 +119,9 @@ export interface FileRoutesById {
   '/_main/sms/config': typeof MainSmsConfigRoute
   '/_main/sms/records': typeof MainSmsRecordsRoute
   '/_main/sms/templates': typeof MainSmsTemplatesRoute
+  '/_main/storage/channels': typeof MainStorageChannelsRoute
+  '/_main/storage/records': typeof MainStorageRecordsRoute
+  '/_main/storage/zones': typeof MainStorageZonesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,6 +134,9 @@ export interface FileRouteTypes {
     | '/sms/config'
     | '/sms/records'
     | '/sms/templates'
+    | '/storage/channels'
+    | '/storage/records'
+    | '/storage/zones'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -117,6 +147,9 @@ export interface FileRouteTypes {
     | '/sms/config'
     | '/sms/records'
     | '/sms/templates'
+    | '/storage/channels'
+    | '/storage/records'
+    | '/storage/zones'
   id:
     | '__root__'
     | '/_main'
@@ -128,6 +161,9 @@ export interface FileRouteTypes {
     | '/_main/sms/config'
     | '/_main/sms/records'
     | '/_main/sms/templates'
+    | '/_main/storage/channels'
+    | '/_main/storage/records'
+    | '/_main/storage/zones'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -200,6 +236,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSmsTemplatesRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/storage/channels': {
+      id: '/_main/storage/channels'
+      path: '/storage/channels'
+      fullPath: '/storage/channels'
+      preLoaderRoute: typeof MainStorageChannelsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/storage/records': {
+      id: '/_main/storage/records'
+      path: '/storage/records'
+      fullPath: '/storage/records'
+      preLoaderRoute: typeof MainStorageRecordsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/storage/zones': {
+      id: '/_main/storage/zones'
+      path: '/storage/zones'
+      fullPath: '/storage/zones'
+      preLoaderRoute: typeof MainStorageZonesRouteImport
+      parentRoute: typeof MainRoute
+    }
   }
 }
 
@@ -211,6 +268,9 @@ interface MainRouteChildren {
   MainSmsConfigRoute: typeof MainSmsConfigRoute
   MainSmsRecordsRoute: typeof MainSmsRecordsRoute
   MainSmsTemplatesRoute: typeof MainSmsTemplatesRoute
+  MainStorageChannelsRoute: typeof MainStorageChannelsRoute
+  MainStorageRecordsRoute: typeof MainStorageRecordsRoute
+  MainStorageZonesRoute: typeof MainStorageZonesRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
@@ -221,6 +281,9 @@ const MainRouteChildren: MainRouteChildren = {
   MainSmsConfigRoute: MainSmsConfigRoute,
   MainSmsRecordsRoute: MainSmsRecordsRoute,
   MainSmsTemplatesRoute: MainSmsTemplatesRoute,
+  MainStorageChannelsRoute: MainStorageChannelsRoute,
+  MainStorageRecordsRoute: MainStorageRecordsRoute,
+  MainStorageZonesRoute: MainStorageZonesRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)

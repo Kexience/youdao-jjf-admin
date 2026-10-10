@@ -238,6 +238,192 @@ declare global {
     /** 创建时间止 */
     end?: string
   }
+
+  /** 存储通道（见文档 StorageChannelVo：GET /admin/storage/channels） */
+  interface StorageChannel {
+    /** 通道 id */
+    id: number
+    /** 厂商标识 */
+    vendor: string
+    /** endpoint */
+    endpoint?: string
+    /** bucket */
+    bucket?: string
+    /** AccessKey ID */
+    accessKeyId?: string
+    /** AccessKey Secret 掩码 */
+    accessKeySecret?: string
+    /** 回调公网 URL */
+    callbackUrl?: string
+    /** 优先级，1 最高 */
+    priority: number
+    /** 启用状态 */
+    enabled: boolean
+    /** 加密开关（只管写，新增默认 true） */
+    accessKeySecretEncrypted?: boolean
+    /** 实际存储形态：true=密文 false=明文 */
+    secretStoredEncrypted?: boolean
+  }
+
+  /** 存储通道保存入参（见文档 StorageChannelSaveDto） */
+  interface StorageChannelSaveParams {
+    /** 厂商标识，首版 oss，必填 */
+    vendor: string
+    /** endpoint */
+    endpoint?: string
+    /** bucket */
+    bucket?: string
+    /** AccessKey ID */
+    accessKeyId?: string
+    /** AccessKey Secret */
+    accessKeySecret?: string
+    /** 回调公网 URL */
+    callbackUrl?: string
+    /** 优先级，1 最高全局唯一，必填 */
+    priority: number
+    /** 启用状态，不传=保留原值 */
+    enabled?: boolean
+    /** Secret 是否加密存储，不传=新增默认加密/修改保留原值 */
+    accessKeySecretEncrypted?: boolean
+  }
+
+  /** 文件 zone（见文档 StorageZoneVo：GET /admin/storage/zones） */
+  interface StorageZone {
+    /** zone id */
+    id: number
+    /** 地址前缀 */
+    prefix: string
+    /** 写策略 */
+    writePolicy?: string
+    /** 读策略 */
+    readPolicy?: string
+    /** 单文件大小上限（字节） */
+    maxSizeBytes?: number
+    /** content-type 白名单 */
+    allowContentTypes?: string[]
+    /** 后缀白名单 */
+    allowExts?: string[]
+    /** 上传凭证有效期（秒） */
+    uploadPolicyExpireSeconds?: number
+    /** 签名读 URL 有效期（秒） */
+    viewUrlExpireSeconds?: number
+    /** 图片处理 style 白名单 */
+    processStyles?: string[]
+    /** 启用状态 */
+    enabled?: boolean
+  }
+
+  /** zone 新增入参（见文档 StorageZoneCreateDto） */
+  interface StorageZoneCreateParams {
+    /** 地址前缀，必须以 / 结尾，必填 */
+    prefix: string
+    /** 写策略：ANON/AUTH_USER/ADMIN_ONLY，必填 */
+    writePolicy: string
+    /** 读策略：PUBLIC/SIGNED/PROGRAM_ONLY，必填 */
+    readPolicy: string
+    /** 单文件大小上限（字节），必填 */
+    maxSizeBytes: number
+    /** content-type 白名单，空=不限制 */
+    allowContentTypes?: string[]
+    /** 后缀白名单，空=不限制 */
+    allowExts?: string[]
+    /** 图片处理 style 白名单，空=不启用 */
+    processStyles?: string[]
+    /** 上传凭证有效期（秒），空=默认 300 */
+    uploadPolicyExpireSeconds?: number
+    /** 签名读 URL 有效期（秒），空=默认 600 */
+    viewUrlExpireSeconds?: number
+  }
+
+  /** zone 修改入参（见文档 StorageZoneUpdateDto：无 prefix，带 enabled） */
+  interface StorageZoneUpdateParams {
+    /** 写策略 */
+    writePolicy?: string
+    /** 读策略 */
+    readPolicy?: string
+    /** 单文件大小上限（字节） */
+    maxSizeBytes?: number
+    /** content-type 白名单 */
+    allowContentTypes?: string[]
+    /** 后缀白名单 */
+    allowExts?: string[]
+    /** 图片处理 style 白名单 */
+    processStyles?: string[]
+    /** 上传凭证有效期（秒） */
+    uploadPolicyExpireSeconds?: number
+    /** 签名读 URL 有效期（秒） */
+    viewUrlExpireSeconds?: number
+    /** 启用状态 */
+    enabled?: boolean
+  }
+
+  /** 上传记录（见文档 StorageUploadRecordVo：GET /admin/storage/records） */
+  interface StorageUploadRecord {
+    /** 记录 id */
+    id: number
+    /** 归属 zone 前缀 */
+    zone?: string
+    /** 文件 SHA-256 */
+    hash?: string
+    /** 声明大小 */
+    sizeExpected?: number
+    /** 实际大小 */
+    sizeActual?: number
+    /** ETag */
+    etag?: string
+    /** content-type */
+    contentType?: string
+    /** 原始文件名 */
+    originalName?: string
+    /** 后缀 */
+    ext?: string
+    /** 上传人类型（空=匿名） */
+    uploaderType?: string
+    /** 上传人 id（空=匿名） */
+    uploaderId?: number
+    /** 冻结厂商 */
+    vendor?: string
+    /** 冻结 bucket */
+    bucket?: string
+    /** 对象 key */
+    objectKey?: string
+    /** 状态 */
+    status?: string
+    /** 失败原因 */
+    failReason?: string
+    /** 创建时间 */
+    createdAt?: string
+    /** 更新时间 */
+    updatedAt?: string
+  }
+
+  /** 上传记录查询入参（分页 1 起） */
+  interface StorageUploadRecordQueryParams extends PageParams {
+    /** zone 前缀 */
+    zone?: string
+    /** 文件 hash */
+    hash?: string
+    /** 上传人类型 */
+    uploaderType?: string
+    /** 上传人 id */
+    uploaderId?: number
+    /** 状态，空=默认排除 EXPIRED */
+    status?: string
+    /** 创建时间起 */
+    start?: string
+    /** 创建时间止 */
+    end?: string
+  }
+
+  /** 服务端直传结果（见文档 ServerUploadResult） */
+  interface ServerUploadResult {
+    recordId?: number
+    vendor?: string
+    bucket?: string
+    objectKey?: string
+    size?: number
+    hash?: string
+  }
 }
 
 export {}

@@ -1,4 +1,7 @@
 import {
+  DatabaseOutlined,
+  FileSearchOutlined,
+  FolderOutlined,
   HomeOutlined,
   LogoutOutlined,
   MailOutlined,
@@ -28,6 +31,9 @@ const LOCAL_MENUS: MenuDataItem[] = [
   { path: '/sms/channels', name: '短信通道', icon: <MessageOutlined /> },
   { path: '/sms/templates', name: '短信模板', icon: <MailOutlined /> },
   { path: '/sms/records', name: '短信发送记录', icon: <SearchOutlined /> },
+  { path: '/storage/channels', name: '存储通道', icon: <DatabaseOutlined /> },
+  { path: '/storage/zones', name: '存储 Zone', icon: <FolderOutlined /> },
+  { path: '/storage/records', name: '存储上传记录', icon: <FileSearchOutlined /> },
   { path: '/about', name: '关于', icon: <QuestionCircleOutlined /> },
 ]
 
