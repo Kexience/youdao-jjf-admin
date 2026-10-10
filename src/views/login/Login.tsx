@@ -4,8 +4,8 @@ import { getRouteApi, useRouter } from '@tanstack/react-router'
 import { App, theme } from 'antd'
 import type { ReactNode } from 'react'
 
-import { login } from '../api/auth'
-import { ApiError } from '../lib/request'
+import { login } from '../../api/auth'
+import { ApiError } from '../../lib/request'
 
 /** 登录表单值：全局 AdminLoginParams + 记住我（仅 UI，不影响 token 持久化） */
 type LoginFormValues = AdminLoginParams & {

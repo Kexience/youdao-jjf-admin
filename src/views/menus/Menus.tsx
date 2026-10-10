@@ -11,8 +11,8 @@ import {
 } from 'antd'
 import { useMemo, useRef, useState } from 'react'
 
-import { useDeleteMenu, useGetListMenus, useSaveMenu } from '../api/menus'
-import { ApiError } from '../lib/request'
+import { useDeleteMenu, useGetListMenus, useSaveMenu } from '../../api/menus'
+import { ApiError } from '../../lib/request'
 import type { ModalState } from './MenuModal'
 import { MenuModal } from './MenuModal'
 

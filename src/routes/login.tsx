@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { useAuthStore } from '../stores/auth'
-import { Login } from '../views/Login'
+import { Login } from '../views/login/Login'
 
 interface LoginSearch {
   redirect?: string
