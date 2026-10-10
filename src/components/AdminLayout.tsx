@@ -1,9 +1,11 @@
 import {
   HomeOutlined,
   LogoutOutlined,
+  MailOutlined,
   MessageOutlined,
   MoonOutlined,
   QuestionCircleOutlined,
+  SearchOutlined,
   SettingOutlined,
   SunOutlined,
 } from '@ant-design/icons'
@@ -24,6 +26,8 @@ const LOCAL_MENUS: MenuDataItem[] = [
   { path: '/menus', name: '菜单管理', icon: <SettingOutlined /> },
   { path: '/sms/config', name: '短信配置', icon: <SettingOutlined /> },
   { path: '/sms/channels', name: '短信通道', icon: <MessageOutlined /> },
+  { path: '/sms/templates', name: '短信模板', icon: <MailOutlined /> },
+  { path: '/sms/records', name: '短信发送记录', icon: <SearchOutlined /> },
   { path: '/about', name: '关于', icon: <QuestionCircleOutlined /> },
 ]
 

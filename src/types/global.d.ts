@@ -158,6 +158,86 @@ declare global {
     /** Secret 是否加密存储，不传=新增默认加密 */
     accessKeySecretEncrypted?: boolean
   }
+
+  /** 短信模板（见文档 SmsTemplateVo：GET /admin/sms/templates，场景×厂商） */
+  interface SmsTemplate {
+    /** 模板 id */
+    id: number
+    /** 场景标识，如 LOGIN */
+    scene: string
+    /** 厂商标识 */
+    vendor: string
+    /** 厂商侧模板 code */
+    templateCode: string
+    /** 启用状态 */
+    enabled: boolean
+    /** 人工备注 */
+    remark?: string
+    /** 创建时间 */
+    createdAt?: string
+  }
+
+  /** 短信模板保存入参（见文档 SmsTemplateSaveDto） */
+  interface SmsTemplateSaveParams {
+    /** 场景标识，建议大写下划线，必填 */
+    scene: string
+    /** 厂商标识，必须已登记通道，必填 */
+    vendor: string
+    /** 厂商侧模板 code，必填 */
+    templateCode: string
+    /** 启用状态，不传视为 false */
+    enabled?: boolean
+    /** 人工备注 */
+    remark?: string
+  }
+
+  /** 短信发送记录（见文档 SmsSendRecordVo：GET /admin/sms/records） */
+  interface SmsSendRecord {
+    /** 记录 id */
+    id: number
+    /** 接收手机号 */
+    mobile?: string
+    /** 场景标识 */
+    scene?: string
+    /** 实际使用的厂商模板 code */
+    templateCode?: string
+    /** 实际投递厂商 */
+    vendor?: string
+    /** 实际投递通道 id */
+    channelId?: number
+    /** 状态：SUCCESS/FAILED */
+    status?: string
+    /** 拒绝原因枚举名，成功为空 */
+    rejectRule?: string
+    /** 厂商受理标识 BizId */
+    bizId?: string
+    /** 厂商错误码 */
+    errorCode?: string
+    /** 错误语义 */
+    errorMessage?: string
+    /** 调用方来源 IP */
+    clientIp?: string
+    /** 设备标识 */
+    deviceId?: string
+    /** 估算成本（通道单价） */
+    cost?: number
+    /** 创建时间 */
+    createdAt?: string
+  }
+
+  /** 发送记录查询入参（分页 1 起，时间 ISO-8601） */
+  interface SmsSendRecordQueryParams extends PageParams {
+    /** 手机号精确过滤 */
+    mobile?: string
+    /** 场景过滤 */
+    scene?: string
+    /** 状态过滤：SUCCESS/FAILED */
+    status?: string
+    /** 创建时间起 */
+    start?: string
+    /** 创建时间止 */
+    end?: string
+  }
 }
 
 export {}

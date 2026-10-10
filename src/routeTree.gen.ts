@@ -16,6 +16,8 @@ import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainMenusRouteImport } from './routes/_main/menus'
 import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels'
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
+import { Route as MainSmsRecordsRouteImport } from './routes/_main/sms/records'
+import { Route as MainSmsTemplatesRouteImport } from './routes/_main/sms/templates'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -51,6 +53,16 @@ const MainSmsConfigRoute = MainSmsConfigRouteImport.update({
   path: '/sms/config',
   getParentRoute: () => MainRoute,
 } as any)
+const MainSmsRecordsRoute = MainSmsRecordsRouteImport.update({
+  id: '/sms/records',
+  path: '/sms/records',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainSmsTemplatesRoute = MainSmsTemplatesRouteImport.update({
+  id: '/sms/templates',
+  path: '/sms/templates',
+  getParentRoute: () => MainRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
@@ -59,6 +71,8 @@ export interface FileRoutesByFullPath {
   '/menus': typeof MainMenusRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
+  '/sms/records': typeof MainSmsRecordsRoute
+  '/sms/templates': typeof MainSmsTemplatesRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -67,6 +81,8 @@ export interface FileRoutesByTo {
   '/': typeof MainIndexRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
+  '/sms/records': typeof MainSmsRecordsRoute
+  '/sms/templates': typeof MainSmsTemplatesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,13 +93,30 @@ export interface FileRoutesById {
   '/_main/': typeof MainIndexRoute
   '/_main/sms/channels': typeof MainSmsChannelsRoute
   '/_main/sms/config': typeof MainSmsConfigRoute
+  '/_main/sms/records': typeof MainSmsRecordsRoute
+  '/_main/sms/templates': typeof MainSmsTemplatesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/login' | '/about' | '/menus' | '/sms/channels' | '/sms/config'
+    | '/'
+    | '/login'
+    | '/about'
+    | '/menus'
+    | '/sms/channels'
+    | '/sms/config'
+    | '/sms/records'
+    | '/sms/templates'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/about' | '/menus' | '/' | '/sms/channels' | '/sms/config'
+  to:
+    | '/login'
+    | '/about'
+    | '/menus'
+    | '/'
+    | '/sms/channels'
+    | '/sms/config'
+    | '/sms/records'
+    | '/sms/templates'
   id:
     | '__root__'
     | '/_main'
@@ -93,6 +126,8 @@ export interface FileRouteTypes {
     | '/_main/'
     | '/_main/sms/channels'
     | '/_main/sms/config'
+    | '/_main/sms/records'
+    | '/_main/sms/templates'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,6 +186,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSmsConfigRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/sms/records': {
+      id: '/_main/sms/records'
+      path: '/sms/records'
+      fullPath: '/sms/records'
+      preLoaderRoute: typeof MainSmsRecordsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/sms/templates': {
+      id: '/_main/sms/templates'
+      path: '/sms/templates'
+      fullPath: '/sms/templates'
+      preLoaderRoute: typeof MainSmsTemplatesRouteImport
+      parentRoute: typeof MainRoute
+    }
   }
 }
 
@@ -160,6 +209,8 @@ interface MainRouteChildren {
   MainIndexRoute: typeof MainIndexRoute
   MainSmsChannelsRoute: typeof MainSmsChannelsRoute
   MainSmsConfigRoute: typeof MainSmsConfigRoute
+  MainSmsRecordsRoute: typeof MainSmsRecordsRoute
+  MainSmsTemplatesRoute: typeof MainSmsTemplatesRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
@@ -168,6 +219,8 @@ const MainRouteChildren: MainRouteChildren = {
   MainIndexRoute: MainIndexRoute,
   MainSmsChannelsRoute: MainSmsChannelsRoute,
   MainSmsConfigRoute: MainSmsConfigRoute,
+  MainSmsRecordsRoute: MainSmsRecordsRoute,
+  MainSmsTemplatesRoute: MainSmsTemplatesRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
