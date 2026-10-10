@@ -8,13 +8,12 @@ import {
 } from '@ant-design/icons'
 import type { MenuDataItem } from '@ant-design/pro-components'
 import { ProLayout } from '@ant-design/pro-components'
-import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { Button, Tooltip } from 'antd'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 
-import { getMyMenus } from '../api/menus'
+import { useGetMyMenus } from '../api/menus'
 import { useAuthStore } from '../stores/auth'
 import { useResolvedTheme, useThemeStore } from '../stores/theme'
 
@@ -66,13 +65,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const toggleTheme = useThemeStore((s) => s.toggle)
   const clearToken = useAuthStore((s) => s.clearToken)
 
-  const myMenusQuery = useQuery({
-    queryKey: ['admin-my-menus'],
-    queryFn: getMyMenus,
-    // 布局级数据：短时间复用，避免每次切换路由都重新拉菜单
-    staleTime: 60_000,
-    retry: false,
-  })
+  const myMenusQuery = useGetMyMenus()
 
   const menuData = useMemo<MenuDataItem[]>(() => {
     const nodes = myMenusQuery.data?.menus
