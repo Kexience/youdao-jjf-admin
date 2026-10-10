@@ -11,6 +11,7 @@ import {
   SearchOutlined,
   SettingOutlined,
   SunOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import type { MenuDataItem } from '@ant-design/pro-components'
 import { ProLayout } from '@ant-design/pro-components'
@@ -26,6 +27,7 @@ import { useResolvedTheme, useThemeStore } from '../stores/theme'
 /** 本地兜底菜单：与 TanStack 文件路由一一对应，保证点击一定能跳到真实页面 */
 const LOCAL_MENUS: MenuDataItem[] = [
   { path: '/', name: '首页', icon: <HomeOutlined /> },
+  { path: '/members', name: '会员管理', icon: <UserOutlined /> },
   { path: '/menus', name: '菜单管理', icon: <SettingOutlined /> },
   { path: '/sms/config', name: '短信配置', icon: <SettingOutlined /> },
   { path: '/sms/channels', name: '短信通道', icon: <MessageOutlined /> },

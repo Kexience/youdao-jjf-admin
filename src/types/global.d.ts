@@ -424,6 +424,94 @@ declare global {
     size?: number
     hash?: string
   }
+
+  /** 会员后台列表/详情（见文档 MemberAdminVo：GET /admin/members） */
+  interface MemberAdmin {
+    /** 会员 id */
+    id: number
+    /** 手机号全号 */
+    mobile?: string
+    /** 用户名 */
+    username?: string
+    /** 昵称 */
+    nickname?: string
+    /** 头像 */
+    avatar?: string
+    /** 真实姓名 */
+    realname?: string
+    /** 性别：0未知 1男 2女 */
+    sex?: number
+    /** 状态：1正常 0禁用 */
+    status?: number
+    /** 会员等级 id */
+    memberLevelId?: number
+    /** 等级名称 */
+    levelName?: string
+    /** 注册渠道 */
+    registerChannel?: string
+    /** 注册时间 */
+    registerAt?: string
+    /** 最后登录时间 */
+    lastLoginAt?: string
+    /** 最后登录IP */
+    lastLoginIp?: string
+    /** 最后登录渠道 */
+    lastLoginChannel?: string
+    /** 生日 */
+    birthday?: string
+    /** 成长值 */
+    growth?: number
+    /** 消费日限额（元），空=不限 */
+    dailyConsumptionLimit?: number
+    /** 消费月限额（元），空=不限 */
+    monthlyConsumptionLimit?: number
+    /** 最后访问时间 */
+    lastVisitAt?: string
+  }
+
+  /** 会员分页查询入参（分页 1 起，时间 ISO-8601） */
+  interface MemberAdminQueryParams extends PageParams {
+    /** 关键词：mobile 精确、username/nickname 模糊 */
+    keyword?: string
+    /** 状态：1正常 0禁用 */
+    status?: 0 | 1
+    /** 等级 id */
+    levelId?: number
+    /** 注册时间起（含） */
+    registerStart?: string
+    /** 注册时间止（含） */
+    registerEnd?: string
+  }
+
+  /** 会员禁用/解禁入参（见文档 MemberStatusUpdateDto：PUT /admin/members/{id}/status） */
+  interface MemberStatusUpdateParams {
+    /** 目标状态：1正常 0禁用 */
+    status: 0 | 1
+  }
+
+  /** 会员等级列表项（见文档 MemberLevelVo：GET /admin/member/levels） */
+  interface MemberLevel {
+    /** 等级 id */
+    id: number
+    /** 等级名称 */
+    levelName?: string
+    /** 稳定档位代码，仅 migration 写入，管理界面不可改 */
+    levelCode?: string
+    /** 档位序位，升序即档位高低 */
+    sort?: number
+    /** 所需成长值 */
+    growthRequired?: number
+    /** 消费折扣，100=不打折 */
+    consumeDiscount?: number
+    /** 是否默认档 */
+    isDefault?: boolean
+    /** 状态：1正常 0停用 */
+    status?: number
+    /** 备注 */
+    remark?: string
+    /** 归属该档的未删除会员数 */
+    memberCount?: number
+  }
 }
 
 export {}

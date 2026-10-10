@@ -13,7 +13,9 @@ import { Route as MainRouteImport } from './routes/_main'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
+import { Route as MainMembersRouteImport } from './routes/_main/members'
 import { Route as MainMenusRouteImport } from './routes/_main/menus'
+import { Route as MainMembersMemberIdRouteImport } from './routes/_main/members.$memberId'
 import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels'
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
 import { Route as MainSmsRecordsRouteImport } from './routes/_main/sms/records'
@@ -41,10 +43,20 @@ const MainAboutRoute = MainAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => MainRoute,
 } as any)
+const MainMembersRoute = MainMembersRouteImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainMenusRoute = MainMenusRouteImport.update({
   id: '/menus',
   path: '/menus',
   getParentRoute: () => MainRoute,
+} as any)
+const MainMembersMemberIdRoute = MainMembersMemberIdRouteImport.update({
+  id: '/$memberId',
+  path: '/$memberId',
+  getParentRoute: () => MainMembersRoute,
 } as any)
 const MainSmsChannelsRoute = MainSmsChannelsRouteImport.update({
   id: '/sms/channels',
@@ -86,7 +98,9 @@ export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
+  '/members': typeof MainMembersRouteWithChildren
   '/menus': typeof MainMenusRoute
+  '/members/$memberId': typeof MainMembersMemberIdRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
@@ -98,8 +112,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
+  '/members': typeof MainMembersRouteWithChildren
   '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
+  '/members/$memberId': typeof MainMembersMemberIdRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
@@ -113,8 +129,10 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteWithChildren
   '/login': typeof LoginRoute
   '/_main/about': typeof MainAboutRoute
+  '/_main/members': typeof MainMembersRouteWithChildren
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
+  '/_main/members/$memberId': typeof MainMembersMemberIdRoute
   '/_main/sms/channels': typeof MainSmsChannelsRoute
   '/_main/sms/config': typeof MainSmsConfigRoute
   '/_main/sms/records': typeof MainSmsRecordsRoute
@@ -129,7 +147,9 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/about'
+    | '/members'
     | '/menus'
+    | '/members/$memberId'
     | '/sms/channels'
     | '/sms/config'
     | '/sms/records'
@@ -141,8 +161,10 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/about'
+    | '/members'
     | '/menus'
     | '/'
+    | '/members/$memberId'
     | '/sms/channels'
     | '/sms/config'
     | '/sms/records'
@@ -155,8 +177,10 @@ export interface FileRouteTypes {
     | '/_main'
     | '/login'
     | '/_main/about'
+    | '/_main/members'
     | '/_main/menus'
     | '/_main/'
+    | '/_main/members/$memberId'
     | '/_main/sms/channels'
     | '/_main/sms/config'
     | '/_main/sms/records'
@@ -201,12 +225,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainAboutRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/members': {
+      id: '/_main/members'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof MainMembersRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/menus': {
       id: '/_main/menus'
       path: '/menus'
       fullPath: '/menus'
       preLoaderRoute: typeof MainMenusRouteImport
       parentRoute: typeof MainRoute
+    }
+    '/_main/members/$memberId': {
+      id: '/_main/members/$memberId'
+      path: '/$memberId'
+      fullPath: '/members/$memberId'
+      preLoaderRoute: typeof MainMembersMemberIdRouteImport
+      parentRoute: typeof MainMembersRoute
     }
     '/_main/sms/channels': {
       id: '/_main/sms/channels'
@@ -260,8 +298,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MainMembersRouteChildren {
+  MainMembersMemberIdRoute: typeof MainMembersMemberIdRoute
+}
+
+const MainMembersRouteChildren: MainMembersRouteChildren = {
+  MainMembersMemberIdRoute: MainMembersMemberIdRoute,
+}
+
+const MainMembersRouteWithChildren = MainMembersRoute._addFileChildren(
+  MainMembersRouteChildren,
+)
+
 interface MainRouteChildren {
   MainAboutRoute: typeof MainAboutRoute
+  MainMembersRoute: typeof MainMembersRouteWithChildren
   MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
   MainSmsChannelsRoute: typeof MainSmsChannelsRoute
@@ -275,6 +326,7 @@ interface MainRouteChildren {
 
 const MainRouteChildren: MainRouteChildren = {
   MainAboutRoute: MainAboutRoute,
+  MainMembersRoute: MainMembersRouteWithChildren,
   MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
   MainSmsChannelsRoute: MainSmsChannelsRoute,
