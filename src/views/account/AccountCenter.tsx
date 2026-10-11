@@ -1,5 +1,5 @@
 import { GridContent, PageContainer } from '@ant-design/pro-components'
-import { Alert, Card, Col, Menu, Row, Skeleton } from 'antd'
+import { Button, Card, Col, Empty, Menu, Row } from 'antd'
 import { useLayoutEffect, useRef, useState } from 'react'
 
 import { useMyProfile } from '../../api/account'
@@ -63,18 +63,19 @@ export function AccountCenter() {
             <AccountProfileCard profile={profile} loading={profileQuery.isPending} />
           </Col>
           <Col lg={17} md={24}>
-            <Card bordered={false}>
-              {profileQuery.isPending && <Skeleton active paragraph={{ rows: 6 }} />}
+            <Card variant="borderless" loading={profileQuery.isPending}>
               {profileQuery.isError && (
-                <Alert
-                  type="error"
-                  showIcon
-                  message={
+                <Empty
+                  description={
                     profileQuery.error instanceof ApiError
                       ? profileQuery.error.message
                       : '个人信息加载失败，请重试'
                   }
-                />
+                >
+                  <Button type="primary" onClick={() => void profileQuery.refetch()}>
+                    重试
+                  </Button>
+                </Empty>
               )}
               {profile && (
                 <div

@@ -23,7 +23,7 @@ export function AccountProfileCard({ profile, loading }: AccountProfileCardProps
   const displayName = profile?.nickname || profile?.realname || profile?.username || '-'
 
   return (
-    <Card bordered={false} style={{ marginBottom: 24 }} loading={loading}>
+    <Card variant="borderless" style={{ marginBottom: 24 }} loading={loading}>
       {profile && (
         <>
           <div style={{ marginBottom: 24, textAlign: 'center' }}>
