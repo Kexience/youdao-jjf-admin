@@ -1,8 +1,7 @@
 import { UploadOutlined } from '@ant-design/icons'
-import type { ProFormInstance } from '@ant-design/pro-components'
-import { ProForm, ProFormDependency } from '@ant-design/pro-components'
-import { App, Avatar, Button, Upload } from 'antd'
-import { useRef, useState } from 'react'
+import { ProForm } from '@ant-design/pro-components'
+import { App, Avatar, Button, Form, Upload } from 'antd'
+import { useState } from 'react'
 
 import { useUpdateAdminUser } from '../../api/adminUsers'
 import { AVATAR_ZONE, uploadImageViaCredential } from '../../api/storageUpload'
@@ -24,7 +23,11 @@ interface AccountBaseFormProps {
  */
 export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
   const { message } = App.useApp()
-  const formRef = useRef<ProFormInstance>(undefined)
+  const [form] = Form.useForm<Record<string, string | undefined>>()
+  // 右侧头像预览需订阅 avatar 字段：必须用带 form 实例的 useWatch，
+  // 不能用 ProFormDependency（它依赖 FormContext，只能写在 ProForm 内部，
+  // 放在右侧预览列会导致 "Can not find FormContext" 警告）。
+  const avatarKey = Form.useWatch('avatar', form)
   const [uploading, setUploading] = useState(false)
 
   const updateMutation = useUpdateAdminUser({
@@ -40,14 +43,15 @@ export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
   /**
    * 更换头像：申请上传凭证 → 直传 OSS → 确认 → 回写资料并刷新。
    * 传完直接保存（对照 Pro 版 AvatarView 的“更换头像”即时生效），
+   * 落库用对象 key（读接口会按 key 解析出可读地址），
    * 同时同步左侧表单的 avatar 字段，保持两边一致。
    */
   const handleAvatarFile = async (file: File) => {
     setUploading(true)
     try {
-      const url = await uploadImageViaCredential(file, AVATAR_ZONE)
-      formRef.current?.setFieldValue('avatar', url)
-      await updateMutation.mutateAsync({ id: profile.id, params: { avatar: url } })
+      const { key } = await uploadImageViaCredential(file, AVATAR_ZONE)
+      form.setFieldValue('avatar', key)
+      await updateMutation.mutateAsync({ id: profile.id, params: { avatar: key } })
     } catch (error) {
       message.error(error instanceof ApiError ? error.message : '头像上传失败，请重试')
     } finally {
@@ -59,7 +63,7 @@ export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
     <div style={{ display: 'flex', gap: 32 }}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <ProForm<Record<string, string | undefined>>
-          formRef={formRef}
+          form={form}
           layout="vertical"
           requiredMark={false}
           submitter={{
@@ -75,6 +79,7 @@ export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
             remark: profile.remark || undefined,
           }}
           onFinish={async (values) => {
+            // 保存只提交文本资料，avatar 只走上传按钮直写，这里不提交
             await updateMutation.mutateAsync({
               id: profile.id,
               params: {
@@ -82,27 +87,25 @@ export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
                 nickname: values.nickname?.trim() || undefined,
                 phone: values.phone?.trim() || undefined,
                 email: values.email?.trim() || undefined,
-                avatar: values.avatar?.trim() || undefined,
                 remark: values.remark?.trim() || undefined,
               },
             })
           }}
         >
-          <AdminUserFormFields />
+          <AdminUserFormFields avatarReadOnly />
         </ProForm>
       </div>
       <div style={{ width: 200, flexShrink: 0, textAlign: 'center' }}>
         <div style={{ marginBottom: 12 }}>头像</div>
-        <ProFormDependency name={['avatar']}>
-          {({ avatar }) => (
-            <Avatar
-              size={144}
-              src={(typeof avatar === 'string' && avatar) || profile.avatar || undefined}
-              icon={displayNameOf(profile).slice(0, 1)}
-              style={{ marginBottom: 16 }}
-            />
-          )}
-        </ProFormDependency>
+        <Avatar
+          size={144}
+          // 表单 avatar 字段是只读展示：可能是对象 key（上传后写入），
+          // 也可能是老数据里的完整 URL；只有 http(s) 才直接预览，
+          // 否则用画像里后端解析好的地址
+          src={isHttpUrl(avatarKey) ? avatarKey : profile.avatar || undefined}
+          icon={displayNameOf(profile).slice(0, 1)}
+          style={{ marginBottom: 16 }}
+        />
         <Upload
           accept="image/*"
           showUploadList={false}
@@ -126,4 +129,9 @@ export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
 
 function displayNameOf(profile: AdminUser): string {
   return profile.nickname || profile.realname || profile.username || '管'
+}
+
+/** 是否完整 URL（对象 key 不算，预览不了） */
+function isHttpUrl(value: unknown): value is string {
+  return typeof value === 'string' && /^https?:\/\//.test(value)
 }
