@@ -553,6 +553,70 @@ declare global {
     /** 权限码集合 */
     permissionCodes: string[]
   }
+
+  /** 管理员账号视图（见文档 AdminUserVo：GET /admin/users） */
+  interface AdminUser {
+    /** 管理员 id */
+    id: number
+    /** 登录用户名 */
+    username: string
+    /** 真实姓名 */
+    realname?: string
+    /** 昵称 */
+    nickname?: string
+    /** 手机号 */
+    phone?: string
+    /** 邮箱 */
+    email?: string
+    /** 头像 URL */
+    avatar?: string
+    /** 备注 */
+    remark?: string
+    /** 状态：1 正常 / 0 禁用 */
+    status?: number
+    /** 角色 id，null=无角色 */
+    roleId?: number | null
+    /** 角色名，无角色或角色缺失时 null */
+    roleName?: string | null
+    /** 最近登录时间 */
+    lastLoginAt?: string
+    /** 创建时间 */
+    createdAt?: string
+    /** 更新时间 */
+    updatedAt?: string
+  }
+
+  /** 管理员分页查询入参（见文档 GET /admin/users：分页 1 起，创建时间倒序） */
+  interface AdminUserQueryParams extends PageParams {
+    /** 用户名模糊 */
+    username?: string
+    /** 真实姓名模糊 */
+    realname?: string
+    /** 状态：1 正常 0 禁用 */
+    status?: 0 | 1
+    /** 角色 id 精确 */
+    roleId?: number
+    /** 是否只看无角色 */
+    unassignedOnly?: boolean
+  }
+
+  /** 管理员资料编辑入参（见文档 AdminUserUpdateRequest：PUT /admin/users/{id}，不动用户名/密码/状态/角色） */
+  interface AdminUserUpdateParams {
+    /** 真实姓名 */
+    realname?: string
+    /** 昵称 */
+    nickname?: string
+    /** 手机号 */
+    phone?: string
+    /** 邮箱 */
+    email?: string
+    /** 头像 URL */
+    avatar?: string
+    /** 备注 */
+    remark?: string
+  }
+
+
 }
 
 export {}
