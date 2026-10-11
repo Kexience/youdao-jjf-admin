@@ -1,9 +1,11 @@
+import { UploadOutlined } from '@ant-design/icons'
 import type { ProFormInstance } from '@ant-design/pro-components'
 import { ProForm, ProFormDependency } from '@ant-design/pro-components'
-import { App, Avatar } from 'antd'
-import { useRef } from 'react'
+import { App, Avatar, Button, Upload } from 'antd'
+import { useRef, useState } from 'react'
 
 import { useUpdateAdminUser } from '../../api/adminUsers'
+import { AVATAR_ZONE, uploadImageViaCredential } from '../../api/storageUpload'
 import { ApiError } from '../../lib/request'
 import { AdminUserFormFields } from '../adminUsers/AdminUserFormFields'
 
@@ -23,6 +25,7 @@ interface AccountBaseFormProps {
 export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
   const { message } = App.useApp()
   const formRef = useRef<ProFormInstance>(undefined)
+  const [uploading, setUploading] = useState(false)
 
   const updateMutation = useUpdateAdminUser({
     onSuccess: () => {
@@ -33,6 +36,24 @@ export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
       message.error(error instanceof ApiError ? error.message : '保存失败，请重试')
     },
   })
+
+  /**
+   * 更换头像：申请上传凭证 → 直传 OSS → 确认 → 回写资料并刷新。
+   * 传完直接保存（对照 Pro 版 AvatarView 的“更换头像”即时生效），
+   * 同时同步左侧表单的 avatar 字段，保持两边一致。
+   */
+  const handleAvatarFile = async (file: File) => {
+    setUploading(true)
+    try {
+      const url = await uploadImageViaCredential(file, AVATAR_ZONE)
+      formRef.current?.setFieldValue('avatar', url)
+      await updateMutation.mutateAsync({ id: profile.id, params: { avatar: url } })
+    } catch (error) {
+      message.error(error instanceof ApiError ? error.message : '头像上传失败，请重试')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   return (
     <div style={{ display: 'flex', gap: 32 }}>
@@ -82,8 +103,21 @@ export function AccountBaseForm({ profile, onSaved }: AccountBaseFormProps) {
             />
           )}
         </ProFormDependency>
-        <div style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 12 }}>
-          在左侧「头像 URL」中填写图片地址后，此处实时预览。
+        <Upload
+          accept="image/*"
+          showUploadList={false}
+          disabled={uploading}
+          beforeUpload={(file) => {
+            void handleAvatarFile(file)
+            return false
+          }}
+        >
+          <Button icon={<UploadOutlined />} loading={uploading}>
+            {uploading ? '上传中' : '更换头像'}
+          </Button>
+        </Upload>
+        <div style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 12, marginTop: 12 }}>
+          图片直传到 {AVATAR_ZONE} 存储区，上传成功即时生效。
         </div>
       </div>
     </div>

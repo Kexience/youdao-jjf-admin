@@ -624,6 +624,71 @@ declare global {
     newPassword: string
   }
 
+  /** 上传凭证申请入参（见文档 StorageUploadRequestDto：POST /api/v1/storage/upload-requests） */
+  interface StorageUploadCredentialParams {
+    /** 目标 zone 前缀，如 admin-avatar/，必填 */
+    zone: string
+    /** 文件 SHA-256 hex（64 位小写），必填 */
+    hash: string
+    /** 文件大小（字节），必填 */
+    size: number
+    /** 浏览器声明的 MIME 类型 */
+    contentType?: string
+    /** 原始文件名 */
+    originalName?: string
+  }
+
+  /** 上传凭证申请响应（见文档 StorageUploadRequestVo） */
+  interface StorageUploadCredential {
+    /** 本次上传记录 id */
+    recordId: number
+    /** 是否秒传命中（命中时 viewUrl 可直接用） */
+    dedup?: boolean
+    /** 对象 key，直传表单的 key 字段必须原样填它 */
+    objectKey?: string
+    /** 直传 host，文件 POST 到这里 */
+    host?: string
+    /** base64 policy */
+    policy?: string
+    /** policy 签名 */
+    signature?: string
+    /** AccessKey ID（V1 直传用） */
+    accessKeyId?: string
+    /** V4 credential 域（V4 直传用） */
+    credential?: string
+    /** x-oss-date（V4 直传用） */
+    dateTime?: string
+    /** base64 回调配置 */
+    callback?: string
+    /** 凭证过期毫秒时间戳 */
+    expireAtMillis?: number
+    /** 秒传命中时的可读地址 */
+    viewUrl?: string
+  }
+
+  /** 上传确认入参（见文档 StorageUploadConfirmDto：POST /api/v1/storage/upload-confirms） */
+  interface StorageUploadConfirmParams {
+    /** 上传记录 id */
+    recordId: number
+    /** 实际上传对象 key */
+    objectKey: string
+    /** 实际上传大小（字节） */
+    size: number
+    /** OSS 返回的 ETag（取不到可空） */
+    etag?: string
+  }
+
+  /** 上传确认响应（见文档 StorageUploadConfirmVo） */
+  interface StorageUploadConfirmResult {
+    /** 记录 id */
+    recordId?: number
+    /** 是否 READY */
+    ready?: boolean
+    /** 是否幂等命中已 READY */
+    alreadyReady?: boolean
+    /** 可读地址（READY 时按读策略给出） */
+    viewUrl?: string
+  }
 }
 
 export {}
