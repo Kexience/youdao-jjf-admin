@@ -19,6 +19,7 @@ function toInitialValues(channel: StorageChannel): StorageChannelFormValues {
     accessKeyId: channel.accessKeyId,
     accessKeySecret: '',
     callbackUrl: channel.callbackUrl,
+    customDomain: channel.customDomain,
     priority: channel.priority,
     enabled: channel.enabled,
     accessKeySecretEncrypted: channel.accessKeySecretEncrypted ?? true,
@@ -62,6 +63,8 @@ export function StorageChannelEditModal({ channel, saving, onSubmit }: StorageCh
           accessKeyId: values.accessKeyId?.trim() || undefined,
           accessKeySecret: values.accessKeySecret?.trim() || undefined,
           callbackUrl: values.callbackUrl?.trim() || undefined,
+          // 自定义域名“空=关闭”：清空要透空串过去，不能按其它字段转 undefined（否则关不掉）
+          customDomain: values.customDomain?.trim() ?? undefined,
           priority: values.priority,
           enabled: values.enabled,
           accessKeySecretEncrypted: values.accessKeySecretEncrypted,

@@ -21,6 +21,12 @@ export const STORAGE_CHANNEL_COLUMNS: ProColumns<StorageChannel>[] = [
     render: (_, record) => record.bucket || '-',
   },
   {
+    title: '自定义读域名',
+    dataIndex: 'customDomain',
+    ellipsis: true,
+    render: (_, record) => record.customDomain || '-',
+  },
+  {
     title: '优先级',
     dataIndex: 'priority',
     width: 100,

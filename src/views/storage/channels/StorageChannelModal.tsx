@@ -12,6 +12,7 @@ export interface StorageChannelFormValues {
   accessKeyId?: string
   accessKeySecret?: string
   callbackUrl?: string
+  customDomain?: string
   priority: number
   enabled: boolean
   accessKeySecretEncrypted: boolean
@@ -57,6 +58,8 @@ export function StorageChannelModal({ saving, onSubmit }: StorageChannelModalPro
           accessKeyId: values.accessKeyId?.trim() || undefined,
           accessKeySecret: values.accessKeySecret?.trim() || undefined,
           callbackUrl: values.callbackUrl?.trim() || undefined,
+          // 自定义域名“空=关闭”：清空要透空串过去，不能按其它字段转 undefined（否则关不掉）
+          customDomain: values.customDomain?.trim() ?? undefined,
           priority: values.priority,
           enabled: values.enabled,
           accessKeySecretEncrypted: values.accessKeySecretEncrypted,

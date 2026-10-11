@@ -255,6 +255,8 @@ declare global {
     accessKeySecret?: string
     /** 回调公网 URL */
     callbackUrl?: string
+    /** 自定义读域名(CNAME)，空=关闭 */
+    customDomain?: string
     /** 优先级，1 最高 */
     priority: number
     /** 启用状态 */
@@ -279,6 +281,8 @@ declare global {
     accessKeySecret?: string
     /** 回调公网 URL */
     callbackUrl?: string
+    /** 自定义读域名(CNAME，如 https://img.example.com)，空=关闭 */
+    customDomain?: string
     /** 优先级，1 最高全局唯一，必填 */
     priority: number
     /** 启用状态，不传=保留原值 */
@@ -568,7 +572,7 @@ declare global {
     phone?: string
     /** 邮箱 */
     email?: string
-    /** 头像 URL */
+    /** 头像对象 key（落库用；读取接口返回解析后的可读地址） */
     avatar?: string
     /** 备注 */
     remark?: string
@@ -610,7 +614,7 @@ declare global {
     phone?: string
     /** 邮箱 */
     email?: string
-    /** 头像 URL */
+    /** 头像对象 key */
     avatar?: string
     /** 备注 */
     remark?: string

@@ -62,6 +62,13 @@ export function StorageChannelFormFields({ isEdit }: { isEdit: boolean }) {
         label="回调公网 URL"
         placeholder="回调公网 URL（可选）"
       />
+      <ProFormText
+        name="customDomain"
+        label="自定义读域名"
+        tooltip="CNAME 读域名，不可绑定当前网站域名，建议新开二级域名；清空=关闭自定义域名"
+        placeholder="如 https://pic.ydndd.com，留空=关闭"
+        rules={[{ type: 'url', message: '域名格式不正确，如 https://pic.ydndd.com' }]}
+      />
       <ProForm.Group>
         <ProFormSwitch
           name="enabled"
