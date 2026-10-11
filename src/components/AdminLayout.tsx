@@ -7,6 +7,7 @@ import type { ComponentType, ReactNode } from 'react'
 import { createElement, useMemo } from 'react'
 
 import { useGetMyMenus } from '../api/menus'
+import { useMyProfile } from '../api/account'
 import { useAuthStore } from '../stores/auth'
 import { useResolvedTheme, useThemeStore } from '../stores/theme'
 
@@ -67,7 +68,7 @@ interface AdminLayoutProps {
  * 管理端主布局（ProLayout side 模式）：
  * - 菜单直接使用当前管理员可见树（GET /admin/menus/mine），无本地兜底；
  * - 菜单点击走 TanStack Router 的 Link；
- * - 用户信息走 avatarProps（后端 AdminLoginVo 暂无用户名/头像字段，先用占位，有接口后再接真数据）；
+ * - 用户信息走 avatarProps（GET /admin/users/me，有数据时显示昵称/用户名）；
  * - 头部操作区（actionsRender）只放白色/深色切换。
  */
 export function AdminLayout({ children }: AdminLayoutProps) {
@@ -76,8 +77,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const resolved = useResolvedTheme()
   const toggleTheme = useThemeStore((s) => s.toggle)
   const clearToken = useAuthStore((s) => s.clearToken)
+  const token = useAuthStore((s) => s.token)
 
   const myMenusQuery = useGetMyMenus()
+  const myProfileQuery = useMyProfile({ enabled: !!token })
 
   const menuData = useMemo<MenuDataItem[]>(
     () => toMenuItems(myMenusQuery.data?.menus ?? []),
@@ -115,12 +118,22 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         ]}
         avatarProps={{
           size: 'small',
+          src: myProfileQuery.data?.avatar || undefined,
           icon: <AntdIcons.UserOutlined />,
-          title: '管理员',
+          title:
+            myProfileQuery.data?.nickname ||
+            myProfileQuery.data?.realname ||
+            myProfileQuery.data?.username ||
+            '管理员',
           render: (_, defaultDom) => (
             <Dropdown
               menu={{
                 items: [
+                  {
+                    key: 'account',
+                    label: '个人中心',
+                    icon: <AntdIcons.UserOutlined />,
+                  },
                   {
                     key: 'logout',
                     label: '退出登录',
@@ -128,6 +141,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                   },
                 ],
                 onClick: ({ key }) => {
+                  if (key === 'account') {
+                    void navigate({ to: '/account' })
+                    return
+                  }
                   if (key === 'logout') {
                     clearToken()
                     void navigate({ to: '/login' })

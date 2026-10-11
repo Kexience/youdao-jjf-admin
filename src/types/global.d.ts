@@ -616,6 +616,13 @@ declare global {
     remark?: string
   }
 
+  /** 自助改密入参（见文档 AdminUserSelfPasswordRequest：PUT /admin/users/me/password） */
+  interface AdminUserSelfPasswordParams {
+    /** 旧口令 */
+    oldPassword: string
+    /** 新口令，8~32 字符 */
+    newPassword: string
+  }
 
 }
 
