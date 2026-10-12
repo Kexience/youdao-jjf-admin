@@ -14,12 +14,13 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainAccountRouteImport } from './routes/_main/account'
-import { Route as MainMembersRouteImport } from './routes/_main/members'
+import { Route as MainMembersRouteRouteImport } from './routes/_main/members/route'
 import { Route as MainMenusRouteImport } from './routes/_main/menus'
 import { Route as MainRegionRouteRouteImport } from './routes/_main/region/route'
 import { Route as MainRolesRouteRouteImport } from './routes/_main/roles/route'
 import { Route as MainUsersRouteRouteImport } from './routes/_main/users/route'
-import { Route as MainMembersMemberIdRouteImport } from './routes/_main/members.$memberId'
+import { Route as MainMembersIndexRouteImport } from './routes/_main/members/index'
+import { Route as MainMembersMemberIdRouteRouteImport } from './routes/_main/members/$memberId/route'
 import { Route as MainRegionIndexRouteImport } from './routes/_main/region/index'
 import { Route as MainRegionQueryRouteImport } from './routes/_main/region/query'
 import { Route as MainRegionSyncRouteImport } from './routes/_main/region/sync'
@@ -36,6 +37,7 @@ import { Route as MainStorageZonesRouteImport } from './routes/_main/storage/zon
 import { Route as MainUsersIndexRouteImport } from './routes/_main/users/index'
 import { Route as MainUsersUserIdRouteImport } from './routes/_main/users/$userId'
 import { Route as MainUsersNewRouteImport } from './routes/_main/users/new'
+import { Route as MainMembersMemberIdIndexRouteImport } from './routes/_main/members/$memberId/index'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -61,7 +63,7 @@ const MainAccountRoute = MainAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => MainRoute,
 } as any)
-const MainMembersRoute = MainMembersRouteImport.update({
+const MainMembersRouteRoute = MainMembersRouteRouteImport.update({
   id: '/members',
   path: '/members',
   getParentRoute: () => MainRoute,
@@ -86,11 +88,17 @@ const MainUsersRouteRoute = MainUsersRouteRouteImport.update({
   path: '/users',
   getParentRoute: () => MainRoute,
 } as any)
-const MainMembersMemberIdRoute = MainMembersMemberIdRouteImport.update({
-  id: '/$memberId',
-  path: '/$memberId',
-  getParentRoute: () => MainMembersRoute,
+const MainMembersIndexRoute = MainMembersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainMembersRouteRoute,
 } as any)
+const MainMembersMemberIdRouteRoute =
+  MainMembersMemberIdRouteRouteImport.update({
+    id: '/$memberId',
+    path: '/$memberId',
+    getParentRoute: () => MainMembersRouteRoute,
+  } as any)
 const MainRegionIndexRoute = MainRegionIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -171,18 +179,24 @@ const MainUsersNewRoute = MainUsersNewRouteImport.update({
   path: '/new',
   getParentRoute: () => MainUsersRouteRoute,
 } as any)
+const MainMembersMemberIdIndexRoute =
+  MainMembersMemberIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => MainMembersMemberIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
   '/login': typeof LoginRoute
+  '/members': typeof MainMembersRouteRouteWithChildren
   '/region': typeof MainRegionRouteRouteWithChildren
   '/roles': typeof MainRolesRouteRouteWithChildren
   '/users': typeof MainUsersRouteRouteWithChildren
   '/about': typeof MainAboutRoute
   '/account': typeof MainAccountRoute
-  '/members': typeof MainMembersRouteWithChildren
   '/menus': typeof MainMenusRoute
-  '/members/$memberId': typeof MainMembersMemberIdRoute
+  '/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
   '/region/query': typeof MainRegionQueryRoute
   '/region/sync': typeof MainRegionSyncRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
@@ -196,18 +210,18 @@ export interface FileRoutesByFullPath {
   '/storage/zones': typeof MainStorageZonesRoute
   '/users/$userId': typeof MainUsersUserIdRoute
   '/users/new': typeof MainUsersNewRoute
+  '/members/': typeof MainMembersIndexRoute
   '/region/': typeof MainRegionIndexRoute
   '/roles/': typeof MainRolesIndexRoute
   '/users/': typeof MainUsersIndexRoute
+  '/members/$memberId/': typeof MainMembersMemberIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
   '/account': typeof MainAccountRoute
-  '/members': typeof MainMembersRouteWithChildren
   '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
-  '/members/$memberId': typeof MainMembersMemberIdRoute
   '/region/query': typeof MainRegionQueryRoute
   '/region/sync': typeof MainRegionSyncRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
@@ -221,23 +235,25 @@ export interface FileRoutesByTo {
   '/storage/zones': typeof MainStorageZonesRoute
   '/users/$userId': typeof MainUsersUserIdRoute
   '/users/new': typeof MainUsersNewRoute
+  '/members': typeof MainMembersIndexRoute
   '/region': typeof MainRegionIndexRoute
   '/roles': typeof MainRolesIndexRoute
   '/users': typeof MainUsersIndexRoute
+  '/members/$memberId': typeof MainMembersMemberIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_main': typeof MainRouteWithChildren
   '/login': typeof LoginRoute
+  '/_main/members': typeof MainMembersRouteRouteWithChildren
   '/_main/region': typeof MainRegionRouteRouteWithChildren
   '/_main/roles': typeof MainRolesRouteRouteWithChildren
   '/_main/users': typeof MainUsersRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
   '/_main/account': typeof MainAccountRoute
-  '/_main/members': typeof MainMembersRouteWithChildren
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
-  '/_main/members/$memberId': typeof MainMembersMemberIdRoute
+  '/_main/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
   '/_main/region/query': typeof MainRegionQueryRoute
   '/_main/region/sync': typeof MainRegionSyncRoute
   '/_main/roles/$roleId': typeof MainRolesRoleIdRoute
@@ -251,21 +267,23 @@ export interface FileRoutesById {
   '/_main/storage/zones': typeof MainStorageZonesRoute
   '/_main/users/$userId': typeof MainUsersUserIdRoute
   '/_main/users/new': typeof MainUsersNewRoute
+  '/_main/members/': typeof MainMembersIndexRoute
   '/_main/region/': typeof MainRegionIndexRoute
   '/_main/roles/': typeof MainRolesIndexRoute
   '/_main/users/': typeof MainUsersIndexRoute
+  '/_main/members/$memberId/': typeof MainMembersMemberIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
+    | '/members'
     | '/region'
     | '/roles'
     | '/users'
     | '/about'
     | '/account'
-    | '/members'
     | '/menus'
     | '/members/$memberId'
     | '/region/query'
@@ -281,18 +299,18 @@ export interface FileRouteTypes {
     | '/storage/zones'
     | '/users/$userId'
     | '/users/new'
+    | '/members/'
     | '/region/'
     | '/roles/'
     | '/users/'
+    | '/members/$memberId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/about'
     | '/account'
-    | '/members'
     | '/menus'
     | '/'
-    | '/members/$memberId'
     | '/region/query'
     | '/region/sync'
     | '/roles/$roleId'
@@ -306,19 +324,21 @@ export interface FileRouteTypes {
     | '/storage/zones'
     | '/users/$userId'
     | '/users/new'
+    | '/members'
     | '/region'
     | '/roles'
     | '/users'
+    | '/members/$memberId'
   id:
     | '__root__'
     | '/_main'
     | '/login'
+    | '/_main/members'
     | '/_main/region'
     | '/_main/roles'
     | '/_main/users'
     | '/_main/about'
     | '/_main/account'
-    | '/_main/members'
     | '/_main/menus'
     | '/_main/'
     | '/_main/members/$memberId'
@@ -335,9 +355,11 @@ export interface FileRouteTypes {
     | '/_main/storage/zones'
     | '/_main/users/$userId'
     | '/_main/users/new'
+    | '/_main/members/'
     | '/_main/region/'
     | '/_main/roles/'
     | '/_main/users/'
+    | '/_main/members/$memberId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -386,7 +408,7 @@ declare module '@tanstack/react-router' {
       id: '/_main/members'
       path: '/members'
       fullPath: '/members'
-      preLoaderRoute: typeof MainMembersRouteImport
+      preLoaderRoute: typeof MainMembersRouteRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/menus': {
@@ -417,12 +439,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainUsersRouteRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/members/': {
+      id: '/_main/members/'
+      path: '/'
+      fullPath: '/members/'
+      preLoaderRoute: typeof MainMembersIndexRouteImport
+      parentRoute: typeof MainMembersRouteRoute
+    }
     '/_main/members/$memberId': {
       id: '/_main/members/$memberId'
       path: '/$memberId'
       fullPath: '/members/$memberId'
-      preLoaderRoute: typeof MainMembersMemberIdRouteImport
-      parentRoute: typeof MainMembersRoute
+      preLoaderRoute: typeof MainMembersMemberIdRouteRouteImport
+      parentRoute: typeof MainMembersRouteRoute
     }
     '/_main/region/': {
       id: '/_main/region/'
@@ -536,8 +565,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainUsersNewRouteImport
       parentRoute: typeof MainUsersRouteRoute
     }
+    '/_main/members/$memberId/': {
+      id: '/_main/members/$memberId/'
+      path: '/'
+      fullPath: '/members/$memberId/'
+      preLoaderRoute: typeof MainMembersMemberIdIndexRouteImport
+      parentRoute: typeof MainMembersMemberIdRouteRoute
+    }
   }
 }
+
+interface MainMembersMemberIdRouteRouteChildren {
+  MainMembersMemberIdIndexRoute: typeof MainMembersMemberIdIndexRoute
+}
+
+const MainMembersMemberIdRouteRouteChildren: MainMembersMemberIdRouteRouteChildren =
+  {
+    MainMembersMemberIdIndexRoute: MainMembersMemberIdIndexRoute,
+  }
+
+const MainMembersMemberIdRouteRouteWithChildren =
+  MainMembersMemberIdRouteRoute._addFileChildren(
+    MainMembersMemberIdRouteRouteChildren,
+  )
+
+interface MainMembersRouteRouteChildren {
+  MainMembersMemberIdRouteRoute: typeof MainMembersMemberIdRouteRouteWithChildren
+  MainMembersIndexRoute: typeof MainMembersIndexRoute
+}
+
+const MainMembersRouteRouteChildren: MainMembersRouteRouteChildren = {
+  MainMembersMemberIdRouteRoute: MainMembersMemberIdRouteRouteWithChildren,
+  MainMembersIndexRoute: MainMembersIndexRoute,
+}
+
+const MainMembersRouteRouteWithChildren =
+  MainMembersRouteRoute._addFileChildren(MainMembersRouteRouteChildren)
 
 interface MainRegionRouteRouteChildren {
   MainRegionQueryRoute: typeof MainRegionQueryRoute
@@ -585,25 +648,13 @@ const MainUsersRouteRouteWithChildren = MainUsersRouteRoute._addFileChildren(
   MainUsersRouteRouteChildren,
 )
 
-interface MainMembersRouteChildren {
-  MainMembersMemberIdRoute: typeof MainMembersMemberIdRoute
-}
-
-const MainMembersRouteChildren: MainMembersRouteChildren = {
-  MainMembersMemberIdRoute: MainMembersMemberIdRoute,
-}
-
-const MainMembersRouteWithChildren = MainMembersRoute._addFileChildren(
-  MainMembersRouteChildren,
-)
-
 interface MainRouteChildren {
+  MainMembersRouteRoute: typeof MainMembersRouteRouteWithChildren
   MainRegionRouteRoute: typeof MainRegionRouteRouteWithChildren
   MainRolesRouteRoute: typeof MainRolesRouteRouteWithChildren
   MainUsersRouteRoute: typeof MainUsersRouteRouteWithChildren
   MainAboutRoute: typeof MainAboutRoute
   MainAccountRoute: typeof MainAccountRoute
-  MainMembersRoute: typeof MainMembersRouteWithChildren
   MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
@@ -617,12 +668,12 @@ interface MainRouteChildren {
 }
 
 const MainRouteChildren: MainRouteChildren = {
+  MainMembersRouteRoute: MainMembersRouteRouteWithChildren,
   MainRegionRouteRoute: MainRegionRouteRouteWithChildren,
   MainRolesRouteRoute: MainRolesRouteRouteWithChildren,
   MainUsersRouteRoute: MainUsersRouteRouteWithChildren,
   MainAboutRoute: MainAboutRoute,
   MainAccountRoute: MainAccountRoute,
-  MainMembersRoute: MainMembersRouteWithChildren,
   MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type { UseMutationOptions } from '@tanstack/react-query'
 
 import { get, put } from '../lib/request'
@@ -23,6 +23,17 @@ export function fetchMembers(params: MemberAdminQueryParams) {
 /** 会员详情：GET /admin/members/{id} */
 export function fetchMemberDetail(id: number) {
   return get<MemberAdmin>(`/members/${id}`)
+}
+
+/**
+ * 会员详情查询：详情布局与各子路由（详情 / 后续订单等）共用同一 queryKey，
+ * 命中 react-query 缓存，不会重复请求。
+ */
+export function useMemberDetail(id: number) {
+  return useQuery({
+    queryKey: ['member-detail', id],
+    queryFn: () => fetchMemberDetail(id),
+  })
 }
 
 /** 禁用/解禁会员（禁用即踢在线，重复提交幂等）：PUT /admin/members/{id}/status */

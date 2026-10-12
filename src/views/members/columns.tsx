@@ -6,12 +6,12 @@ export const MEMBER_STATUS_ENUM = {
   0: { text: '禁用', status: 'Error' },
 } as const
 
-/** 性别文案（见文档 MemberAdminVo.sex：0未知 1男 2女） */
-export const MEMBER_SEX_TEXT: Record<number, string> = {
-  0: '未知',
-  1: '男',
-  2: '女',
-}
+/** 性别 valueEnum（见文档 MemberAdminVo.sex：0未知 1男 2女） */
+export const MEMBER_SEX_ENUM = {
+  0: { text: '未知' },
+  1: { text: '男' },
+  2: { text: '女' },
+} as const
 
 /** 等级列表 → ProTable 筛选项 valueEnum（key 为等级 id） */
 export function toMemberLevelValueEnum(levels: MemberLevel[]): Record<number, { text: string }> {
@@ -95,9 +95,9 @@ export function getMemberColumns(levels: MemberLevel[]): ProColumns<MemberAdmin>
       title: '最后登录时间',
       dataIndex: 'lastLoginAt',
       width: 180,
+      // 交给 ProField 的 dateTime 渲染：默认格式化 YYYY-MM-DD HH:mm:ss，空值显示 -
       valueType: 'dateTime',
       search: false,
-      render: (_, record) => record.lastLoginAt || '-',
     },
   ]
 }
