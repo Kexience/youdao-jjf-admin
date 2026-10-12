@@ -3,7 +3,12 @@ import type {
   ProFieldValueType,
 } from "@ant-design/pro-components";
 import { PageContainer, ProDescriptions } from "@ant-design/pro-components";
-import { Link, Outlet } from "@tanstack/react-router";
+import {
+  Link,
+  Outlet,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 import { Alert, App, Avatar, Button, Popconfirm, Skeleton } from "antd";
 
 import { useMemberDetail, useUpdateMemberStatus } from "../../api/members";
@@ -32,14 +37,21 @@ const HEADER_COLUMNS: DetailColumn[] = [
 /**
  * 会员详情布局路由：布局参考 ant-design-pro 高级资料页
  * （https://github.com/ant-design/ant-design-pro/tree/master/src/pages/profile/advanced）——
- * 页头（PageContainer content/extraContent/extra）常驻，主体交给 <Outlet />。
+ * 页头（PageContainer content/extraContent/extra）常驻，主体分「用户身份 / 等级历史」两个 Tab，
+ * Tab 与子路由一一对应（用户身份=index，等级历史=level-history），支持刷新/前进后退/分享链接。
  *
- * 后续「订单 / 等级变更历史 / 推荐关系」等子页在
- * routes/_main/members/$memberId/ 下新增子路由即可自动挂到这里，
- * 页头与权限校验无需重复实现。
+ * 后续「订单 / 推荐关系」等子页在 routes/_main/members/$memberId/ 下新增子路由，
+ * 并在 tabList 里补一项即可自动挂到这里，页头与权限校验无需重复实现。
  */
 export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
   const { message } = App.useApp();
+  const navigate = useNavigate();
+
+  // 路径驱动 Tab：/members/$memberId 为「用户身份」，/members/$memberId/level-history 为「等级历史」
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const activeTab = pathname.endsWith("/level-history")
+    ? "level-history"
+    : "profile";
 
   const detailQuery = useMemberDetail(memberId);
 
@@ -58,10 +70,27 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
   const detail = detailQuery.data;
   const banned = detail?.status === 0;
 
+  /** Tab 切换跳转到对应子路由，保持 URL 与选中态一致 */
+  const handleTabChange = (key: string) => {
+    void navigate({
+      to:
+        key === "level-history"
+          ? "/members/$memberId/level-history"
+          : "/members/$memberId",
+      params: { memberId: String(memberId) },
+    });
+  };
+
   return (
     <PageContainer
       title="会员详情"
-      subTitle="会员基础信息与登录状态，支持禁用 / 解禁。"
+      subTitle="用户身份与等级历史，支持禁用 / 解禁。"
+      tabList={[
+        { key: "profile", tab: "用户身份" },
+        { key: "level-history", tab: "等级历史" },
+      ]}
+      tabActiveKey={activeTab}
+      onTabChange={handleTabChange}
       content={
         detail ? (
           <ProDescriptions<MemberAdmin, ProFieldValueType>
@@ -92,15 +121,6 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
           <Button>返回列表</Button>
         </Link>,
         detail && (
-          <Link
-            key="level-history"
-            to="/members/$memberId/level-history"
-            params={{ memberId: String(memberId) }}
-          >
-            <Button>等级历史</Button>
-          </Link>
-        ),
-        detail && (
           <Popconfirm
             key="status"
             title={banned ? "确认解禁该会员吗？" : "确认禁用该会员吗？"}
@@ -122,7 +142,7 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
         <Alert
           type="error"
           showIcon
-          message={
+          title={
             detailQuery.error instanceof ApiError
               ? detailQuery.error.message
               : "详情加载失败，请重试"
