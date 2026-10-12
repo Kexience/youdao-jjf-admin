@@ -239,6 +239,43 @@ declare global {
     end?: string
   }
 
+  /** 短信黑名单维度：手机号 / IP / 设备标识（见文档 SmsBlacklistVo.type） */
+  type SmsBlacklistType = 'MOBILE' | 'IP' | 'DEVICE'
+
+  /** 短信黑名单项（见文档 SmsBlacklistVo：GET /admin/sms/blacklist） */
+  interface SmsBlacklist {
+    /** 黑名单项 id */
+    id: number
+    /** 维度：MOBILE/IP/DEVICE */
+    type: string
+    /** 维度值：手机号 / IP / 设备标识 */
+    value: string
+    /** 原因备注 */
+    reason?: string
+    /** 启用状态 */
+    enabled: boolean
+    /** 加入时间 */
+    createdAt?: string
+  }
+
+  /** 黑名单新增入参（见文档 SmsBlacklistAddDto：POST /admin/sms/blacklist） */
+  interface SmsBlacklistAddParams {
+    /** 维度：MOBILE/IP/DEVICE，必填 */
+    type: SmsBlacklistType
+    /** 维度值：手机号 / IP / 设备标识，必填 */
+    value: string
+    /** 原因备注 */
+    reason?: string
+    /** 启用状态，默认启用 */
+    enabled?: boolean
+  }
+
+  /** 黑名单查询入参（分页 1 起；type 空字符串=全部维度） */
+  interface SmsBlacklistQueryParams extends PageParams {
+    /** 维度过滤：MOBILE/IP/DEVICE，空=全部 */
+    type?: string
+  }
+
   /** 存储通道（见文档 StorageChannelVo：GET /admin/storage/channels） */
   interface StorageChannel {
     /** 通道 id */

@@ -21,6 +21,7 @@ import { Route as MainUsersRouteRouteImport } from './routes/_main/users/route'
 import { Route as MainMembersMemberIdRouteImport } from './routes/_main/members.$memberId'
 import { Route as MainRolesIndexRouteImport } from './routes/_main/roles/index'
 import { Route as MainRolesRoleIdRouteImport } from './routes/_main/roles/$roleId'
+import { Route as MainSmsBlacklistRouteImport } from './routes/_main/sms/blacklist'
 import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels'
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
 import { Route as MainSmsRecordsRouteImport } from './routes/_main/sms/records'
@@ -91,6 +92,11 @@ const MainRolesRoleIdRoute = MainRolesRoleIdRouteImport.update({
   path: '/$roleId',
   getParentRoute: () => MainRolesRouteRoute,
 } as any)
+const MainSmsBlacklistRoute = MainSmsBlacklistRouteImport.update({
+  id: '/sms/blacklist',
+  path: '/sms/blacklist',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainSmsChannelsRoute = MainSmsChannelsRouteImport.update({
   id: '/sms/channels',
   path: '/sms/channels',
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/menus': typeof MainMenusRoute
   '/members/$memberId': typeof MainMembersMemberIdRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
+  '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/': typeof MainIndexRoute
   '/members/$memberId': typeof MainMembersMemberIdRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
+  '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channels': typeof MainSmsChannelsRoute
   '/sms/config': typeof MainSmsConfigRoute
   '/sms/records': typeof MainSmsRecordsRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/_main/': typeof MainIndexRoute
   '/_main/members/$memberId': typeof MainMembersMemberIdRoute
   '/_main/roles/$roleId': typeof MainRolesRoleIdRoute
+  '/_main/sms/blacklist': typeof MainSmsBlacklistRoute
   '/_main/sms/channels': typeof MainSmsChannelsRoute
   '/_main/sms/config': typeof MainSmsConfigRoute
   '/_main/sms/records': typeof MainSmsRecordsRoute
@@ -224,6 +233,7 @@ export interface FileRouteTypes {
     | '/menus'
     | '/members/$memberId'
     | '/roles/$roleId'
+    | '/sms/blacklist'
     | '/sms/channels'
     | '/sms/config'
     | '/sms/records'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/'
     | '/members/$memberId'
     | '/roles/$roleId'
+    | '/sms/blacklist'
     | '/sms/channels'
     | '/sms/config'
     | '/sms/records'
@@ -269,6 +280,7 @@ export interface FileRouteTypes {
     | '/_main/'
     | '/_main/members/$memberId'
     | '/_main/roles/$roleId'
+    | '/_main/sms/blacklist'
     | '/_main/sms/channels'
     | '/_main/sms/config'
     | '/_main/sms/records'
@@ -372,6 +384,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/roles/$roleId'
       preLoaderRoute: typeof MainRolesRoleIdRouteImport
       parentRoute: typeof MainRolesRouteRoute
+    }
+    '/_main/sms/blacklist': {
+      id: '/_main/sms/blacklist'
+      path: '/sms/blacklist'
+      fullPath: '/sms/blacklist'
+      preLoaderRoute: typeof MainSmsBlacklistRouteImport
+      parentRoute: typeof MainRoute
     }
     '/_main/sms/channels': {
       id: '/_main/sms/channels'
@@ -496,6 +515,7 @@ interface MainRouteChildren {
   MainMembersRoute: typeof MainMembersRouteWithChildren
   MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
   MainSmsChannelsRoute: typeof MainSmsChannelsRoute
   MainSmsConfigRoute: typeof MainSmsConfigRoute
   MainSmsRecordsRoute: typeof MainSmsRecordsRoute
@@ -513,6 +533,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainMembersRoute: MainMembersRouteWithChildren,
   MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
+  MainSmsBlacklistRoute: MainSmsBlacklistRoute,
   MainSmsChannelsRoute: MainSmsChannelsRoute,
   MainSmsConfigRoute: MainSmsConfigRoute,
   MainSmsRecordsRoute: MainSmsRecordsRoute,
