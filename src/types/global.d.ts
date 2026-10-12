@@ -554,6 +554,67 @@ declare global {
     memberCount?: number
   }
 
+  /** 等级新建入参（见文档 MemberLevelCreateDto：POST /admin/member/levels） */
+  interface MemberLevelCreateParams {
+    /** 等级名称，必填 */
+    levelName: string
+    /** 档位序位，升序即档位高低，必填 */
+    sort: number
+    /** 消费折扣，100=不打折，必填（0~100） */
+    consumeDiscount: number
+    /** 成长值门槛，必填 */
+    growthRequired: number
+    /** 状态：1正常 0停用，必填 */
+    status: 0 | 1
+    /** 备注 */
+    remark?: string
+    /** 是否默认档，缺省 false；已有默认档时为 true 将被拒绝 */
+    isDefault?: boolean
+  }
+
+  /**
+   * 等级编辑入参（见文档 MemberLevelUpdateDto：PUT /admin/member/levels/{id}）。
+   * 全部字段可选，空=保留原值（注意：传空字符串/0 也会被后端视为保留，前端按需裁剪）。
+   */
+  interface MemberLevelUpdateParams {
+    /** 等级名称，空=保留原值 */
+    levelName?: string
+    /** 档位序位，空=保留原值 */
+    sort?: number
+    /** 消费折扣，空=保留原值（0~100） */
+    consumeDiscount?: number
+    /** 成长值门槛，空=保留原值 */
+    growthRequired?: number
+    /** 状态：1正常 0停用，空=保留原值 */
+    status?: 0 | 1
+    /** 备注，空=保留原值 */
+    remark?: string
+  }
+
+  /** 会员等级调整入参（见文档 MemberLevelAssignDto：PUT /admin/member/{memberId}/level） */
+  interface MemberLevelAssignParams {
+    /** 目标等级 id，必填 */
+    levelId: number
+    /** 备注（≤255） */
+    remark?: string
+  }
+
+  /** 会员等级调整历史项（见文档 MemberLevelChangeLogVo） */
+  interface MemberLevelChangeLog {
+    /** 审计行 id */
+    id: number
+    /** 调整前等级 id，空=调整前无等级 */
+    fromLevelId?: number
+    /** 调整后等级 id */
+    toLevelId: number
+    /** 操作管理员 id，可空 */
+    operatorAdminId?: number
+    /** 备注 */
+    remark?: string
+    /** 调整时间 */
+    createdAt?: string
+  }
+
   /** 后台角色（见文档 AdminRoleVo：GET /admin/roles，含内置与停用角色） */
   interface AdminRole {
     /** 角色 id */

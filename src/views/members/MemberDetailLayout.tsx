@@ -92,6 +92,15 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
           <Button>返回列表</Button>
         </Link>,
         detail && (
+          <Link
+            key="level-history"
+            to="/members/$memberId/level-history"
+            params={{ memberId: String(memberId) }}
+          >
+            <Button>等级历史</Button>
+          </Link>
+        ),
+        detail && (
           <Popconfirm
             key="status"
             title={banned ? "确认解禁该会员吗？" : "确认禁用该会员吗？"}
