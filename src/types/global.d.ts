@@ -755,6 +755,103 @@ declare global {
     /** 可读地址（READY 时按读策略给出） */
     viewUrl?: string
   }
+
+  /** 行政区子级项（见文档 RegionChildVo：GET /admin/region/children） */
+  interface RegionChild {
+    /** 国标码（6 位，根码 000000 的下一级为省级） */
+    code: string
+    /** 全称 */
+    name: string
+    /** 层级 */
+    level: number
+  }
+
+  /** 行政区划同步任务（见文档 RegionSyncJobVo：GET /admin/region/sync-jobs） */
+  interface RegionSyncJob {
+    /** 任务 id */
+    id: number
+    /** 目标版本号 */
+    targetVersion?: string
+    /** 状态 */
+    status?: string
+    /** 当前阶段 */
+    stage?: string
+    /** 阶段断点码 */
+    cursorCode?: string
+    /** 预计抓取节点数 */
+    total?: number
+    /** 已抓取节点数 */
+    fetched?: number
+    /** 已直接应用行数 */
+    applied?: number
+    /** 已停用行数 */
+    disabled?: number
+    /** 进入待审核清单数 */
+    changed?: number
+    /** 已跳过数 */
+    skipped?: number
+    /** 错误信息 */
+    errorMsg?: string
+    /** 触发人 id */
+    createdBy?: number
+    /** 开始时间 */
+    startedAt?: string
+    /** 结束时间 */
+    finishedAt?: string
+  }
+
+  /** 触发行政区划同步入参（见文档 RegionSyncJobCreateDto） */
+  interface RegionSyncJobCreateParams {
+    /** 目标版本号：8 位日期串，仅作本地任务标签，如 20250101 */
+    version: string
+  }
+
+  /** 市辖区变动清单项（见文档 RegionSyncChangeVo：GET /admin/region/sync-changes） */
+  interface RegionSyncChange {
+    /** 清单项 id */
+    id: number
+    /** 所属任务 id */
+    jobId?: number
+    /** 变动的 6 位国标码 */
+    code?: string
+    /** 层级 */
+    level?: number
+    /** 变动类型 */
+    changeType?: string
+    /** 变动前快照 */
+    beforeJson?: string
+    /** 变动后快照 */
+    afterJson?: string
+    /** 审核状态：pending/approved/rejected */
+    status?: string
+    /** 审核人 id */
+    reviewedBy?: number
+    /** 审核时间 */
+    reviewedAt?: string
+    /** 创建时间 */
+    createdAt?: string
+  }
+
+  /**
+   * 变动清单分页查询入参（见文档 GET /admin/region/sync-changes）。
+   * 注意：该接口分页字段是 page/pageSize，与全局 PageParams 的 page/size 不同。
+   */
+  interface RegionSyncChangeQueryParams {
+    /** 所属任务 id，不过滤不传 */
+    jobId?: number
+    /** 审核状态：pending/approved/rejected，不过滤不传 */
+    status?: string
+    /** 页码，1 起，默认 1 */
+    page?: number
+    /** 每页条数，默认 20 */
+    pageSize?: number
+  }
+
+  /** 变动审批入参（见文档 RegionSyncChangeReviewDto） */
+  interface RegionSyncChangeReviewParams {
+    /** 审批结论：approve 批准 / reject 驳回 */
+    decision: 'approve' | 'reject'
+  }
 }
 
 export {}

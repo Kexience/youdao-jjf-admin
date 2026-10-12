@@ -155,3 +155,22 @@ export async function del<T>(url: string, config?: AxiosRequestConfig): Promise<
   const { data } = await request.delete<ApiResult<T> | T>(url, config)
   return unwrap(data)
 }
+
+/**
+ * 下载二进制响应（如 /admin/region/exports/latest 的 JSON 文件流）。
+ * 不走信封 unwrap：成功时返回 Blob；后端异常时可能仍以 JSON 错误信封返回，
+ * 此时解析后抛 ApiError，避免把错误对象当文件存下去。
+ */
+export async function download(url: string, config?: AxiosRequestConfig): Promise<Blob> {
+  const { data } = await request.get<Blob>(url, { ...config, responseType: 'blob' })
+  if (data instanceof Blob && data.type.includes('application/json')) {
+    let envelope: ApiResult<unknown> | undefined
+    try {
+      envelope = JSON.parse(await data.text()) as ApiResult<unknown>
+    } catch {
+      envelope = undefined
+    }
+    if (envelope) throw new ApiError(envelope.message || '下载失败', envelope.code)
+  }
+  return data
+}

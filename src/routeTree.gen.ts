@@ -16,9 +16,13 @@ import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainAccountRouteImport } from './routes/_main/account'
 import { Route as MainMembersRouteImport } from './routes/_main/members'
 import { Route as MainMenusRouteImport } from './routes/_main/menus'
+import { Route as MainRegionRouteRouteImport } from './routes/_main/region/route'
 import { Route as MainRolesRouteRouteImport } from './routes/_main/roles/route'
 import { Route as MainUsersRouteRouteImport } from './routes/_main/users/route'
 import { Route as MainMembersMemberIdRouteImport } from './routes/_main/members.$memberId'
+import { Route as MainRegionIndexRouteImport } from './routes/_main/region/index'
+import { Route as MainRegionQueryRouteImport } from './routes/_main/region/query'
+import { Route as MainRegionSyncRouteImport } from './routes/_main/region/sync'
 import { Route as MainRolesIndexRouteImport } from './routes/_main/roles/index'
 import { Route as MainRolesRoleIdRouteImport } from './routes/_main/roles/$roleId'
 import { Route as MainSmsBlacklistRouteImport } from './routes/_main/sms/blacklist'
@@ -67,6 +71,11 @@ const MainMenusRoute = MainMenusRouteImport.update({
   path: '/menus',
   getParentRoute: () => MainRoute,
 } as any)
+const MainRegionRouteRoute = MainRegionRouteRouteImport.update({
+  id: '/region',
+  path: '/region',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainRolesRouteRoute = MainRolesRouteRouteImport.update({
   id: '/roles',
   path: '/roles',
@@ -81,6 +90,21 @@ const MainMembersMemberIdRoute = MainMembersMemberIdRouteImport.update({
   id: '/$memberId',
   path: '/$memberId',
   getParentRoute: () => MainMembersRoute,
+} as any)
+const MainRegionIndexRoute = MainRegionIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainRegionRouteRoute,
+} as any)
+const MainRegionQueryRoute = MainRegionQueryRouteImport.update({
+  id: '/query',
+  path: '/query',
+  getParentRoute: () => MainRegionRouteRoute,
+} as any)
+const MainRegionSyncRoute = MainRegionSyncRouteImport.update({
+  id: '/sync',
+  path: '/sync',
+  getParentRoute: () => MainRegionRouteRoute,
 } as any)
 const MainRolesIndexRoute = MainRolesIndexRouteImport.update({
   id: '/',
@@ -151,6 +175,7 @@ const MainUsersNewRoute = MainUsersNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
   '/login': typeof LoginRoute
+  '/region': typeof MainRegionRouteRouteWithChildren
   '/roles': typeof MainRolesRouteRouteWithChildren
   '/users': typeof MainUsersRouteRouteWithChildren
   '/about': typeof MainAboutRoute
@@ -158,6 +183,8 @@ export interface FileRoutesByFullPath {
   '/members': typeof MainMembersRouteWithChildren
   '/menus': typeof MainMenusRoute
   '/members/$memberId': typeof MainMembersMemberIdRoute
+  '/region/query': typeof MainRegionQueryRoute
+  '/region/sync': typeof MainRegionSyncRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channels': typeof MainSmsChannelsRoute
@@ -169,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/storage/zones': typeof MainStorageZonesRoute
   '/users/$userId': typeof MainUsersUserIdRoute
   '/users/new': typeof MainUsersNewRoute
+  '/region/': typeof MainRegionIndexRoute
   '/roles/': typeof MainRolesIndexRoute
   '/users/': typeof MainUsersIndexRoute
 }
@@ -180,6 +208,8 @@ export interface FileRoutesByTo {
   '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
   '/members/$memberId': typeof MainMembersMemberIdRoute
+  '/region/query': typeof MainRegionQueryRoute
+  '/region/sync': typeof MainRegionSyncRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channels': typeof MainSmsChannelsRoute
@@ -191,6 +221,7 @@ export interface FileRoutesByTo {
   '/storage/zones': typeof MainStorageZonesRoute
   '/users/$userId': typeof MainUsersUserIdRoute
   '/users/new': typeof MainUsersNewRoute
+  '/region': typeof MainRegionIndexRoute
   '/roles': typeof MainRolesIndexRoute
   '/users': typeof MainUsersIndexRoute
 }
@@ -198,6 +229,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_main': typeof MainRouteWithChildren
   '/login': typeof LoginRoute
+  '/_main/region': typeof MainRegionRouteRouteWithChildren
   '/_main/roles': typeof MainRolesRouteRouteWithChildren
   '/_main/users': typeof MainUsersRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
@@ -206,6 +238,8 @@ export interface FileRoutesById {
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
   '/_main/members/$memberId': typeof MainMembersMemberIdRoute
+  '/_main/region/query': typeof MainRegionQueryRoute
+  '/_main/region/sync': typeof MainRegionSyncRoute
   '/_main/roles/$roleId': typeof MainRolesRoleIdRoute
   '/_main/sms/blacklist': typeof MainSmsBlacklistRoute
   '/_main/sms/channels': typeof MainSmsChannelsRoute
@@ -217,6 +251,7 @@ export interface FileRoutesById {
   '/_main/storage/zones': typeof MainStorageZonesRoute
   '/_main/users/$userId': typeof MainUsersUserIdRoute
   '/_main/users/new': typeof MainUsersNewRoute
+  '/_main/region/': typeof MainRegionIndexRoute
   '/_main/roles/': typeof MainRolesIndexRoute
   '/_main/users/': typeof MainUsersIndexRoute
 }
@@ -225,6 +260,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/region'
     | '/roles'
     | '/users'
     | '/about'
@@ -232,6 +268,8 @@ export interface FileRouteTypes {
     | '/members'
     | '/menus'
     | '/members/$memberId'
+    | '/region/query'
+    | '/region/sync'
     | '/roles/$roleId'
     | '/sms/blacklist'
     | '/sms/channels'
@@ -243,6 +281,7 @@ export interface FileRouteTypes {
     | '/storage/zones'
     | '/users/$userId'
     | '/users/new'
+    | '/region/'
     | '/roles/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
@@ -254,6 +293,8 @@ export interface FileRouteTypes {
     | '/menus'
     | '/'
     | '/members/$memberId'
+    | '/region/query'
+    | '/region/sync'
     | '/roles/$roleId'
     | '/sms/blacklist'
     | '/sms/channels'
@@ -265,12 +306,14 @@ export interface FileRouteTypes {
     | '/storage/zones'
     | '/users/$userId'
     | '/users/new'
+    | '/region'
     | '/roles'
     | '/users'
   id:
     | '__root__'
     | '/_main'
     | '/login'
+    | '/_main/region'
     | '/_main/roles'
     | '/_main/users'
     | '/_main/about'
@@ -279,6 +322,8 @@ export interface FileRouteTypes {
     | '/_main/menus'
     | '/_main/'
     | '/_main/members/$memberId'
+    | '/_main/region/query'
+    | '/_main/region/sync'
     | '/_main/roles/$roleId'
     | '/_main/sms/blacklist'
     | '/_main/sms/channels'
@@ -290,6 +335,7 @@ export interface FileRouteTypes {
     | '/_main/storage/zones'
     | '/_main/users/$userId'
     | '/_main/users/new'
+    | '/_main/region/'
     | '/_main/roles/'
     | '/_main/users/'
   fileRoutesById: FileRoutesById
@@ -350,6 +396,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainMenusRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/region': {
+      id: '/_main/region'
+      path: '/region'
+      fullPath: '/region'
+      preLoaderRoute: typeof MainRegionRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/roles': {
       id: '/_main/roles'
       path: '/roles'
@@ -370,6 +423,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/members/$memberId'
       preLoaderRoute: typeof MainMembersMemberIdRouteImport
       parentRoute: typeof MainMembersRoute
+    }
+    '/_main/region/': {
+      id: '/_main/region/'
+      path: '/'
+      fullPath: '/region/'
+      preLoaderRoute: typeof MainRegionIndexRouteImport
+      parentRoute: typeof MainRegionRouteRoute
+    }
+    '/_main/region/query': {
+      id: '/_main/region/query'
+      path: '/query'
+      fullPath: '/region/query'
+      preLoaderRoute: typeof MainRegionQueryRouteImport
+      parentRoute: typeof MainRegionRouteRoute
+    }
+    '/_main/region/sync': {
+      id: '/_main/region/sync'
+      path: '/sync'
+      fullPath: '/region/sync'
+      preLoaderRoute: typeof MainRegionSyncRouteImport
+      parentRoute: typeof MainRegionRouteRoute
     }
     '/_main/roles/': {
       id: '/_main/roles/'
@@ -465,6 +539,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MainRegionRouteRouteChildren {
+  MainRegionQueryRoute: typeof MainRegionQueryRoute
+  MainRegionSyncRoute: typeof MainRegionSyncRoute
+  MainRegionIndexRoute: typeof MainRegionIndexRoute
+}
+
+const MainRegionRouteRouteChildren: MainRegionRouteRouteChildren = {
+  MainRegionQueryRoute: MainRegionQueryRoute,
+  MainRegionSyncRoute: MainRegionSyncRoute,
+  MainRegionIndexRoute: MainRegionIndexRoute,
+}
+
+const MainRegionRouteRouteWithChildren = MainRegionRouteRoute._addFileChildren(
+  MainRegionRouteRouteChildren,
+)
+
 interface MainRolesRouteRouteChildren {
   MainRolesRoleIdRoute: typeof MainRolesRoleIdRoute
   MainRolesIndexRoute: typeof MainRolesIndexRoute
@@ -508,6 +598,7 @@ const MainMembersRouteWithChildren = MainMembersRoute._addFileChildren(
 )
 
 interface MainRouteChildren {
+  MainRegionRouteRoute: typeof MainRegionRouteRouteWithChildren
   MainRolesRouteRoute: typeof MainRolesRouteRouteWithChildren
   MainUsersRouteRoute: typeof MainUsersRouteRouteWithChildren
   MainAboutRoute: typeof MainAboutRoute
@@ -526,6 +617,7 @@ interface MainRouteChildren {
 }
 
 const MainRouteChildren: MainRouteChildren = {
+  MainRegionRouteRoute: MainRegionRouteRouteWithChildren,
   MainRolesRouteRoute: MainRolesRouteRouteWithChildren,
   MainUsersRouteRoute: MainUsersRouteRouteWithChildren,
   MainAboutRoute: MainAboutRoute,
