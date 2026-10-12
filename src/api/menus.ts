@@ -56,6 +56,9 @@ function useInvalidateMenus<TData, TVars>(
     ...rest,
     onSuccess: (...args) => {
       void queryClient.invalidateQueries({ queryKey: MENUS_QUERY_KEY })
+      // 侧边栏走 /menus/mine（MY_MENUS_QUERY_KEY，staleTime 60s）：
+      // 不同步失效会导致显隐/排序改动后菜单栏长时间不刷新
+      void queryClient.invalidateQueries({ queryKey: MY_MENUS_QUERY_KEY })
       onSuccess?.(...args)
     },
   })
