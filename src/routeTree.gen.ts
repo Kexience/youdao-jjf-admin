@@ -30,6 +30,7 @@ import { Route as MainStorageRecordsRouteImport } from './routes/_main/storage/r
 import { Route as MainStorageZonesRouteImport } from './routes/_main/storage/zones'
 import { Route as MainUsersIndexRouteImport } from './routes/_main/users/index'
 import { Route as MainUsersUserIdRouteImport } from './routes/_main/users/$userId'
+import { Route as MainUsersNewRouteImport } from './routes/_main/users/new'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -135,6 +136,11 @@ const MainUsersUserIdRoute = MainUsersUserIdRouteImport.update({
   path: '/$userId',
   getParentRoute: () => MainUsersRouteRoute,
 } as any)
+const MainUsersNewRoute = MainUsersNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => MainUsersRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/storage/records': typeof MainStorageRecordsRoute
   '/storage/zones': typeof MainStorageZonesRoute
   '/users/$userId': typeof MainUsersUserIdRoute
+  '/users/new': typeof MainUsersNewRoute
   '/roles/': typeof MainRolesIndexRoute
   '/users/': typeof MainUsersIndexRoute
 }
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/storage/records': typeof MainStorageRecordsRoute
   '/storage/zones': typeof MainStorageZonesRoute
   '/users/$userId': typeof MainUsersUserIdRoute
+  '/users/new': typeof MainUsersNewRoute
   '/roles': typeof MainRolesIndexRoute
   '/users': typeof MainUsersIndexRoute
 }
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/_main/storage/records': typeof MainStorageRecordsRoute
   '/_main/storage/zones': typeof MainStorageZonesRoute
   '/_main/users/$userId': typeof MainUsersUserIdRoute
+  '/_main/users/new': typeof MainUsersNewRoute
   '/_main/roles/': typeof MainRolesIndexRoute
   '/_main/users/': typeof MainUsersIndexRoute
 }
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/storage/records'
     | '/storage/zones'
     | '/users/$userId'
+    | '/users/new'
     | '/roles/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/storage/records'
     | '/storage/zones'
     | '/users/$userId'
+    | '/users/new'
     | '/roles'
     | '/users'
   id:
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/_main/storage/records'
     | '/_main/storage/zones'
     | '/_main/users/$userId'
+    | '/_main/users/new'
     | '/_main/roles/'
     | '/_main/users/'
   fileRoutesById: FileRoutesById
@@ -424,6 +436,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainUsersUserIdRouteImport
       parentRoute: typeof MainUsersRouteRoute
     }
+    '/_main/users/new': {
+      id: '/_main/users/new'
+      path: '/new'
+      fullPath: '/users/new'
+      preLoaderRoute: typeof MainUsersNewRouteImport
+      parentRoute: typeof MainUsersRouteRoute
+    }
   }
 }
 
@@ -443,11 +462,13 @@ const MainRolesRouteRouteWithChildren = MainRolesRouteRoute._addFileChildren(
 
 interface MainUsersRouteRouteChildren {
   MainUsersUserIdRoute: typeof MainUsersUserIdRoute
+  MainUsersNewRoute: typeof MainUsersNewRoute
   MainUsersIndexRoute: typeof MainUsersIndexRoute
 }
 
 const MainUsersRouteRouteChildren: MainUsersRouteRouteChildren = {
   MainUsersUserIdRoute: MainUsersUserIdRoute,
+  MainUsersNewRoute: MainUsersNewRoute,
   MainUsersIndexRoute: MainUsersIndexRoute,
 }
 

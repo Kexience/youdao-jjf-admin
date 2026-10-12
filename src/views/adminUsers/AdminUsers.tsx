@@ -143,6 +143,15 @@ export function AdminUsers() {
         dateFormatter={false}
         scroll={{ x: 'max-content' }}
         options={{ density: true }}
+        toolBarRender={() => [
+          <Button
+            key="create"
+            type="primary"
+            onClick={() => void navigate({ to: '/users/new' })}
+          >
+            新建管理员
+          </Button>,
+        ]}
       />
     </PageContainer>
   )

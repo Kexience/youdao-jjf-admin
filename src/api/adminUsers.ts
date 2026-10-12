@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import type { UseMutationOptions } from '@tanstack/react-query'
 
-import { get, put } from '../lib/request'
+import { get, post, put } from '../lib/request'
 import type { ApiError } from '../lib/request'
 
 /**
@@ -29,6 +29,20 @@ export function fetchAdminUserDetail(id: number) {
 export interface UpdateAdminUserVars {
   id: number
   params: AdminUserUpdateParams
+}
+
+/**
+ * 新建管理员：POST /admin/users（见文档 AdminUserCreateRequest）。
+ * username/password 必填，口令 8~32 字符；新建后账号恒正常、无角色。
+ * 成功返回账号视图，刷新列表由调用方负责。
+ */
+export function useCreateAdminUser(
+  options?: UseMutationOptions<AdminUser, ApiError, AdminUserCreateParams>,
+) {
+  return useMutation({
+    mutationFn: (params) => post<AdminUser>('/users', params),
+    ...options,
+  })
 }
 
 /** 编辑管理员资料：PUT /admin/users/{id}，成功后由调用方手动 refetch 详情 */

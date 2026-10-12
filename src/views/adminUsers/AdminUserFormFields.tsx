@@ -11,8 +11,15 @@ const PHONE_PATTERN = /^$|^1[3-9]\d{9}$/
  *
  * avatarReadOnly：个人中心场景传 true（头像只走上传按钮直写，
  * 点保存不再提交 avatar 字段，文本框仅展示当前 key）。
+ * hideAvatar：新建场景传 true（头像不在创建时设置，详情/编辑再补）。
  */
-export function AdminUserFormFields({ avatarReadOnly }: { avatarReadOnly?: boolean }) {
+export function AdminUserFormFields({
+  avatarReadOnly,
+  hideAvatar,
+}: {
+  avatarReadOnly?: boolean
+  hideAvatar?: boolean
+}) {
   return (
     <>
       <ProFormText
@@ -50,14 +57,16 @@ export function AdminUserFormFields({ avatarReadOnly }: { avatarReadOnly?: boole
         ]}
         fieldProps={{ maxLength: 128 }}
       />
-      <ProFormText
-        width="lg"
-        name="avatar"
-        label="头像 key"
-        placeholder="对象 key，如 admin-avatar/2026/10/11/xx/xxx.png"
-        rules={[{ max: 512, message: '头像 key 最多 512 个字符' }]}
-        fieldProps={{ maxLength: 512, readOnly: avatarReadOnly }}
-      />
+      {!hideAvatar && (
+        <ProFormText
+          width="lg"
+          name="avatar"
+          label="头像 key"
+          placeholder="对象 key，如 admin-avatar/2026/10/11/xx/xxx.png"
+          rules={[{ max: 512, message: '头像 key 最多 512 个字符' }]}
+          fieldProps={{ maxLength: 512, readOnly: avatarReadOnly }}
+        />
+      )}
       <ProFormTextArea
         width="lg"
         name="remark"

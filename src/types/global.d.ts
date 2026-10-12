@@ -620,6 +620,26 @@ declare global {
     remark?: string
   }
 
+  /** 管理员新建入参（见文档 AdminUserCreateRequest：POST /admin/users，新建后恒正常、无角色） */
+  interface AdminUserCreateParams {
+    /** 登录用户名，全局唯一，必填 */
+    username: string
+    /** 明文口令 8~32 字符，必填 */
+    password: string
+    /** 真实姓名 */
+    realname?: string
+    /** 昵称 */
+    nickname?: string
+    /** 手机号 */
+    phone?: string
+    /** 邮箱 */
+    email?: string
+    /** 头像对象 key */
+    avatar?: string
+    /** 备注 */
+    remark?: string
+  }
+
   /** 自助改密入参（见文档 AdminUserSelfPasswordRequest：PUT /admin/users/me/password） */
   interface AdminUserSelfPasswordParams {
     /** 旧口令 */
