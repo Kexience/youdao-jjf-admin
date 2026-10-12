@@ -147,7 +147,11 @@ export function RoleGrantModal({ role, saving, onSubmit }: RoleGrantModalProps) 
         return true
       }}
     >
-      {menusQuery.isLoading && <Spin tip="权限树加载中…" />}
+      {menusQuery.isLoading && (
+        <Spin description="权限树加载中…">
+          <div style={{ minHeight: 120 }} />
+        </Spin>
+      )}
       {menusQuery.isError && (
         <Alert type="error" showIcon message="权限树加载失败，请关闭重试" />
       )}
