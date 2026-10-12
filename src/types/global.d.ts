@@ -640,8 +640,13 @@ declare global {
     remark?: string
   }
 
-  /** 自助改密入参（见文档 AdminUserSelfPasswordRequest：PUT /admin/users/me/password） */
-  interface AdminUserSelfPasswordParams {
+  /** 管理员角色分配入参（见文档 AdminUserRoleAssignRequest：PUT /admin/users/{id}/role，roleId 空=清空角色） */
+  interface AdminUserRoleAssignParams {
+    /** 目标角色 id；null/不传表示清空角色 */
+    roleId?: number | null
+  }
+
+  /** 自助改密入参（见文档 AdminUserSelfPasswordRequest：PUT /admin/users/me/password） */  interface AdminUserSelfPasswordParams {
     /** 旧口令 */
     oldPassword: string
     /** 新口令，8~32 字符 */

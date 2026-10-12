@@ -45,6 +45,16 @@ export function useCreateAdminUser(
   })
 }
 
+/** 分配/清空角色：PUT /admin/users/{id}/role，roleId 空=清空；刷新由调用方负责 */
+export function useUpdateAdminUserRole(
+  options?: UseMutationOptions<void, ApiError, { id: number; params: AdminUserRoleAssignParams }>,
+) {
+  return useMutation({
+    mutationFn: ({ id, params }) => put<void>(`/users/${id}/role`, params),
+    ...options,
+  })
+}
+
 /** 编辑管理员资料：PUT /admin/users/{id}，成功后由调用方手动 refetch 详情 */
 export function useUpdateAdminUser(
   options?: UseMutationOptions<AdminUser, ApiError, UpdateAdminUserVars>,

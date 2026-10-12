@@ -1,48 +1,44 @@
 import { ModalForm, ProFormText } from '@ant-design/pro-components'
-import { Form } from 'antd'
+import { App, Form } from 'antd'
 import type { ReactElement } from 'react'
 
-/** 重置密码表单值：与文档 AdminUserResetPasswordRequest 对应（8~32 字符） */
-export interface AdminUserResetPasswordFormValues {
-  newPassword: string
-}
+import { useResetAdminUserPassword } from '../../api/adminUsers'
+import { ApiError } from '../../lib/request'
 
-interface AdminUserResetPasswordModalProps {
+interface Props {
   user: AdminUser
-  /** 列表页传 link 按钮，详情页传页头按钮 */
+  /** 触发按钮由调用方传入（列表列内用 link 按钮，详情页头用 danger 按钮） */
   trigger: ReactElement
-  saving: boolean
-  onSubmit: (params: { newPassword: string }) => Promise<unknown>
 }
 
 /**
- * 重置他人密码弹窗：提交后成功自动关闭。
- * 不许重置自己/超管由后端拦截，报错由父组件的 mutation 回调透出。
+ * 重置他人密码弹窗：内部调 PUT /admin/users/{id}/password，成功自动关闭。
+ * 不许重置自己/超管由后端拦截，报错由 mutation onError 透出；口令变更无需刷新页面。
  */
-export function AdminUserResetPasswordModal({
-  user,
-  trigger,
-  saving,
-  onSubmit,
-}: AdminUserResetPasswordModalProps) {
-  const [form] = Form.useForm<AdminUserResetPasswordFormValues>()
+export function AdminUserResetPasswordModal({ user, trigger }: Props) {
+  const { message } = App.useApp()
+  const [form] = Form.useForm<{ newPassword: string }>()
+
+  const resetMutation = useResetAdminUserPassword({
+    onSuccess: () => message.success('密码重置成功'),
+    onError: (error) =>
+      message.error(error instanceof ApiError ? error.message : '操作失败，请重试'),
+  })
 
   return (
-    <ModalForm<AdminUserResetPasswordFormValues>
-      name={`admin-user-reset-password-form-${user.id}`}
+    <ModalForm<{ newPassword: string }>
+      name={`admin-user-reset-password-${user.id}`}
       title={`重置密码（${user.username}）`}
       trigger={trigger}
       form={form}
-      autoFocusFirstInput
       modalProps={{ destroyOnHidden: true }}
-      submitTimeout={2000}
       layout="vertical"
       submitter={{
         searchConfig: { submitText: '重置', resetText: '取消' },
-        submitButtonProps: { loading: saving, danger: true },
+        submitButtonProps: { loading: resetMutation.isPending },
       }}
       onFinish={async (values) => {
-        await onSubmit({ newPassword: values.newPassword })
+        await resetMutation.mutateAsync({ id: user.id, params: { newPassword: values.newPassword } })
         return true
       }}
     >

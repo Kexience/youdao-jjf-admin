@@ -4,10 +4,11 @@ import { useNavigate } from '@tanstack/react-router'
 import { App, Button, Popconfirm } from 'antd'
 import { useRef } from 'react'
 
-import { fetchAdminUsers, useResetAdminUserPassword, useUpdateAdminUserStatus } from '../../api/adminUsers'
+import { fetchAdminUsers, useUpdateAdminUserStatus } from '../../api/adminUsers'
 import { useGetRoles } from '../../api/roles'
 import { ApiError } from '../../lib/request'
 import { AdminUserResetPasswordModal } from './AdminUserResetPasswordModal'
+import { AdminUserRoleAssignModal } from './AdminUserRoleAssignModal'
 import { getAdminUserColumns } from './columns'
 
 /**
@@ -33,21 +34,12 @@ export function AdminUsers() {
     },
   })
 
-  const resetPasswordMutation = useResetAdminUserPassword({
-    onSuccess: () => {
-      message.success('密码重置成功')
-    },
-    onError: (error) => {
-      message.error(error instanceof ApiError ? error.message : '操作失败，请重试')
-    },
-  })
-
   const columns: ProColumns<AdminUser>[] = [
     ...getAdminUserColumns(rolesQuery.data ?? []),
     {
       title: '操作',
       key: 'action',
-      width: 220,
+      width: 300,
       valueType: 'option',
       render: (_, record) => {
         const disabled = record.status === 0
@@ -77,13 +69,19 @@ export function AdminUsers() {
               {disabled ? '启用' : '禁用'}
             </Button>
           </Popconfirm>,
+          <AdminUserRoleAssignModal
+            key="role"
+            user={record}
+            actionRef={actionRef}
+            trigger={
+              <Button type="link" size="small">
+                分配角色
+              </Button>
+            }
+          />,
           <AdminUserResetPasswordModal
             key="reset-password"
             user={record}
-            saving={resetPasswordMutation.isPending}
-            onSubmit={(params) =>
-              resetPasswordMutation.mutateAsync({ id: record.id, params })
-            }
             trigger={
               <Button type="link" size="small" danger>
                 重置密码

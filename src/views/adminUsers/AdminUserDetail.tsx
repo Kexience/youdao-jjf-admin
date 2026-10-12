@@ -5,10 +5,11 @@ import { Link } from '@tanstack/react-router'
 import { App, Avatar, Button, Card, Popconfirm, Skeleton, Tag } from 'antd'
 import { useState } from 'react'
 
-import { fetchAdminUserDetail, useResetAdminUserPassword, useUpdateAdminUser, useUpdateAdminUserStatus } from '../../api/adminUsers'
+import { fetchAdminUserDetail, useUpdateAdminUser, useUpdateAdminUserStatus } from '../../api/adminUsers'
 import { ApiError } from '../../lib/request'
 import { AdminUserEditModal } from './AdminUserEditModal'
 import { AdminUserResetPasswordModal } from './AdminUserResetPasswordModal'
+import { AdminUserRoleAssignModal } from './AdminUserRoleAssignModal'
 
 interface AdminUserDetailProps {
   userId: number
@@ -97,15 +98,6 @@ export function AdminUserDetail({ userId }: AdminUserDetailProps) {
     },
   })
 
-  const resetPasswordMutation = useResetAdminUserPassword({
-    onSuccess: () => {
-      message.success('密码重置成功')
-    },
-    onError: (error) => {
-      message.error(error instanceof ApiError ? error.message : '操作失败，请重试')
-    },
-  })
-
   const detail = detailQuery.data
   const disabled = detail?.status === 0
 
@@ -156,13 +148,16 @@ export function AdminUserDetail({ userId }: AdminUserDetailProps) {
             </Popconfirm>
           ),
           detail && (
+            <AdminUserRoleAssignModal
+              key="role"
+              user={detail}
+              trigger={<Button>分配角色</Button>}
+            />
+          ),
+          detail && (
             <AdminUserResetPasswordModal
               key="reset-password"
               user={detail}
-              saving={resetPasswordMutation.isPending}
-              onSubmit={(params) =>
-                resetPasswordMutation.mutateAsync({ id: userId, params })
-              }
               trigger={<Button danger>重置密码</Button>}
             />
           ),
