@@ -4,43 +4,45 @@ import { App, Card } from "antd";
 import { useMemo, useRef } from "react";
 
 import {
-  fetchMemberLevelHistory,
-  useAssignMemberLevel,
-  useGetMemberLevels,
-} from "../../api/memberLevels";
+  fetchMemberIdentityLevelHistory,
+  useAssignMemberIdentityLevel,
+  useGetMemberIdentityLevels,
+} from "../../api/memberIdentityLevels";
 import { useMemberDetail } from "../../api/members";
 import { ApiError } from "../../lib/request";
-import { MemberLevelAssignModal } from "./MemberLevelAssignModal";
+import { MemberIdentityLevelAssignModal } from "./MemberIdentityLevelAssignModal";
 
-interface MemberLevelHistoryProps {
+interface MemberIdentityLevelHistoryProps {
   memberId: number;
 }
 
 /**
- * 会员等级调整历史（/members/$memberId/level-history）：
- * GET /admin/member/{memberId}/level-history 分页，时间倒序；
- * 顶部「调整等级」按钮走 PUT /admin/member/{memberId}/level。
- * 等级 id → 名称取自等级列表（MemberLevelVo），未知档位退回展示 id。
+ * 会员身份档位调整历史（/members/$memberId/identity-level-history）：
+ * GET /admin/member/{memberId}/identity-level-history 分页，时间倒序；
+ * 顶部「调整身份档位」按钮走 PUT /admin/member/{memberId}/identity-level。
+ * 档位 id → 名称取自档位列表（MemberIdentityLevelVo），未知档位退回展示 id。
  */
-export function MemberLevelHistory({ memberId }: MemberLevelHistoryProps) {
+export function MemberIdentityLevelHistory({
+  memberId,
+}: MemberIdentityLevelHistoryProps) {
   const { message } = App.useApp();
   const actionRef = useRef<ActionType>(null);
 
-  // 与 MemberDetailLayout 共用缓存，取当前等级用于弹窗默认值
+  // 与 MemberDetailLayout 共用缓存，取当前档位用于弹窗默认值
   const { data: detail } = useMemberDetail(memberId);
-  const levelsQuery = useGetMemberLevels();
+  const levelsQuery = useGetMemberIdentityLevels();
 
   const levelNameById = useMemo(() => {
     const map = new Map<number, string>();
     for (const level of levelsQuery.data ?? []) {
-      map.set(level.id, level.levelName ?? `等级 ${level.id}`);
+      map.set(level.id, level.levelName ?? `档位 ${level.id}`);
     }
     return map;
   }, [levelsQuery.data]);
 
-  const assignMutation = useAssignMemberLevel({
+  const assignMutation = useAssignMemberIdentityLevel({
     onSuccess: () => {
-      message.success("会员等级已调整");
+      message.success("会员身份档位已调整");
       actionRef.current?.reload();
     },
     onError: (error) => {
@@ -50,23 +52,23 @@ export function MemberLevelHistory({ memberId }: MemberLevelHistoryProps) {
     },
   });
 
-  const columns: ProColumns<MemberLevelChangeLog>[] = [
+  const columns: ProColumns<MemberIdentityLevelChangeLog>[] = [
     {
-      title: "调整前等级",
+      title: "调整前档位",
       dataIndex: "fromLevelId",
       width: 160,
       render: (_, record) =>
         record.fromLevelId === undefined || record.fromLevelId === null
-          ? "无等级"
+          ? "无档位"
           : (levelNameById.get(record.fromLevelId) ??
-            `等级 ${record.fromLevelId}`),
+            `档位 ${record.fromLevelId}`),
     },
     {
-      title: "调整后等级",
+      title: "调整后档位",
       dataIndex: "toLevelId",
       width: 160,
       render: (_, record) =>
-        levelNameById.get(record.toLevelId) ?? `等级 ${record.toLevelId}`,
+        levelNameById.get(record.toLevelId) ?? `档位 ${record.toLevelId}`,
     },
     {
       title: "操作管理员 ID",
@@ -90,7 +92,7 @@ export function MemberLevelHistory({ memberId }: MemberLevelHistoryProps) {
 
   return (
     <Card>
-      <ProTable<MemberLevelChangeLog>
+      <ProTable<MemberIdentityLevelChangeLog>
         rowKey="id"
         actionRef={actionRef}
         columns={columns}
@@ -99,7 +101,7 @@ export function MemberLevelHistory({ memberId }: MemberLevelHistoryProps) {
         scroll={{ x: "max-content" }}
         request={async (params) => {
           try {
-            const data = await fetchMemberLevelHistory({
+            const data = await fetchMemberIdentityLevelHistory({
               memberId,
               page: params.current ?? 1,
               size: params.pageSize ?? 10,
@@ -118,10 +120,10 @@ export function MemberLevelHistory({ memberId }: MemberLevelHistoryProps) {
         pagination={{ defaultPageSize: 10, showSizeChanger: true }}
         options={{ density: true }}
         toolBarRender={() => [
-          <MemberLevelAssignModal
+          <MemberIdentityLevelAssignModal
             key="assign"
             memberId={memberId}
-            currentLevelId={detail?.memberLevelId}
+            currentLevelId={detail?.memberIdentityLevelId}
             saving={assignMutation.isPending}
             onSubmit={(params) =>
               assignMutation.mutateAsync({ memberId, params })

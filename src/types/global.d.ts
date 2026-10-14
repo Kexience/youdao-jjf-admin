@@ -484,9 +484,9 @@ declare global {
     sex?: number
     /** 状态：1正常 0禁用 */
     status?: number
-    /** 会员等级 id */
-    memberLevelId?: number
-    /** 等级名称 */
+    /** 会员身份档位 id */
+    memberIdentityLevelId?: number
+    /** 身份档位名称 */
     levelName?: string
     /** 注册渠道 */
     registerChannel?: string
@@ -516,7 +516,7 @@ declare global {
     keyword?: string
     /** 状态：1正常 0禁用 */
     status?: 0 | 1
-    /** 等级 id */
+    /** 身份档位 id */
     levelId?: number
     /** 注册时间起（含） */
     registerStart?: string
@@ -530,11 +530,31 @@ declare global {
     status: 0 | 1
   }
 
-  /** 会员等级列表项（见文档 MemberLevelVo：GET /admin/member/levels） */
-  interface MemberLevel {
-    /** 等级 id */
+  /**
+   * 身份档位自动升级配置（见文档 MemberIdentityLevelUpgradeConfigDto）。
+   * 独立字段组：新建「缺省=仅后台手动」，编辑「空=保持原值、非空整体替换」。
+   */
+  interface MemberIdentityLevelUpgradeConfig {
+    /** 自动升级方式：空=仅后台手动，1=消费达标，2=直推达标 */
+    upgradeType?: 1 | 2
+    /** 方式1累计消费门槛（元），须>0，仅升级方式=1 时非空 */
+    upgradeConsumeAmount?: number
+    /** 方式2直推达标人数（人头口径），≥1，仅升级方式=2 时非空 */
+    upgradeReferralCount?: number
+    /** 方式2锚点档位代码，须命中同表启用档位，仅升级方式=2 时非空 */
+    upgradeReferralRank?: string
+    /** 自动升到该档的积分奖励，≥0，空=无奖励 */
+    upgradeRewardPoint?: number
+  }
+
+  /**
+   * 会员身份档位列表项
+   * （见文档 MemberIdentityLevelVo：GET /admin/member/identity-levels）
+   */
+  interface MemberIdentityLevel {
+    /** 身份档位 id */
     id: number
-    /** 等级名称 */
+    /** 身份档位名称 */
     levelName?: string
     /** 稳定档位代码，仅 migration 写入，管理界面不可改 */
     levelCode?: string
@@ -550,13 +570,26 @@ declare global {
     status?: number
     /** 备注 */
     remark?: string
+    /** 自动升级方式：空/0=仅后台手动，1=消费达标，2=直推达标 */
+    upgradeType?: number
+    /** 方式1累计消费门槛（元），仅 upgradeType=1 时非空 */
+    upgradeConsumeAmount?: number
+    /** 方式2直推达标人数，仅 upgradeType=2 时非空 */
+    upgradeReferralCount?: number
+    /** 方式2锚点档位代码，仅 upgradeType=2 时非空 */
+    upgradeReferralRank?: string
+    /** 自动升到该档的积分奖励，空=无奖励 */
+    upgradeRewardPoint?: number
     /** 归属该档的未删除会员数 */
     memberCount?: number
   }
 
-  /** 等级新建入参（见文档 MemberLevelCreateDto：POST /admin/member/levels） */
-  interface MemberLevelCreateParams {
-    /** 等级名称，必填 */
+  /**
+   * 身份档位新建入参
+   * （见文档 MemberIdentityLevelCreateDto：POST /admin/member/identity-levels）
+   */
+  interface MemberIdentityLevelCreateParams {
+    /** 身份档位名称，必填 */
     levelName: string
     /** 档位序位，升序即档位高低，必填 */
     sort: number
@@ -570,14 +603,17 @@ declare global {
     remark?: string
     /** 是否默认档，缺省 false；已有默认档时为 true 将被拒绝 */
     isDefault?: boolean
+    /** 自动升级配置，缺省=仅后台手动（upgradeType 空即手动） */
+    upgrade?: MemberIdentityLevelUpgradeConfig
   }
 
   /**
-   * 等级编辑入参（见文档 MemberLevelUpdateDto：PUT /admin/member/levels/{id}）。
+   * 身份档位编辑入参
+   * （见文档 MemberIdentityLevelUpdateDto：PUT /admin/member/identity-levels/{id}）。
    * 全部字段可选，空=保留原值（注意：传空字符串/0 也会被后端视为保留，前端按需裁剪）。
    */
-  interface MemberLevelUpdateParams {
-    /** 等级名称，空=保留原值 */
+  interface MemberIdentityLevelUpdateParams {
+    /** 身份档位名称，空=保留原值 */
     levelName?: string
     /** 档位序位，空=保留原值 */
     sort?: number
@@ -589,23 +625,28 @@ declare global {
     status?: 0 | 1
     /** 备注，空=保留原值 */
     remark?: string
+    /** 升级配置组：空=保持原值（老客户端兼容）；非空时组内字段整体替换 */
+    upgrade?: MemberIdentityLevelUpgradeConfig
   }
 
-  /** 会员等级调整入参（见文档 MemberLevelAssignDto：PUT /admin/member/{memberId}/level） */
-  interface MemberLevelAssignParams {
-    /** 目标等级 id，必填 */
+  /**
+   * 会员身份档位调整入参
+   * （见文档 MemberIdentityLevelAssignDto：PUT /admin/member/{memberId}/identity-level）
+   */
+  interface MemberIdentityLevelAssignParams {
+    /** 目标身份档位 id，必填 */
     levelId: number
     /** 备注（≤255） */
     remark?: string
   }
 
-  /** 会员等级调整历史项（见文档 MemberLevelChangeLogVo） */
-  interface MemberLevelChangeLog {
+  /** 会员身份档位调整历史项（见文档 MemberIdentityLevelChangeLogVo） */
+  interface MemberIdentityLevelChangeLog {
     /** 审计行 id */
     id: number
-    /** 调整前等级 id，空=调整前无等级 */
+    /** 调整前身份档位 id，空=调整前无档位 */
     fromLevelId?: number
-    /** 调整后等级 id */
+    /** 调整后身份档位 id */
     toLevelId: number
     /** 操作管理员 id，可空 */
     operatorAdminId?: number

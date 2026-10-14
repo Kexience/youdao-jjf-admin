@@ -13,13 +13,15 @@ export const MEMBER_SEX_ENUM = {
   2: { text: '女' },
 } as const
 
-/** 等级列表 → ProTable 筛选项 valueEnum（key 为等级 id） */
-export function toMemberLevelValueEnum(levels: MemberLevel[]): Record<number, { text: string }> {
+/** 身份档位列表 → ProTable 筛选项 valueEnum（key 为档位 id） */
+export function toMemberIdentityLevelValueEnum(
+  levels: MemberIdentityLevel[],
+): Record<number, { text: string }> {
   return Object.fromEntries(levels.map((level) => [level.id, { text: level.levelName ?? '-' }]))
 }
 
 /** 会员列表列定义（展示用，与 MemberAdminVo 字段对齐） */
-export function getMemberColumns(levels: MemberLevel[]): ProColumns<MemberAdmin>[] {
+export function getMemberColumns(levels: MemberIdentityLevel[]): ProColumns<MemberAdmin>[] {
   return [
     {
       title: 'ID',
@@ -57,11 +59,11 @@ export function getMemberColumns(levels: MemberLevel[]): ProColumns<MemberAdmin>
       render: (_, record) => record.nickname || '-',
     },
     {
-      title: '等级',
+      title: '身份档位',
       dataIndex: 'levelId',
       ellipsis: true,
       valueType: 'select',
-      valueEnum: toMemberLevelValueEnum(levels),
+      valueEnum: toMemberIdentityLevelValueEnum(levels),
       render: (_, record) => record.levelName || '-',
     },
     {

@@ -30,15 +30,15 @@ const HEADER_COLUMNS: DetailColumn[] = [
   { title: "状态", dataIndex: "status", valueEnum: MEMBER_STATUS_ENUM },
   { title: "手机号", dataIndex: "mobile" },
   { title: "昵称", dataIndex: "nickname" },
-  { title: "等级", dataIndex: "levelName" },
+  { title: "身份档位", dataIndex: "levelName" },
   { title: "成长值", dataIndex: "growth" },
 ];
 
 /**
  * 会员详情布局路由：布局参考 ant-design-pro 高级资料页
  * （https://github.com/ant-design/ant-design-pro/tree/master/src/pages/profile/advanced）——
- * 页头（PageContainer content/extraContent/extra）常驻，主体分「用户身份 / 等级历史」两个 Tab，
- * Tab 与子路由一一对应（用户身份=index，等级历史=level-history），支持刷新/前进后退/分享链接。
+ * 页头（PageContainer content/extraContent/extra）常驻，主体分「用户身份 / 身份档位历史」两个 Tab，
+ * Tab 与子路由一一对应（用户身份=index，身份档位历史=identity-level-history），支持刷新/前进后退/分享链接。
  *
  * 后续「订单 / 推荐关系」等子页在 routes/_main/members/$memberId/ 下新增子路由，
  * 并在 tabList 里补一项即可自动挂到这里，页头与权限校验无需重复实现。
@@ -47,10 +47,10 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
   const { message } = App.useApp();
   const navigate = useNavigate();
 
-  // 路径驱动 Tab：/members/$memberId 为「用户身份」，/members/$memberId/level-history 为「等级历史」
+  // 路径驱动 Tab：/members/$memberId 为「用户身份」，/members/$memberId/identity-level-history 为「身份档位历史」
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const activeTab = pathname.endsWith("/level-history")
-    ? "level-history"
+  const activeTab = pathname.endsWith("/identity-level-history")
+    ? "identity-level-history"
     : "profile";
 
   const detailQuery = useMemberDetail(memberId);
@@ -74,8 +74,8 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
   const handleTabChange = (key: string) => {
     void navigate({
       to:
-        key === "level-history"
-          ? "/members/$memberId/level-history"
+        key === "identity-level-history"
+          ? "/members/$memberId/identity-level-history"
           : "/members/$memberId",
       params: { memberId: String(memberId) },
     });
@@ -84,10 +84,10 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
   return (
     <PageContainer
       title="会员详情"
-      subTitle="用户身份与等级历史，支持禁用 / 解禁。"
+      subTitle="用户身份与身份档位历史，支持禁用 / 解禁。"
       tabList={[
         { key: "profile", tab: "用户身份" },
-        { key: "level-history", tab: "等级历史" },
+        { key: "identity-level-history", tab: "身份档位历史" },
       ]}
       tabActiveKey={activeTab}
       onTabChange={handleTabChange}

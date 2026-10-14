@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { App, Button, Popconfirm } from 'antd'
 import { useRef } from 'react'
 
-import { useGetMemberLevels } from '../../api/memberLevels'
+import { useGetMemberIdentityLevels } from '../../api/memberIdentityLevels'
 import { useUpdateMemberStatus } from '../../api/members'
 import { fetchMembers } from '../../api/members'
 import { ApiError } from '../../lib/request'
@@ -21,8 +21,8 @@ export function Members() {
   const navigate = useNavigate()
   const actionRef = useRef<ActionType>(null)
 
-  // 等级筛选项来自等级列表
-  const levelsQuery = useGetMemberLevels()
+  // 身份档位筛选项来自身份档位列表
+  const levelsQuery = useGetMemberIdentityLevels()
 
   const statusMutation = useUpdateMemberStatus({
     onSuccess: (_, vars) => {
@@ -79,7 +79,7 @@ export function Members() {
     <PageContainer
       header={{
         title: '会员管理',
-        subTitle: '按关键词 / 状态 / 等级 / 注册时间检索，支持查看详情与禁用 / 解禁。',
+        subTitle: '按关键词 / 状态 / 身份档位 / 注册时间检索，支持查看详情与禁用 / 解禁。',
       }}
     >
       <ProTable<MemberAdmin>

@@ -22,7 +22,7 @@ const BASIC_COLUMNS: DetailColumn[] = [
   { title: "真实姓名", dataIndex: "realname" },
   { title: "性别", dataIndex: "sex", valueEnum: MEMBER_SEX_ENUM },
   { title: "生日", dataIndex: "birthday" },
-  { title: "等级", dataIndex: "levelName" },
+  { title: "身份档位", dataIndex: "levelName" },
   { title: "成长值", dataIndex: "growth" },
   { title: "注册渠道", dataIndex: "registerChannel" },
 ];

@@ -19,7 +19,7 @@ import { Route as MainMenusRouteImport } from './routes/_main/menus'
 import { Route as MainRegionRouteRouteImport } from './routes/_main/region/route'
 import { Route as MainRolesRouteRouteImport } from './routes/_main/roles/route'
 import { Route as MainUsersRouteRouteImport } from './routes/_main/users/route'
-import { Route as MainMemberlevelLevelsRouteImport } from './routes/_main/memberlevel/levels'
+import { Route as MainMemberidentityLevelsRouteImport } from './routes/_main/memberidentity/levels'
 import { Route as MainMembersIndexRouteImport } from './routes/_main/members/index'
 import { Route as MainMembersMemberIdRouteRouteImport } from './routes/_main/members/$memberId/route'
 import { Route as MainRegionIndexRouteImport } from './routes/_main/region/index'
@@ -39,7 +39,7 @@ import { Route as MainUsersIndexRouteImport } from './routes/_main/users/index'
 import { Route as MainUsersUserIdRouteImport } from './routes/_main/users/$userId'
 import { Route as MainUsersNewRouteImport } from './routes/_main/users/new'
 import { Route as MainMembersMemberIdIndexRouteImport } from './routes/_main/members/$memberId/index'
-import { Route as MainMembersMemberIdLevelHistoryRouteImport } from './routes/_main/members/$memberId/level-history'
+import { Route as MainMembersMemberIdIdentityLevelHistoryRouteImport } from './routes/_main/members/$memberId/identity-level-history'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -90,11 +90,12 @@ const MainUsersRouteRoute = MainUsersRouteRouteImport.update({
   path: '/users',
   getParentRoute: () => MainRoute,
 } as any)
-const MainMemberlevelLevelsRoute = MainMemberlevelLevelsRouteImport.update({
-  id: '/memberlevel/levels',
-  path: '/memberlevel/levels',
-  getParentRoute: () => MainRoute,
-} as any)
+const MainMemberidentityLevelsRoute =
+  MainMemberidentityLevelsRouteImport.update({
+    id: '/memberidentity/levels',
+    path: '/memberidentity/levels',
+    getParentRoute: () => MainRoute,
+  } as any)
 const MainMembersIndexRoute = MainMembersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -192,10 +193,10 @@ const MainMembersMemberIdIndexRoute =
     path: '/',
     getParentRoute: () => MainMembersMemberIdRouteRoute,
   } as any)
-const MainMembersMemberIdLevelHistoryRoute =
-  MainMembersMemberIdLevelHistoryRouteImport.update({
-    id: '/level-history',
-    path: '/level-history',
+const MainMembersMemberIdIdentityLevelHistoryRoute =
+  MainMembersMemberIdIdentityLevelHistoryRouteImport.update({
+    id: '/identity-level-history',
+    path: '/identity-level-history',
     getParentRoute: () => MainMembersMemberIdRouteRoute,
   } as any)
 
@@ -210,7 +211,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof MainAccountRoute
   '/menus': typeof MainMenusRoute
   '/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
-  '/memberlevel/levels': typeof MainMemberlevelLevelsRoute
+  '/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/region/query': typeof MainRegionQueryRoute
   '/region/sync': typeof MainRegionSyncRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
@@ -228,7 +229,7 @@ export interface FileRoutesByFullPath {
   '/region/': typeof MainRegionIndexRoute
   '/roles/': typeof MainRolesIndexRoute
   '/users/': typeof MainUsersIndexRoute
-  '/members/$memberId/level-history': typeof MainMembersMemberIdLevelHistoryRoute
+  '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/members/$memberId/': typeof MainMembersMemberIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -237,7 +238,7 @@ export interface FileRoutesByTo {
   '/account': typeof MainAccountRoute
   '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
-  '/memberlevel/levels': typeof MainMemberlevelLevelsRoute
+  '/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/region/query': typeof MainRegionQueryRoute
   '/region/sync': typeof MainRegionSyncRoute
   '/roles/$roleId': typeof MainRolesRoleIdRoute
@@ -255,7 +256,7 @@ export interface FileRoutesByTo {
   '/region': typeof MainRegionIndexRoute
   '/roles': typeof MainRolesIndexRoute
   '/users': typeof MainUsersIndexRoute
-  '/members/$memberId/level-history': typeof MainMembersMemberIdLevelHistoryRoute
+  '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/members/$memberId': typeof MainMembersMemberIdIndexRoute
 }
 export interface FileRoutesById {
@@ -271,7 +272,7 @@ export interface FileRoutesById {
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
   '/_main/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
-  '/_main/memberlevel/levels': typeof MainMemberlevelLevelsRoute
+  '/_main/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/_main/region/query': typeof MainRegionQueryRoute
   '/_main/region/sync': typeof MainRegionSyncRoute
   '/_main/roles/$roleId': typeof MainRolesRoleIdRoute
@@ -289,7 +290,7 @@ export interface FileRoutesById {
   '/_main/region/': typeof MainRegionIndexRoute
   '/_main/roles/': typeof MainRolesIndexRoute
   '/_main/users/': typeof MainUsersIndexRoute
-  '/_main/members/$memberId/level-history': typeof MainMembersMemberIdLevelHistoryRoute
+  '/_main/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/_main/members/$memberId/': typeof MainMembersMemberIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -305,7 +306,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/menus'
     | '/members/$memberId'
-    | '/memberlevel/levels'
+    | '/memberidentity/levels'
     | '/region/query'
     | '/region/sync'
     | '/roles/$roleId'
@@ -323,7 +324,7 @@ export interface FileRouteTypes {
     | '/region/'
     | '/roles/'
     | '/users/'
-    | '/members/$memberId/level-history'
+    | '/members/$memberId/identity-level-history'
     | '/members/$memberId/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -332,7 +333,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/menus'
     | '/'
-    | '/memberlevel/levels'
+    | '/memberidentity/levels'
     | '/region/query'
     | '/region/sync'
     | '/roles/$roleId'
@@ -350,7 +351,7 @@ export interface FileRouteTypes {
     | '/region'
     | '/roles'
     | '/users'
-    | '/members/$memberId/level-history'
+    | '/members/$memberId/identity-level-history'
     | '/members/$memberId'
   id:
     | '__root__'
@@ -365,7 +366,7 @@ export interface FileRouteTypes {
     | '/_main/menus'
     | '/_main/'
     | '/_main/members/$memberId'
-    | '/_main/memberlevel/levels'
+    | '/_main/memberidentity/levels'
     | '/_main/region/query'
     | '/_main/region/sync'
     | '/_main/roles/$roleId'
@@ -383,7 +384,7 @@ export interface FileRouteTypes {
     | '/_main/region/'
     | '/_main/roles/'
     | '/_main/users/'
-    | '/_main/members/$memberId/level-history'
+    | '/_main/members/$memberId/identity-level-history'
     | '/_main/members/$memberId/'
   fileRoutesById: FileRoutesById
 }
@@ -464,11 +465,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainUsersRouteRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/memberlevel/levels': {
-      id: '/_main/memberlevel/levels'
-      path: '/memberlevel/levels'
-      fullPath: '/memberlevel/levels'
-      preLoaderRoute: typeof MainMemberlevelLevelsRouteImport
+    '/_main/memberidentity/levels': {
+      id: '/_main/memberidentity/levels'
+      path: '/memberidentity/levels'
+      fullPath: '/memberidentity/levels'
+      preLoaderRoute: typeof MainMemberidentityLevelsRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/members/': {
@@ -604,24 +605,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainMembersMemberIdIndexRouteImport
       parentRoute: typeof MainMembersMemberIdRouteRoute
     }
-    '/_main/members/$memberId/level-history': {
-      id: '/_main/members/$memberId/level-history'
-      path: '/level-history'
-      fullPath: '/members/$memberId/level-history'
-      preLoaderRoute: typeof MainMembersMemberIdLevelHistoryRouteImport
+    '/_main/members/$memberId/identity-level-history': {
+      id: '/_main/members/$memberId/identity-level-history'
+      path: '/identity-level-history'
+      fullPath: '/members/$memberId/identity-level-history'
+      preLoaderRoute: typeof MainMembersMemberIdIdentityLevelHistoryRouteImport
       parentRoute: typeof MainMembersMemberIdRouteRoute
     }
   }
 }
 
 interface MainMembersMemberIdRouteRouteChildren {
-  MainMembersMemberIdLevelHistoryRoute: typeof MainMembersMemberIdLevelHistoryRoute
+  MainMembersMemberIdIdentityLevelHistoryRoute: typeof MainMembersMemberIdIdentityLevelHistoryRoute
   MainMembersMemberIdIndexRoute: typeof MainMembersMemberIdIndexRoute
 }
 
 const MainMembersMemberIdRouteRouteChildren: MainMembersMemberIdRouteRouteChildren =
   {
-    MainMembersMemberIdLevelHistoryRoute: MainMembersMemberIdLevelHistoryRoute,
+    MainMembersMemberIdIdentityLevelHistoryRoute:
+      MainMembersMemberIdIdentityLevelHistoryRoute,
     MainMembersMemberIdIndexRoute: MainMembersMemberIdIndexRoute,
   }
 
@@ -698,7 +700,7 @@ interface MainRouteChildren {
   MainAccountRoute: typeof MainAccountRoute
   MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
-  MainMemberlevelLevelsRoute: typeof MainMemberlevelLevelsRoute
+  MainMemberidentityLevelsRoute: typeof MainMemberidentityLevelsRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
   MainSmsChannelsRoute: typeof MainSmsChannelsRoute
   MainSmsConfigRoute: typeof MainSmsConfigRoute
@@ -718,7 +720,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainAccountRoute: MainAccountRoute,
   MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
-  MainMemberlevelLevelsRoute: MainMemberlevelLevelsRoute,
+  MainMemberidentityLevelsRoute: MainMemberidentityLevelsRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,
   MainSmsChannelsRoute: MainSmsChannelsRoute,
   MainSmsConfigRoute: MainSmsConfigRoute,
