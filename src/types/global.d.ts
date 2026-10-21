@@ -954,6 +954,135 @@ declare global {
     /** 审批结论：approve 批准 / reject 驳回 */
     decision: 'approve' | 'reject'
   }
+
+  /** 会员摘要（见文档 MemberBrief，区代等嵌套展示用） */
+  interface MemberBrief {
+    /** 会员 id */
+    id: number
+    /** 手机号 */
+    mobile?: string
+    /** 用户名，可为空 */
+    username?: string
+    /** 昵称 */
+    nickname?: string
+    /** 头像 */
+    avatar?: string
+    /** 会员身份档位 id，可为空 */
+    memberIdentityLevelId?: number
+    /** 状态：1 正常 0 禁用 */
+    status?: number
+    /** 是否已设置登录口令 */
+    hasPassword?: boolean
+  }
+
+  /** 行政区视图（见文档 RegionView，区代等嵌套展示用） */
+  interface RegionView {
+    /** 行政区自增 id */
+    id: number
+    /** 国标区划码 */
+    code?: string
+    /** 区域全称 */
+    name?: string
+    /** 简称 */
+    shortName?: string
+    /** 层级：1 省 2 地 3 区/县 */
+    level?: number
+    /** 是否市辖区 */
+    urbanDistrict?: boolean
+    /** 状态：1 正常 0 停用 */
+    status?: number
+  }
+
+  /** 区代状态（见文档 DistrictAgentVo.status） */
+  type DistrictAgentStatus = 'pending' | 'active' | 'rejected' | 'revoked'
+
+  /** 区代附件（见文档 DistrictAgentAttachmentVo） */
+  interface DistrictAgentAttachment {
+    /** 附件 id */
+    id: number
+    /** 附件类型：id_card / business_license / other */
+    fileType?: string
+    /** 对象存储 URL */
+    fileUrl?: string
+    /** 上传人，可空 */
+    uploadedBy?: number
+    /** 上传时间 */
+    uploadedAt?: string
+  }
+
+  /** 区代（见文档 DistrictAgentVo） */
+  interface DistrictAgent {
+    /** 区代行 id */
+    id: number
+    /** 所属区 id */
+    regionId?: number
+    /** 区代会员 id */
+    memberId?: number
+    /** 状态：pending/active/rejected/revoked */
+    status?: DistrictAgentStatus
+    /** 过审上位时间，可空 */
+    assignedAt?: string
+    /** 撤销时间，可空 */
+    revokedAt?: string
+    /** 最后操作人，可空 */
+    operatorId?: number
+    /** 备注快照 */
+    remark?: string
+    /** 提交时间 */
+    createdAt?: string
+    /** 会员展示信息，会员被删时为空 */
+    member?: MemberBrief
+    /** 区域展示信息，区域缺行时为空 */
+    region?: RegionView
+    /** 附件列表 */
+    attachments?: DistrictAgentAttachment[]
+  }
+
+  /**
+   * 待审区代分页查询入参
+   * （见文档 GET /admin/agent/district-agents/pendings）。
+   * 注意：该接口分页字段是 page/pageSize，与全局 PageParams 的 page/size 不同。
+   */
+  interface DistrictAgentPendingQueryParams {
+    /** 所属区 id，不过滤不传 */
+    regionId?: number
+    /** 页码，1 起，默认 1 */
+    page?: number
+    /** 每页条数，默认 20，最大 100 */
+    pageSize?: number
+  }
+
+  /** 区代审核入参（见文档 AuditRequest） */
+  interface DistrictAgentAuditParams {
+    /** true 过审 / false 驳回 */
+    approved: boolean
+    /** 驳回原因，驳回必填（≤255） */
+    reason?: string
+  }
+
+  /** 区代附件入参（见文档 AttachmentRequest） */
+  interface DistrictAgentAttachmentParams {
+    /** 附件类型：id_card / business_license / other */
+    fileType: string
+    /** 对象存储 URL */
+    fileUrl: string
+  }
+
+  /** 区代附件全量覆盖入参（见文档 AttachmentsRequest，空数组=清空） */
+  interface DistrictAgentAttachmentsParams {
+    /** 附件全量列表 */
+    attachments: DistrictAgentAttachmentParams[]
+  }
+
+  /** 区代建单入参（见文档 ApplicationRequest） */
+  interface DistrictAgentApplicationParams {
+    /** 会员 id */
+    memberId: number
+    /** 区域 id */
+    regionId: number
+    /** 附件列表，可为空 */
+    attachments?: DistrictAgentAttachmentParams[]
+  }
 }
 
 export {}

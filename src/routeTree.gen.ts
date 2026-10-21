@@ -38,6 +38,7 @@ import { Route as MainStorageZonesRouteImport } from './routes/_main/storage/zon
 import { Route as MainUsersIndexRouteImport } from './routes/_main/users/index'
 import { Route as MainUsersUserIdRouteImport } from './routes/_main/users/$userId'
 import { Route as MainUsersNewRouteImport } from './routes/_main/users/new'
+import { Route as MainAgentDistrictAgentsPendingsRouteImport } from './routes/_main/agent/district-agents/pendings'
 import { Route as MainMembersMemberIdIndexRouteImport } from './routes/_main/members/$memberId/index'
 import { Route as MainMembersMemberIdIdentityLevelHistoryRouteImport } from './routes/_main/members/$memberId/identity-level-history'
 
@@ -187,6 +188,12 @@ const MainUsersNewRoute = MainUsersNewRouteImport.update({
   path: '/new',
   getParentRoute: () => MainUsersRouteRoute,
 } as any)
+const MainAgentDistrictAgentsPendingsRoute =
+  MainAgentDistrictAgentsPendingsRouteImport.update({
+    id: '/agent/district-agents/pendings',
+    path: '/agent/district-agents/pendings',
+    getParentRoute: () => MainRoute,
+  } as any)
 const MainMembersMemberIdIndexRoute =
   MainMembersMemberIdIndexRouteImport.update({
     id: '/',
@@ -229,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/region/': typeof MainRegionIndexRoute
   '/roles/': typeof MainRolesIndexRoute
   '/users/': typeof MainUsersIndexRoute
+  '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/members/$memberId/': typeof MainMembersMemberIdIndexRoute
 }
@@ -256,6 +264,7 @@ export interface FileRoutesByTo {
   '/region': typeof MainRegionIndexRoute
   '/roles': typeof MainRolesIndexRoute
   '/users': typeof MainUsersIndexRoute
+  '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/members/$memberId': typeof MainMembersMemberIdIndexRoute
 }
@@ -290,6 +299,7 @@ export interface FileRoutesById {
   '/_main/region/': typeof MainRegionIndexRoute
   '/_main/roles/': typeof MainRolesIndexRoute
   '/_main/users/': typeof MainUsersIndexRoute
+  '/_main/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/_main/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/_main/members/$memberId/': typeof MainMembersMemberIdIndexRoute
 }
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/region/'
     | '/roles/'
     | '/users/'
+    | '/agent/district-agents/pendings'
     | '/members/$memberId/identity-level-history'
     | '/members/$memberId/'
   fileRoutesByTo: FileRoutesByTo
@@ -351,6 +362,7 @@ export interface FileRouteTypes {
     | '/region'
     | '/roles'
     | '/users'
+    | '/agent/district-agents/pendings'
     | '/members/$memberId/identity-level-history'
     | '/members/$memberId'
   id:
@@ -384,6 +396,7 @@ export interface FileRouteTypes {
     | '/_main/region/'
     | '/_main/roles/'
     | '/_main/users/'
+    | '/_main/agent/district-agents/pendings'
     | '/_main/members/$memberId/identity-level-history'
     | '/_main/members/$memberId/'
   fileRoutesById: FileRoutesById
@@ -598,6 +611,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainUsersNewRouteImport
       parentRoute: typeof MainUsersRouteRoute
     }
+    '/_main/agent/district-agents/pendings': {
+      id: '/_main/agent/district-agents/pendings'
+      path: '/agent/district-agents/pendings'
+      fullPath: '/agent/district-agents/pendings'
+      preLoaderRoute: typeof MainAgentDistrictAgentsPendingsRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/members/$memberId/': {
       id: '/_main/members/$memberId/'
       path: '/'
@@ -709,6 +729,7 @@ interface MainRouteChildren {
   MainStorageChannelsRoute: typeof MainStorageChannelsRoute
   MainStorageRecordsRoute: typeof MainStorageRecordsRoute
   MainStorageZonesRoute: typeof MainStorageZonesRoute
+  MainAgentDistrictAgentsPendingsRoute: typeof MainAgentDistrictAgentsPendingsRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
@@ -729,6 +750,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainStorageChannelsRoute: MainStorageChannelsRoute,
   MainStorageRecordsRoute: MainStorageRecordsRoute,
   MainStorageZonesRoute: MainStorageZonesRoute,
+  MainAgentDistrictAgentsPendingsRoute: MainAgentDistrictAgentsPendingsRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
