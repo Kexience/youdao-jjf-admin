@@ -860,11 +860,16 @@ declare global {
 
   /** 行政区子级项（见文档 RegionChildVo：GET /admin/region/children） */
   interface RegionChild {
+    /**
+     * 业务引用键：省/地/县三级为 sys_region.id，可直接作为区代等业务的 regionId；
+     * 街道行来自 sys_region_street，不按 id 引用，返回 null。
+     */
+    id?: number | null
     /** 国标码（6 位，根码 000000 的下一级为省级） */
     code: string
     /** 全称 */
     name: string
-    /** 层级 */
+    /** 层级：1 省 2 地 3 区/县 4 街道 */
     level: number
   }
 

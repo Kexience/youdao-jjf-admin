@@ -35,6 +35,7 @@ export const REGION_CHILDREN_QUERY_KEY = ['admin-region-children'] as const
 /**
  * 行政区子级懒加载：GET /admin/region/children?code={code}。
  * 根码 000000 返回省级，之后逐级按父码往下查，供级联 / 树形懒加载按需取子级。
+ * 返回项的 id 为 sys_region.id（省/地/县三级非空，街道为 null），可直接作为业务 regionId。
  */
 export function fetchRegionChildren(code: string) {
   return get<RegionChild[]>('/region/children', { code })
