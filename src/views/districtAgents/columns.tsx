@@ -1,4 +1,5 @@
 import type { ProColumns } from '@ant-design/pro-components'
+import { Link } from '@tanstack/react-router'
 import { Avatar, Space, Tag, Typography } from 'antd'
 
 /**
@@ -29,27 +30,32 @@ const REGION_LEVEL_TEXT: Record<number, string> = {
   3: '区/县',
 }
 
-/** 会员展示：头像 + 昵称/用户名 + 手机号 */
-function renderMember(member?: MemberBrief) {
+/**
+ * 会员展示：头像 + 昵称/用户名 + 手机号。
+ * 点击整块会员信息跳到会员详情主 Tab（/members/$memberId，即「用户身份」）。
+ */
+export function renderMember(member?: MemberBrief) {
   if (!member) return '-'
   const name = member.nickname || member.username || member.mobile || `会员 ${member.id}`
   return (
-    <Space>
-      <Avatar src={member.avatar || undefined}>{name.slice(0, 1)}</Avatar>
-      <div>
-        <div>{name}</div>
-        {member.mobile && (
-          <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-            {member.mobile}
-          </Typography.Text>
-        )}
-      </div>
-    </Space>
+    <Link to="/members/$memberId" params={{ memberId: String(member.id) }}>
+      <Space>
+        <Avatar src={member.avatar || undefined}>{name.slice(0, 1)}</Avatar>
+        <div>
+          <div>{name}</div>
+          {member.mobile && (
+            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+              {member.mobile}
+            </Typography.Text>
+          )}
+        </div>
+      </Space>
+    </Link>
   )
 }
 
 /** 区域展示：全称 + 层级 / 国标码 */
-function renderRegion(region?: RegionView) {
+export function renderRegion(region?: RegionView) {
   if (!region) return '-'
   return (
     <Space size={4} wrap>
