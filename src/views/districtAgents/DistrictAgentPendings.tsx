@@ -1,6 +1,7 @@
 import type { ActionType, ProColumns } from '@ant-design/pro-components'
 import { PageContainer, ProTable } from '@ant-design/pro-components'
-import { App } from 'antd'
+import { Link } from '@tanstack/react-router'
+import { App, Button } from 'antd'
 import { useRef } from 'react'
 
 import {
@@ -19,8 +20,8 @@ import { DistrictAgentAuditModal } from './DistrictAgentAuditModal'
  * - 审核：POST /admin/agent/district-agents/{agentId}/audit（过审/驳回）
  * - 附件：PUT /admin/agent/district-agents/{agentId}/attachments（仅待审，全量覆盖）
  *
- * 列表只有待审数据，检索暂不提供（区域过滤参数 regionId 由接口按区 id 支持，
- * 当前无按区划码反查区 id 的接口，故页面不做区域下拉）。
+ * 列表只有待审数据，检索暂不提供；需要按区域核对时，
+ * 可点行内「在任区代」带着 regionId 跳到在任区代查询页。
  */
 export function DistrictAgentPendings() {
   const { message } = App.useApp()
@@ -54,7 +55,7 @@ export function DistrictAgentPendings() {
       title: '操作',
       key: 'action',
       valueType: 'option',
-      width: 140,
+      width: 200,
       fixed: 'right',
       render: (_, record) => [
         <DistrictAgentAuditModal
@@ -73,6 +74,21 @@ export function DistrictAgentPendings() {
             attachmentsMutation.mutateAsync({ agentId: record.id, params })
           }
         />,
+        // 审核前可先核对本区是否已有在任区代（带 regionId 跳到在任区代查询页）
+        record.regionId ? (
+          <Link
+            key="active"
+            to="/agent/district-agents/active"
+            search={{
+              regionId: record.regionId,
+              regionCode: record.region?.code,
+            }}
+          >
+            <Button type="link" size="small">
+              在任区代
+            </Button>
+          </Link>
+        ) : null,
       ],
     },
   ]
