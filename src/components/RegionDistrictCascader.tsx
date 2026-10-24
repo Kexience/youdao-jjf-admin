@@ -8,8 +8,8 @@ import { ApiError } from '../lib/request'
 
 /** 行政区划根码：查询省级列表 */
 const REGION_ROOT_CODE = '000000'
-/** 区/县层级：省/市/区三级中的最后一层，选中后拿 sys_region.id */
-const DISTRICT_LEVEL = 3
+/** 默认叶子层级：省/市/区三级中的最后一层（区/县），选中后拿 sys_region.id */
+const DEFAULT_LEAF_LEVEL = 3
 
 /** 级联选项：value/label 为国标码/名称，regionId 为 sys_region.id */
 interface RegionCascaderOption {
@@ -25,8 +25,13 @@ interface RegionCascaderOption {
 interface RegionDistrictCascaderProps {
   /** 选中的省/市/区县国标码路径，如 ['440000','440100','440103'] */
   value?: string[]
-  /** 选中区县回调；清空时 district 为 undefined */
+  /** 选中叶子回调（默认叶子为区/县）；清空时 node 为 undefined */
   onChange?: (district: RegionChild | undefined, path: string[]) => void
+  /**
+   * 叶子层级（=选项可选中的最深层级）：
+   * 2 = 地市（用于按城市筛选），3 = 区/县（默认，区代所属区域）。
+   */
+  leafLevel?: number
   placeholder?: string
   disabled?: boolean
   style?: CSSProperties
@@ -35,38 +40,40 @@ interface RegionDistrictCascaderProps {
 /**
  * 已加载子级映射 → 级联选项。
  * 未加载的非叶子节点给空 children，展开时由 loadData 拉取；
- * 区/县（level 3）作为业务叶子，不再下钻街道。
+ * 叶子（层级 ≥ leafLevel）作为业务叶子，不再下钻。
  */
 function buildOptions(
   nodes: RegionChild[],
   loaded: Record<string, RegionChild[]>,
+  leafLevel: number,
 ): RegionCascaderOption[] {
   return nodes.map((node) => {
     const level = node.level ?? 0
     const children = loaded[node.code]
-    const isLeaf = level >= DISTRICT_LEVEL || (children !== undefined && children.length === 0)
+    const isLeaf = level >= leafLevel || (children !== undefined && children.length === 0)
     return {
       value: node.code,
       label: node.name,
       level,
       regionId: node.id,
       isLeaf,
-      disabled: level > DISTRICT_LEVEL,
-      children: isLeaf ? undefined : buildOptions(children ?? [], loaded),
+      disabled: level > leafLevel,
+      children: isLeaf ? undefined : buildOptions(children ?? [], loaded, leafLevel),
     }
   })
 }
 
 /**
- * 省/市/区县级联选择器（复用已封装的行政区划接口）。
+ * 省/市/区县行政区划级联选择器（复用已封装的行政区划接口）。
  *
  * - 首屏只拉省级（根码 000000），展开省/市时按父码懒加载下一级（GET /admin/region/children）；
- * - 区/县为叶子，选中后把 RegionChild（含 sys_region.id）交给调用方；
+ * - 叶子（默认区/县，leafLevel=2 时为地市）选中后把 RegionChild（含 sys_region.id）交给调用方；
  * - 传入 value（国标码路径）时自动补拉沿途子级，保证刷新后回显省/市/区名称。
  */
 export function RegionDistrictCascader({
   value,
   onChange,
+  leafLevel = DEFAULT_LEAF_LEVEL,
   placeholder,
   disabled,
   style,
@@ -105,9 +112,9 @@ export function RegionDistrictCascader({
   useEffect(() => {
     if (!valueKey) return
     const codes = valueKey.split('/')
-    if (codes.length < DISTRICT_LEVEL) return
+    if (codes.length < leafLevel) return
     void (async () => {
-      for (const code of codes.slice(0, DISTRICT_LEVEL - 1)) {
+      for (const code of codes.slice(0, leafLevel - 1)) {
         try {
           await ensureChildren(code)
         } catch {
@@ -116,11 +123,11 @@ export function RegionDistrictCascader({
         }
       }
     })()
-  }, [valueKey, ensureChildren])
+  }, [valueKey, leafLevel, ensureChildren])
 
   const options = useMemo(
-    () => buildOptions(rootQuery.data ?? [], loaded),
-    [rootQuery.data, loaded],
+    () => buildOptions(rootQuery.data ?? [], loaded, leafLevel),
+    [rootQuery.data, loaded, leafLevel],
   )
 
   const handleChange: CascaderProps<RegionCascaderOption>['onChange'] = (_, selectedOptions) => {
@@ -146,7 +153,9 @@ export function RegionDistrictCascader({
       options={options}
       loadData={loadData}
       onChange={handleChange}
-      placeholder={placeholder ?? '选择省 / 市 / 区县'}
+      placeholder={
+        placeholder ?? (leafLevel <= 2 ? '选择省 / 市' : '选择省 / 市 / 区县')
+      }
       disabled={disabled}
       style={style}
       allowClear

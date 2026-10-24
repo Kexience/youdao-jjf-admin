@@ -40,6 +40,7 @@ import { Route as MainUsersIndexRouteImport } from './routes/_main/users/index'
 import { Route as MainUsersUserIdRouteImport } from './routes/_main/users/$userId'
 import { Route as MainUsersNewRouteImport } from './routes/_main/users/new'
 import { Route as MainAgentDistrictAgentsActiveRouteImport } from './routes/_main/agent/district-agents/active'
+import { Route as MainAgentDistrictAgentsActivesRouteImport } from './routes/_main/agent/district-agents/actives'
 import { Route as MainAgentDistrictAgentsPendingsRouteImport } from './routes/_main/agent/district-agents/pendings'
 import { Route as MainMembersMemberIdIndexRouteImport } from './routes/_main/members/$memberId/index'
 import { Route as MainMembersMemberIdIdentityLevelHistoryRouteImport } from './routes/_main/members/$memberId/identity-level-history'
@@ -201,6 +202,12 @@ const MainAgentDistrictAgentsActiveRoute =
     path: '/agent/district-agents/active',
     getParentRoute: () => MainRoute,
   } as any)
+const MainAgentDistrictAgentsActivesRoute =
+  MainAgentDistrictAgentsActivesRouteImport.update({
+    id: '/agent/district-agents/actives',
+    path: '/agent/district-agents/actives',
+    getParentRoute: () => MainRoute,
+  } as any)
 const MainAgentDistrictAgentsPendingsRoute =
   MainAgentDistrictAgentsPendingsRouteImport.update({
     id: '/agent/district-agents/pendings',
@@ -251,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/roles/': typeof MainRolesIndexRoute
   '/users/': typeof MainUsersIndexRoute
   '/agent/district-agents/active': typeof MainAgentDistrictAgentsActiveRoute
+  '/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
   '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/members/$memberId/': typeof MainMembersMemberIdIndexRoute
@@ -281,6 +289,7 @@ export interface FileRoutesByTo {
   '/roles': typeof MainRolesIndexRoute
   '/users': typeof MainUsersIndexRoute
   '/agent/district-agents/active': typeof MainAgentDistrictAgentsActiveRoute
+  '/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
   '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/members/$memberId': typeof MainMembersMemberIdIndexRoute
@@ -318,6 +327,7 @@ export interface FileRoutesById {
   '/_main/roles/': typeof MainRolesIndexRoute
   '/_main/users/': typeof MainUsersIndexRoute
   '/_main/agent/district-agents/active': typeof MainAgentDistrictAgentsActiveRoute
+  '/_main/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
   '/_main/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/_main/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
   '/_main/members/$memberId/': typeof MainMembersMemberIdIndexRoute
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/roles/'
     | '/users/'
     | '/agent/district-agents/active'
+    | '/agent/district-agents/actives'
     | '/agent/district-agents/pendings'
     | '/members/$memberId/identity-level-history'
     | '/members/$memberId/'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/roles'
     | '/users'
     | '/agent/district-agents/active'
+    | '/agent/district-agents/actives'
     | '/agent/district-agents/pendings'
     | '/members/$memberId/identity-level-history'
     | '/members/$memberId'
@@ -421,6 +433,7 @@ export interface FileRouteTypes {
     | '/_main/roles/'
     | '/_main/users/'
     | '/_main/agent/district-agents/active'
+    | '/_main/agent/district-agents/actives'
     | '/_main/agent/district-agents/pendings'
     | '/_main/members/$memberId/identity-level-history'
     | '/_main/members/$memberId/'
@@ -650,6 +663,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainAgentDistrictAgentsActiveRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/agent/district-agents/actives': {
+      id: '/_main/agent/district-agents/actives'
+      path: '/agent/district-agents/actives'
+      fullPath: '/agent/district-agents/actives'
+      preLoaderRoute: typeof MainAgentDistrictAgentsActivesRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/agent/district-agents/pendings': {
       id: '/_main/agent/district-agents/pendings'
       path: '/agent/district-agents/pendings'
@@ -770,6 +790,7 @@ interface MainRouteChildren {
   MainStorageRecordsRoute: typeof MainStorageRecordsRoute
   MainStorageZonesRoute: typeof MainStorageZonesRoute
   MainAgentDistrictAgentsActiveRoute: typeof MainAgentDistrictAgentsActiveRoute
+  MainAgentDistrictAgentsActivesRoute: typeof MainAgentDistrictAgentsActivesRoute
   MainAgentDistrictAgentsPendingsRoute: typeof MainAgentDistrictAgentsPendingsRoute
 }
 
@@ -793,6 +814,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainStorageRecordsRoute: MainStorageRecordsRoute,
   MainStorageZonesRoute: MainStorageZonesRoute,
   MainAgentDistrictAgentsActiveRoute: MainAgentDistrictAgentsActiveRoute,
+  MainAgentDistrictAgentsActivesRoute: MainAgentDistrictAgentsActivesRoute,
   MainAgentDistrictAgentsPendingsRoute: MainAgentDistrictAgentsPendingsRoute,
 }
 

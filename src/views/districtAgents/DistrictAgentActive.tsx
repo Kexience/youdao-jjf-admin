@@ -157,6 +157,9 @@ export function DistrictAgentActive() {
           <Link key="pendings" to="/agent/district-agents/pendings">
             <Button>待审区代</Button>
           </Link>,
+          <Link key="actives" to="/agent/district-agents/actives">
+            <Button>全部在任区代</Button>
+          </Link>,
         ],
       }}
     >

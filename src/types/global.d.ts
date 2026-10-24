@@ -1107,6 +1107,22 @@ declare global {
     pageSize?: number
   }
 
+  /**
+   * 全部在任区代分页查询入参
+   * （见文档 GET /admin/agent/district-agents/actives）。
+   * 注意：该接口分页字段是 page/pageSize，与全局 PageParams 的 page/size 不同。
+   */
+  interface DistrictAgentActivesQueryParams {
+    /** 所属区域（区/县）id，不过滤不传 */
+    regionId?: number
+    /** 城市筛选节点 id，不过滤不传 */
+    cityId?: number
+    /** 页码，1 起，默认 1 */
+    page?: number
+    /** 每页条数，默认 20，最大 100 */
+    pageSize?: number
+  }
+
   /** 区代审核入参（见文档 AuditRequest） */
   interface DistrictAgentAuditParams {
     /** true 过审 / false 驳回 */

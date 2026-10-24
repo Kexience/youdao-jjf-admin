@@ -14,6 +14,7 @@ import type { ApiError } from '../lib/request'
  * 覆盖接口：
  * - GET  /admin/agent/district-agents/pendings           分页查待审区代
  * - GET  /admin/agent/district-agents/active             查某区在任区代
+ * - GET  /admin/agent/district-agents/actives            分页查全部在任区代
  * - POST /admin/agent/district-agents/applications       建区代待审申请
  * - POST /admin/agent/district-agents/{agentId}/audit    审核（过审/驳回）
  * - POST /admin/agent/district-agents/{agentId}/revoke   撤销在任区代
@@ -66,6 +67,15 @@ export function useGetActiveDistrictAgent(
     queryFn: () => fetchActiveDistrictAgent(regionId as number),
     enabled: regionId !== undefined && regionId > 0 && (options?.enabled ?? true),
   })
+}
+
+/**
+ * 全部在任区代分页列表：GET /admin/agent/district-agents/actives。
+ * 支持 cityId（城市节点）与 regionId（区/县）两个可选筛选，均不过滤时不传。
+ * 供 ProTable request 直接使用（PageResult 与全局分页结构对齐）。
+ */
+export function fetchDistrictAgentActives(params: DistrictAgentActivesQueryParams) {
+  return get<PageResult<DistrictAgent>>('/agent/district-agents/actives', params)
 }
 
 /** 审核区代入参：区代行 id + 审核体 */

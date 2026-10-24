@@ -125,3 +125,65 @@ export const DISTRICT_AGENT_PENDING_COLUMNS: ProColumns<DistrictAgent>[] = [
     search: false,
   },
 ]
+
+/**
+ * 全部在任区代列（GET /admin/agent/district-agents/actives）。
+ * 与待审列的差异：在任数据无待审态，补「上任时间」；检索由页面的
+ * 城市 / 区域级联条件提供，操作列在页面内追加。
+ */
+export const DISTRICT_AGENT_ACTIVES_COLUMNS: ProColumns<DistrictAgent>[] = [
+  {
+    title: '会员',
+    dataIndex: 'memberId',
+    width: 220,
+    search: false,
+    render: (_, record) => renderMember(record.member),
+  },
+  {
+    title: '所属区域',
+    dataIndex: 'regionId',
+    width: 240,
+    search: false,
+    render: (_, record) => renderRegion(record.region),
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    width: 100,
+    search: false,
+    render: (_, record) => renderDistrictAgentStatus(record.status),
+  },
+  {
+    title: '上任时间',
+    dataIndex: 'assignedAt',
+    valueType: 'dateTime',
+    width: 180,
+    search: false,
+  },
+  {
+    title: '附件',
+    dataIndex: 'attachments',
+    width: 90,
+    search: false,
+    render: (_, record) =>
+      record.attachments?.length ? (
+        <Tag color="blue">{record.attachments.length} 个</Tag>
+      ) : (
+        <Tag>无</Tag>
+      ),
+  },
+  {
+    title: '备注',
+    dataIndex: 'remark',
+    ellipsis: true,
+    search: false,
+    render: (_, record) => record.remark || '-',
+  },
+  {
+    title: '提交时间',
+    dataIndex: 'createdAt',
+    valueType: 'dateTime',
+    width: 180,
+    search: false,
+  },
+]
