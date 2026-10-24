@@ -28,6 +28,7 @@ import { Route as MainRegionQueryRouteImport } from './routes/_main/region/query
 import { Route as MainRegionSyncRouteImport } from './routes/_main/region/sync'
 import { Route as MainRolesIndexRouteImport } from './routes/_main/roles/index'
 import { Route as MainRolesRoleIdRouteImport } from './routes/_main/roles/$roleId'
+import { Route as MainShopAuditsRouteRouteImport } from './routes/_main/shop/audits/route'
 import { Route as MainSmsBlacklistRouteImport } from './routes/_main/sms/blacklist'
 import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels'
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
@@ -44,6 +45,9 @@ import { Route as MainAgentDistrictAgentsActivesRouteImport } from './routes/_ma
 import { Route as MainAgentDistrictAgentsPendingsRouteImport } from './routes/_main/agent/district-agents/pendings'
 import { Route as MainMembersMemberIdIndexRouteImport } from './routes/_main/members/$memberId/index'
 import { Route as MainMembersMemberIdIdentityLevelHistoryRouteImport } from './routes/_main/members/$memberId/identity-level-history'
+import { Route as MainShopAuditsIndexRouteImport } from './routes/_main/shop/audits/index'
+import { Route as MainShopAuditsShopApplicationsRouteImport } from './routes/_main/shop/audits/shop-applications'
+import { Route as MainShopAuditsStoreApplicationsRouteImport } from './routes/_main/shop/audits/store-applications'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -141,6 +145,11 @@ const MainRolesRoleIdRoute = MainRolesRoleIdRouteImport.update({
   path: '/$roleId',
   getParentRoute: () => MainRolesRouteRoute,
 } as any)
+const MainShopAuditsRouteRoute = MainShopAuditsRouteRouteImport.update({
+  id: '/shop/audits',
+  path: '/shop/audits',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainSmsBlacklistRoute = MainSmsBlacklistRouteImport.update({
   id: '/sms/blacklist',
   path: '/sms/blacklist',
@@ -226,6 +235,23 @@ const MainMembersMemberIdIdentityLevelHistoryRoute =
     path: '/identity-level-history',
     getParentRoute: () => MainMembersMemberIdRouteRoute,
   } as any)
+const MainShopAuditsIndexRoute = MainShopAuditsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainShopAuditsRouteRoute,
+} as any)
+const MainShopAuditsShopApplicationsRoute =
+  MainShopAuditsShopApplicationsRouteImport.update({
+    id: '/shop-applications',
+    path: '/shop-applications',
+    getParentRoute: () => MainShopAuditsRouteRoute,
+  } as any)
+const MainShopAuditsStoreApplicationsRoute =
+  MainShopAuditsStoreApplicationsRouteImport.update({
+    id: '/store-applications',
+    path: '/store-applications',
+    getParentRoute: () => MainShopAuditsRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
@@ -238,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof MainAccountRoute
   '/menus': typeof MainMenusRoute
   '/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
+  '/shop/audits': typeof MainShopAuditsRouteRouteWithChildren
   '/geo/channels': typeof MainGeoChannelsRoute
   '/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/region/query': typeof MainRegionQueryRoute
@@ -261,7 +288,10 @@ export interface FileRoutesByFullPath {
   '/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
   '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
+  '/shop/audits/shop-applications': typeof MainShopAuditsShopApplicationsRoute
+  '/shop/audits/store-applications': typeof MainShopAuditsStoreApplicationsRoute
   '/members/$memberId/': typeof MainMembersMemberIdIndexRoute
+  '/shop/audits/': typeof MainShopAuditsIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -292,7 +322,10 @@ export interface FileRoutesByTo {
   '/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
   '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
+  '/shop/audits/shop-applications': typeof MainShopAuditsShopApplicationsRoute
+  '/shop/audits/store-applications': typeof MainShopAuditsStoreApplicationsRoute
   '/members/$memberId': typeof MainMembersMemberIdIndexRoute
+  '/shop/audits': typeof MainShopAuditsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -307,6 +340,7 @@ export interface FileRoutesById {
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
   '/_main/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
+  '/_main/shop/audits': typeof MainShopAuditsRouteRouteWithChildren
   '/_main/geo/channels': typeof MainGeoChannelsRoute
   '/_main/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/_main/region/query': typeof MainRegionQueryRoute
@@ -330,7 +364,10 @@ export interface FileRoutesById {
   '/_main/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
   '/_main/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
   '/_main/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
+  '/_main/shop/audits/shop-applications': typeof MainShopAuditsShopApplicationsRoute
+  '/_main/shop/audits/store-applications': typeof MainShopAuditsStoreApplicationsRoute
   '/_main/members/$memberId/': typeof MainMembersMemberIdIndexRoute
+  '/_main/shop/audits/': typeof MainShopAuditsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -345,6 +382,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/menus'
     | '/members/$memberId'
+    | '/shop/audits'
     | '/geo/channels'
     | '/memberidentity/levels'
     | '/region/query'
@@ -368,7 +406,10 @@ export interface FileRouteTypes {
     | '/agent/district-agents/actives'
     | '/agent/district-agents/pendings'
     | '/members/$memberId/identity-level-history'
+    | '/shop/audits/shop-applications'
+    | '/shop/audits/store-applications'
     | '/members/$memberId/'
+    | '/shop/audits/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -399,7 +440,10 @@ export interface FileRouteTypes {
     | '/agent/district-agents/actives'
     | '/agent/district-agents/pendings'
     | '/members/$memberId/identity-level-history'
+    | '/shop/audits/shop-applications'
+    | '/shop/audits/store-applications'
     | '/members/$memberId'
+    | '/shop/audits'
   id:
     | '__root__'
     | '/_main'
@@ -413,6 +457,7 @@ export interface FileRouteTypes {
     | '/_main/menus'
     | '/_main/'
     | '/_main/members/$memberId'
+    | '/_main/shop/audits'
     | '/_main/geo/channels'
     | '/_main/memberidentity/levels'
     | '/_main/region/query'
@@ -436,7 +481,10 @@ export interface FileRouteTypes {
     | '/_main/agent/district-agents/actives'
     | '/_main/agent/district-agents/pendings'
     | '/_main/members/$memberId/identity-level-history'
+    | '/_main/shop/audits/shop-applications'
+    | '/_main/shop/audits/store-applications'
     | '/_main/members/$memberId/'
+    | '/_main/shop/audits/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -579,6 +627,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainRolesRoleIdRouteImport
       parentRoute: typeof MainRolesRouteRoute
     }
+    '/_main/shop/audits': {
+      id: '/_main/shop/audits'
+      path: '/shop/audits'
+      fullPath: '/shop/audits'
+      preLoaderRoute: typeof MainShopAuditsRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/sms/blacklist': {
       id: '/_main/sms/blacklist'
       path: '/sms/blacklist'
@@ -691,6 +746,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainMembersMemberIdIdentityLevelHistoryRouteImport
       parentRoute: typeof MainMembersMemberIdRouteRoute
     }
+    '/_main/shop/audits/': {
+      id: '/_main/shop/audits/'
+      path: '/'
+      fullPath: '/shop/audits/'
+      preLoaderRoute: typeof MainShopAuditsIndexRouteImport
+      parentRoute: typeof MainShopAuditsRouteRoute
+    }
+    '/_main/shop/audits/shop-applications': {
+      id: '/_main/shop/audits/shop-applications'
+      path: '/shop-applications'
+      fullPath: '/shop/audits/shop-applications'
+      preLoaderRoute: typeof MainShopAuditsShopApplicationsRouteImport
+      parentRoute: typeof MainShopAuditsRouteRoute
+    }
+    '/_main/shop/audits/store-applications': {
+      id: '/_main/shop/audits/store-applications'
+      path: '/store-applications'
+      fullPath: '/shop/audits/store-applications'
+      preLoaderRoute: typeof MainShopAuditsStoreApplicationsRouteImport
+      parentRoute: typeof MainShopAuditsRouteRoute
+    }
   }
 }
 
@@ -770,6 +846,21 @@ const MainUsersRouteRouteWithChildren = MainUsersRouteRoute._addFileChildren(
   MainUsersRouteRouteChildren,
 )
 
+interface MainShopAuditsRouteRouteChildren {
+  MainShopAuditsShopApplicationsRoute: typeof MainShopAuditsShopApplicationsRoute
+  MainShopAuditsStoreApplicationsRoute: typeof MainShopAuditsStoreApplicationsRoute
+  MainShopAuditsIndexRoute: typeof MainShopAuditsIndexRoute
+}
+
+const MainShopAuditsRouteRouteChildren: MainShopAuditsRouteRouteChildren = {
+  MainShopAuditsShopApplicationsRoute: MainShopAuditsShopApplicationsRoute,
+  MainShopAuditsStoreApplicationsRoute: MainShopAuditsStoreApplicationsRoute,
+  MainShopAuditsIndexRoute: MainShopAuditsIndexRoute,
+}
+
+const MainShopAuditsRouteRouteWithChildren =
+  MainShopAuditsRouteRoute._addFileChildren(MainShopAuditsRouteRouteChildren)
+
 interface MainRouteChildren {
   MainMembersRouteRoute: typeof MainMembersRouteRouteWithChildren
   MainRegionRouteRoute: typeof MainRegionRouteRouteWithChildren
@@ -779,6 +870,7 @@ interface MainRouteChildren {
   MainAccountRoute: typeof MainAccountRoute
   MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainShopAuditsRouteRoute: typeof MainShopAuditsRouteRouteWithChildren
   MainGeoChannelsRoute: typeof MainGeoChannelsRoute
   MainMemberidentityLevelsRoute: typeof MainMemberidentityLevelsRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
@@ -803,6 +895,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainAccountRoute: MainAccountRoute,
   MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
+  MainShopAuditsRouteRoute: MainShopAuditsRouteRouteWithChildren,
   MainGeoChannelsRoute: MainGeoChannelsRoute,
   MainMemberidentityLevelsRoute: MainMemberidentityLevelsRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,
