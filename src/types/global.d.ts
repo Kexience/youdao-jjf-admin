@@ -328,6 +328,56 @@ declare global {
     accessKeySecretEncrypted?: boolean
   }
 
+  /** 地图厂商通道（见文档 GeoChannelVo：GET /admin/geo/channels） */
+  interface GeoChannel {
+    /** 通道 id */
+    id: number
+    /** 厂商标识：tencent 等 */
+    vendor: string
+    /** 服务端 key（厂商 WebService API 调用凭证） */
+    serverKey?: string
+    /** 服务端 Secret 掩码（响应恒为掩码） */
+    serverSecret?: string
+    /** 前端公开 key（H5/PC 地图渲染用） */
+    clientKey?: string
+    /** 优先级，1 最高 */
+    priority: number
+    /** 启用状态 */
+    enabled: boolean
+    /** Secret 是否加密存储（只管写，新增默认 true） */
+    serverSecretEncrypted?: boolean
+    /** 实际存储形态：true=密文 false=明文（与开关不一致时以此为准） */
+    serverSecretStoredEncrypted?: boolean
+  }
+
+  /** 地图通道保存入参（见文档 GeoChannelSaveRequest：POST/PUT /admin/geo/channels） */
+  interface GeoChannelSaveParams {
+    /** 厂商标识：tencent 等，必填 */
+    vendor: string
+    /** 服务端 key */
+    serverKey?: string
+    /** 服务端 Secret，修改时留空=保留原值 */
+    serverSecret?: string
+    /** 前端公开 key */
+    clientKey?: string
+    /** 优先级，1 最高全局唯一，必填 */
+    priority: number
+    /** 启用状态，不传=新增默认 false/修改保留原状态 */
+    enabled?: boolean
+    /** Secret 是否加密存储，不传=新增默认加密/修改保留原值 */
+    serverSecretEncrypted?: boolean
+  }
+
+  /** 地图通道连通性测试结果（见文档 GeoChannelTestVo：POST /admin/geo/channels/{id}/test） */
+  interface GeoChannelTestResult {
+    /** 厂商标识 */
+    vendor: string
+    /** 是否可用 */
+    available: boolean
+    /** 结果说明（统一错误分类文案） */
+    message: string
+  }
+
   /** 文件 zone（见文档 StorageZoneVo：GET /admin/storage/zones） */
   interface StorageZone {
     /** zone id */

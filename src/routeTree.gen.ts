@@ -19,6 +19,7 @@ import { Route as MainMenusRouteImport } from './routes/_main/menus'
 import { Route as MainRegionRouteRouteImport } from './routes/_main/region/route'
 import { Route as MainRolesRouteRouteImport } from './routes/_main/roles/route'
 import { Route as MainUsersRouteRouteImport } from './routes/_main/users/route'
+import { Route as MainGeoChannelsRouteImport } from './routes/_main/geo/channels'
 import { Route as MainMemberidentityLevelsRouteImport } from './routes/_main/memberidentity/levels'
 import { Route as MainMembersIndexRouteImport } from './routes/_main/members/index'
 import { Route as MainMembersMemberIdRouteRouteImport } from './routes/_main/members/$memberId/route'
@@ -90,6 +91,11 @@ const MainRolesRouteRoute = MainRolesRouteRouteImport.update({
 const MainUsersRouteRoute = MainUsersRouteRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainGeoChannelsRoute = MainGeoChannelsRouteImport.update({
+  id: '/geo/channels',
+  path: '/geo/channels',
   getParentRoute: () => MainRoute,
 } as any)
 const MainMemberidentityLevelsRoute =
@@ -225,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof MainAccountRoute
   '/menus': typeof MainMenusRoute
   '/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
+  '/geo/channels': typeof MainGeoChannelsRoute
   '/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/region/query': typeof MainRegionQueryRoute
   '/region/sync': typeof MainRegionSyncRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/account': typeof MainAccountRoute
   '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
+  '/geo/channels': typeof MainGeoChannelsRoute
   '/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/region/query': typeof MainRegionQueryRoute
   '/region/sync': typeof MainRegionSyncRoute
@@ -290,6 +298,7 @@ export interface FileRoutesById {
   '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
   '/_main/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
+  '/_main/geo/channels': typeof MainGeoChannelsRoute
   '/_main/memberidentity/levels': typeof MainMemberidentityLevelsRoute
   '/_main/region/query': typeof MainRegionQueryRoute
   '/_main/region/sync': typeof MainRegionSyncRoute
@@ -326,6 +335,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/menus'
     | '/members/$memberId'
+    | '/geo/channels'
     | '/memberidentity/levels'
     | '/region/query'
     | '/region/sync'
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/menus'
     | '/'
+    | '/geo/channels'
     | '/memberidentity/levels'
     | '/region/query'
     | '/region/sync'
@@ -390,6 +401,7 @@ export interface FileRouteTypes {
     | '/_main/menus'
     | '/_main/'
     | '/_main/members/$memberId'
+    | '/_main/geo/channels'
     | '/_main/memberidentity/levels'
     | '/_main/region/query'
     | '/_main/region/sync'
@@ -489,6 +501,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof MainUsersRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/geo/channels': {
+      id: '/_main/geo/channels'
+      path: '/geo/channels'
+      fullPath: '/geo/channels'
+      preLoaderRoute: typeof MainGeoChannelsRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/memberidentity/levels': {
@@ -740,6 +759,7 @@ interface MainRouteChildren {
   MainAccountRoute: typeof MainAccountRoute
   MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
+  MainGeoChannelsRoute: typeof MainGeoChannelsRoute
   MainMemberidentityLevelsRoute: typeof MainMemberidentityLevelsRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
   MainSmsChannelsRoute: typeof MainSmsChannelsRoute
@@ -762,6 +782,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainAccountRoute: MainAccountRoute,
   MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
+  MainGeoChannelsRoute: MainGeoChannelsRoute,
   MainMemberidentityLevelsRoute: MainMemberidentityLevelsRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,
   MainSmsChannelsRoute: MainSmsChannelsRoute,
