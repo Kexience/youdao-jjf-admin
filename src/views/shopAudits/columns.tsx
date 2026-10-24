@@ -1,4 +1,5 @@
 import type { ProColumns } from '@ant-design/pro-components'
+import { ProField } from '@ant-design/pro-components'
 import { Link } from '@tanstack/react-router'
 import { Tag, Typography } from 'antd'
 
@@ -19,11 +20,21 @@ export const SHOP_APPLY_STATUS_ENUM = {
   approved: { text: '已通过', status: 'Success' },
 } as const
 
-/** 申请单状态展示（带颜色 Tag，未知值按原样展示） */
+/**
+ * 申请单状态展示：交给 ProField（valueEnum → 只读态渲染）。
+ * 与表格单元格同一套渲染：命中枚举时出带状态色的 Badge，色值走 antd 主题
+ * token（深浅色模式都正确）；未命中枚举按原样展示文本，空值显示 -。
+ */
 export function renderShopApplyStatus(status?: string) {
-  if (!status) return '-'
-  const meta = SHOP_APPLY_STATUS_ENUM[status as keyof typeof SHOP_APPLY_STATUS_ENUM]
-  return <Tag color={meta?.status ?? 'default'}>{meta?.text ?? status}</Tag>
+  return (
+    <ProField
+      text={status}
+      valueType="select"
+      mode="read"
+      valueEnum={SHOP_APPLY_STATUS_ENUM}
+      emptyText="-"
+    />
+  )
 }
 
 /** 门店类型（见文档 StoreApplyVo.storeType：directsale/franchise） */
