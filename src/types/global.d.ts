@@ -1154,6 +1154,163 @@ declare global {
     /** 附件列表，可为空 */
     attachments?: DistrictAgentAttachmentParams[]
   }
+
+  /**
+   * 店铺/门店申请单状态（见文档 ShopApplyVo.status / StoreApplyVo.status）：
+   * pending_agent 区代初审中 / pending_admin 平台终审中 /
+   * rejected_agent 区代已驳回（管理员可复核推翻）/ rejected_admin 终审驳回（终态）/ approved 已通过（终态）
+   */
+  type ShopApplyStatus =
+    | 'pending_agent'
+    | 'pending_admin'
+    | 'rejected_agent'
+    | 'rejected_admin'
+    | 'approved'
+
+  /** 店铺申请单视图（见文档 ShopApplyVo：GET /admin/shop/audits/shop-applications） */
+  interface ShopApplyVo {
+    /** 申请单 id */
+    id: number
+    /** 申请人会员 id */
+    ownerMemberId?: number
+    /** 申请人昵称 */
+    ownerName?: string
+    /** 店铺名称 */
+    shopName?: string
+    /** 联系电话 */
+    contactPhone?: string
+    /** 营业地址所在区 id */
+    regionId?: number
+    /** 区名 */
+    regionName?: string
+    /** 详细地址 */
+    addressDetail?: string
+    /** 经度，GCJ-02 */
+    longitude?: number
+    /** 纬度，GCJ-02 */
+    latitude?: number
+    /** 行业分类 id 快照 */
+    categoryId?: number
+    /** 行业分类名称快照 */
+    categoryName?: string
+    /** 标签 id 快照（逗号分隔） */
+    labelIds?: string
+    /** 标签名称快照（逗号分隔） */
+    labelNames?: string
+    /** 营业执照图片 URL */
+    businessLicense?: string
+    /** 店铺门头照图片 URL */
+    shopImage?: string
+    /** 身份证正面图片 URL */
+    idCardFront?: string
+    /** 身份证反面图片 URL */
+    idCardBack?: string
+    /** 店铺介绍 */
+    content?: string
+    /** 状态：pending_agent/pending_admin/rejected_agent/rejected_admin/approved */
+    status?: ShopApplyStatus
+    /** 初审区代行 id */
+    agentId?: number
+    /** 驳回原因 */
+    rejectReason?: string
+    /** 开通的店铺 id */
+    shopId?: number
+    /** 终审裁决时间 */
+    auditedAt?: string
+    /** 提交时间 */
+    createdAt?: string
+  }
+
+  /** 门店申请单视图（见文档 StoreApplyVo：GET /admin/shop/audits/store-applications） */
+  interface StoreApplyVo {
+    /** 申请单 id */
+    id: number
+    /** 所属店铺 id */
+    shopId?: number
+    /** 申请人会员 id */
+    applicantId?: number
+    /** 门店名称 */
+    storeName?: string
+    /** 联系电话 */
+    contactPhone?: string
+    /** 门店类型：directsale 直营 / franchise 加盟 */
+    storeType?: string
+    /** 门店地址所在区 id */
+    regionId?: number
+    /** 区名 */
+    regionName?: string
+    /** 详细地址 */
+    addressDetail?: string
+    /** 经度，GCJ-02 */
+    longitude?: number
+    /** 纬度，GCJ-02 */
+    latitude?: number
+    /** 行业分类 id 快照 */
+    categoryId?: number
+    /** 行业分类名称快照 */
+    categoryName?: string
+    /** 标签 id 快照（逗号分隔） */
+    labelIds?: string
+    /** 标签名称快照（逗号分隔） */
+    labelNames?: string
+    /** 营业执照图片 URL */
+    businessLicense?: string
+    /** 门店门头照图片 URL */
+    storeImage?: string
+    /** 身份证正面图片 URL */
+    idCardFront?: string
+    /** 身份证反面图片 URL */
+    idCardBack?: string
+    /** 门店介绍 */
+    content?: string
+    /** 状态：pending_agent/pending_admin/rejected_agent/rejected_admin/approved */
+    status?: ShopApplyStatus
+    /** 初审区代行 id */
+    agentId?: number
+    /** 应缴保证金金额快照 */
+    depositAmount?: number
+    /** 驳回原因 */
+    rejectReason?: string
+    /** 开通的门店 id */
+    storeId?: number
+    /** 终审裁决时间 */
+    auditedAt?: string
+    /** 提交时间 */
+    createdAt?: string
+  }
+
+  /**
+   * 店铺/门店申请单分页查询入参
+   * （见文档 GET /admin/shop/audits/shop-applications、/store-applications）。
+   * 注意：该组接口分页字段是 page/pageSize，与全局 PageParams 的 page/size 不同。
+   */
+  interface ShopApplyQueryParams {
+    /**
+     * 状态过滤：后端为数组参数，前端拼成逗号分隔串（axios 对数组默认展开成
+     * statuses[]=xxx，后端解析不到）。为空=查全部非 approved 单。
+     */
+    statuses?: string
+    /** 页码，1 起，默认 1 */
+    page?: number
+    /** 每页条数，默认 20，最大 100 */
+    pageSize?: number
+  }
+
+  /** 终审入参（见文档 AdminAuditRequest：approved=true 通过开通 / false 驳回终态） */
+  interface ShopAuditParams {
+    /** true 通过(开通) / false 驳回(终态) */
+    approved: boolean
+    /** 驳回原因，驳回必填（≤255） */
+    reason?: string
+  }
+
+  /** 门店保证金余额视图（见文档 StoreDepositBalanceVo：GET /admin/shop/deposits/apply/{applyId}/balance） */
+  interface StoreDepositBalance {
+    /** 当前余额 */
+    balance?: number
+    /** 缴纳累计 */
+    paid?: number
+  }
 }
 
 export {}
