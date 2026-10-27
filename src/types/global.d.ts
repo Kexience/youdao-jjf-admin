@@ -1167,6 +1167,12 @@ declare global {
     | 'rejected_admin'
     | 'approved'
 
+  /**
+   * 店铺/门店经营状态（见后端 Shop.STATUS_* / Store.STATUS_*）：
+   * active 营业中 / suspended 已停业 / frozen 已冻结（风控处置中）/ closed 已关店（终态）
+   */
+  type ShopLifecycleStatus = 'active' | 'suspended' | 'frozen' | 'closed'
+
   /** 店铺申请单视图（见文档 ShopApplyVo：GET /admin/shop/audits/shop-applications） */
   interface ShopApplyVo {
     /** 申请单 id */
@@ -1276,6 +1282,114 @@ declare global {
     /** 终审裁决时间 */
     auditedAt?: string
     /** 提交时间 */
+    createdAt?: string
+  }
+
+  /**
+   * 店铺视图（见文档 ShopVo：生命周期接口返回，GET 门店列表不含店铺主体）。
+   * 字段为店铺主表 + 区名展示快照，不含敏感信息。
+   */
+  interface ShopVo {
+    /** 店铺 id */
+    id: number
+    /** 店主会员 id */
+    ownerMemberId?: number
+    /** 店铺名称 */
+    shopName?: string
+    /** 联系电话 */
+    contactPhone?: string
+    /** 营业地址所在区 id */
+    regionId?: number
+    /** 区名 */
+    regionName?: string
+    /** 详细地址 */
+    addressDetail?: string
+    /** 经度（GCJ-02） */
+    longitude?: number
+    /** 纬度（GCJ-02） */
+    latitude?: number
+    /** 行业分类 id 快照 */
+    categoryId?: number
+    /** 行业分类名称快照 */
+    categoryName?: string
+    /** 标签 id 快照（逗号分隔） */
+    labelIds?: string
+    /** 标签名称快照（逗号分隔） */
+    labelNames?: string
+    /** 营业执照图片 URL */
+    businessLicense?: string
+    /** 店铺门头照图片 URL */
+    shopImage?: string
+    /** 身份证正面图片 URL */
+    idCardFront?: string
+    /** 身份证反面图片 URL */
+    idCardBack?: string
+    /** 店铺介绍 */
+    content?: string
+    /** 经营状态：active/suspended/frozen/closed */
+    status?: ShopLifecycleStatus
+    /** 冻结时间 */
+    frozenAt?: string
+    /** 停业时间 */
+    suspendedAt?: string
+    /** 关店时间 */
+    closedAt?: string
+    /** 创建时间 */
+    createdAt?: string
+  }
+
+  /**
+   * 门店视图（见文档 StoreVo：GET /admin/shop/lifecycle/shops/{shopId}/stores，
+   * 含已关店门店；生命周期四动作的响应体同此结构）。
+   */
+  interface StoreVo {
+    /** 门店 id */
+    id: number
+    /** 归属店铺 id */
+    shopId?: number
+    /** 门店名称 */
+    storeName?: string
+    /** 联系电话 */
+    contactPhone?: string
+    /** 门店类型：directsale 直营 / franchise 加盟 */
+    storeType?: string
+    /** 门店地址所在区 id */
+    regionId?: number
+    /** 区名 */
+    regionName?: string
+    /** 详细地址 */
+    addressDetail?: string
+    /** 经度（GCJ-02） */
+    longitude?: number
+    /** 纬度（GCJ-02） */
+    latitude?: number
+    /** 行业分类 id 快照 */
+    categoryId?: number
+    /** 行业分类名称快照 */
+    categoryName?: string
+    /** 标签 id 快照（逗号分隔） */
+    labelIds?: string
+    /** 标签名称快照（逗号分隔） */
+    labelNames?: string
+    /** 营业执照图片 URL */
+    businessLicense?: string
+    /** 门店门头照图片 URL */
+    storeImage?: string
+    /** 身份证正面图片 URL */
+    idCardFront?: string
+    /** 身份证反面图片 URL */
+    idCardBack?: string
+    /** 门店介绍 */
+    content?: string
+    /** 经营状态：active/suspended/frozen/closed */
+    status?: ShopLifecycleStatus
+    /** 冻结时间 */
+    frozenAt?: string
+    /** 停业时间 */
+    suspendedAt?: string
+    /** 关店时间 */
+    closedAt?: string
+    /** 创建时间 */
     createdAt?: string
   }
 
