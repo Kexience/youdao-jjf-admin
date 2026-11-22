@@ -29,7 +29,7 @@ export function AdminUserCreate() {
   const createMutation = useCreateAdminUser({
     onSuccess: (user) => {
       message.success(`管理员 ${user.username} 创建成功`);
-      void navigate({ to: "/users" });
+      void navigate({ to: "/system/admin" });
     },
     onError: (error) => {
       message.error(
@@ -43,7 +43,7 @@ export function AdminUserCreate() {
       title="新建管理员"
       subTitle="仅填写登录用户名与初始口令，资料由管理员自行补充。"
       extra={[
-        <Link key="back" to="/users">
+        <Link key="back" to="/system/admin">
           <Button>返回列表</Button>
         </Link>,
       ]}

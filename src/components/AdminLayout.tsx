@@ -41,6 +41,8 @@ function resolveMenuIcon(icon?: string): ReactNode | undefined {
  *   可见子节点向上「桥接」到最近的可见祖先（甚至挂到根），这些子节点的 pid 仍指向
  *   那个不在返回树中的父节点。这里用 pid 不在可见树中的孤儿判定把它们整支丢弃，
  *   避免出现「父级隐藏、子菜单还显示」的孤立菜单；
+ * - 路由地址取自 component（后端菜单无独立 path 字段），并统一补前导 /，
+ *   保证与前端文件路由（如 component=sms/record → /sms/record）逐字对应；
  * - 目录（M）无 component 时 path 置空，只做折叠分组；若过滤后分组为空也不再渲染；
  * - icon 自动映射 @ant-design/icons，填 MenuOutlined / menu 都能显示，填错则无图标；
  * - 同级按 sort 升序排列。
@@ -67,7 +69,13 @@ function toMenuItems(nodes: AdminMenuTreeNode[], visibleIds: Set<number>): MenuD
       if (node.menuType === 'A' || !node.show) return []
       if (node.pid !== 0 && !visibleIds.has(node.pid)) return []
       const children = node.children?.length ? toMenuItems(node.children, visibleIds) : undefined
-      const path = node.component?.trim() || undefined
+      const component = node.component?.trim()
+      // 后端 component 形如 sms/record（无前导 /），补成绝对路径再交给 Router Link
+      const path = component
+        ? /^https?:\/\//.test(component)
+          ? component
+          : `/${component.replace(/^\/+/, '')}`
+        : undefined
       // 目录（无路由）在子节点全部被过滤后不再渲染空分组
       if (!path && !children?.length) return []
       return [

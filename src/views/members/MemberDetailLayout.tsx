@@ -40,14 +40,14 @@ const HEADER_COLUMNS: DetailColumn[] = [
  * 页头（PageContainer content/extraContent/extra）常驻，主体分「用户身份 / 身份档位历史」两个 Tab，
  * Tab 与子路由一一对应（用户身份=index，身份档位历史=identity-level-history），支持刷新/前进后退/分享链接。
  *
- * 后续「订单 / 推荐关系」等子页在 routes/_main/members/$memberId/ 下新增子路由，
+ * 后续「订单 / 推荐关系」等子页在 routes/_main/member/$memberId/ 下新增子路由，
  * 并在 tabList 里补一项即可自动挂到这里，页头与权限校验无需重复实现。
  */
 export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
   const { message } = App.useApp();
   const navigate = useNavigate();
 
-  // 路径驱动 Tab：/members/$memberId 为「用户身份」，/members/$memberId/identity-level-history 为「身份档位历史」
+  // 路径驱动 Tab：/member/$memberId 为「用户身份」，/member/$memberId/identity-level-history 为「身份档位历史」
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const activeTab = pathname.endsWith("/identity-level-history")
     ? "identity-level-history"
@@ -75,8 +75,8 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
     void navigate({
       to:
         key === "identity-level-history"
-          ? "/members/$memberId/identity-level-history"
-          : "/members/$memberId",
+          ? "/member/$memberId/identity-level-history"
+          : "/member/$memberId",
       params: { memberId: String(memberId) },
     });
   };
@@ -117,7 +117,7 @@ export function MemberDetailLayout({ memberId }: MemberDetailLayoutProps) {
         ) : undefined
       }
       extra={[
-        <Link key="back" to="/members">
+        <Link key="back" to="/member/list">
           <Button>返回列表</Button>
         </Link>,
         detail && (

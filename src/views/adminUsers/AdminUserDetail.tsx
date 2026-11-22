@@ -62,7 +62,7 @@ const DETAIL_TAB_LIST = [{ key: 'detail', tab: '详情' }]
 
 /**
  * 管理员详情页：GET /admin/users/{id} 展示全部字段，支持编辑资料与启停。
- * 独立路由页面（/users/$userId），用户名 / 密码 / 角色不在此改，
+ * 独立路由页面（/system/admin/$userId），用户名 / 密码 / 角色不在此改，
  * 后续对应接口完成后在该页面扩展入口。
  *
  * 布局参考 ant-design-pro 高级资料页：页头 content 区放关键字段、
@@ -130,7 +130,7 @@ export function AdminUserDetail({ userId }: AdminUserDetailProps) {
       tabActiveKey={tabActiveKey}
       onTabChange={setTabActiveKey}
       extra={[
-          <Link key="back" to="/users">
+          <Link key="back" to="/system/admin">
             <Button>返回列表</Button>
           </Link>,
           detail && (

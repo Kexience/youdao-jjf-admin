@@ -14,40 +14,40 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainAboutRouteImport } from './routes/_main/about'
 import { Route as MainAccountRouteImport } from './routes/_main/account'
-import { Route as MainMembersRouteRouteImport } from './routes/_main/members/route'
-import { Route as MainMenusRouteImport } from './routes/_main/menus'
 import { Route as MainRegionRouteRouteImport } from './routes/_main/region/route'
-import { Route as MainRolesRouteRouteImport } from './routes/_main/roles/route'
-import { Route as MainUsersRouteRouteImport } from './routes/_main/users/route'
-import { Route as MainGeoChannelsRouteImport } from './routes/_main/geo/channels'
-import { Route as MainMemberidentityLevelsRouteImport } from './routes/_main/memberidentity/levels'
-import { Route as MainMembersIndexRouteImport } from './routes/_main/members/index'
-import { Route as MainMembersMemberIdRouteRouteImport } from './routes/_main/members/$memberId/route'
+import { Route as MainGeoChannelRouteImport } from './routes/_main/geo/channel'
+import { Route as MainMemberMemberIdRouteRouteImport } from './routes/_main/member/$memberId/route'
+import { Route as MainMemberIdentityLevelRouteImport } from './routes/_main/member/identity-level'
+import { Route as MainMemberListRouteImport } from './routes/_main/member/list'
 import { Route as MainRegionIndexRouteImport } from './routes/_main/region/index'
-import { Route as MainRegionQueryRouteImport } from './routes/_main/region/query'
+import { Route as MainRegionListRouteImport } from './routes/_main/region/list'
 import { Route as MainRegionSyncRouteImport } from './routes/_main/region/sync'
-import { Route as MainRolesIndexRouteImport } from './routes/_main/roles/index'
-import { Route as MainRolesRoleIdRouteImport } from './routes/_main/roles/$roleId'
-import { Route as MainShopAuditsRouteRouteImport } from './routes/_main/shop/audits/route'
+import { Route as MainShopAuditRouteRouteImport } from './routes/_main/shop/audit/route'
 import { Route as MainSmsBlacklistRouteImport } from './routes/_main/sms/blacklist'
-import { Route as MainSmsChannelsRouteImport } from './routes/_main/sms/channels'
+import { Route as MainSmsChannelRouteImport } from './routes/_main/sms/channel'
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
-import { Route as MainSmsRecordsRouteImport } from './routes/_main/sms/records'
-import { Route as MainSmsTemplatesRouteImport } from './routes/_main/sms/templates'
-import { Route as MainStorageChannelsRouteImport } from './routes/_main/storage/channels'
-import { Route as MainStorageRecordsRouteImport } from './routes/_main/storage/records'
-import { Route as MainStorageZonesRouteImport } from './routes/_main/storage/zones'
-import { Route as MainUsersIndexRouteImport } from './routes/_main/users/index'
-import { Route as MainUsersUserIdRouteImport } from './routes/_main/users/$userId'
-import { Route as MainUsersNewRouteImport } from './routes/_main/users/new'
-import { Route as MainAgentDistrictAgentsActiveRouteImport } from './routes/_main/agent/district-agents/active'
-import { Route as MainAgentDistrictAgentsActivesRouteImport } from './routes/_main/agent/district-agents/actives'
-import { Route as MainAgentDistrictAgentsPendingsRouteImport } from './routes/_main/agent/district-agents/pendings'
-import { Route as MainMembersMemberIdIndexRouteImport } from './routes/_main/members/$memberId/index'
-import { Route as MainMembersMemberIdIdentityLevelHistoryRouteImport } from './routes/_main/members/$memberId/identity-level-history'
-import { Route as MainShopAuditsIndexRouteImport } from './routes/_main/shop/audits/index'
-import { Route as MainShopAuditsShopApplicationsRouteImport } from './routes/_main/shop/audits/shop-applications'
-import { Route as MainShopAuditsStoreApplicationsRouteImport } from './routes/_main/shop/audits/store-applications'
+import { Route as MainSmsRecordRouteImport } from './routes/_main/sms/record'
+import { Route as MainSmsTemplateRouteImport } from './routes/_main/sms/template'
+import { Route as MainStorageChannelRouteImport } from './routes/_main/storage/channel'
+import { Route as MainStorageRecordRouteImport } from './routes/_main/storage/record'
+import { Route as MainStorageZoneRouteImport } from './routes/_main/storage/zone'
+import { Route as MainSystemAdminRouteRouteImport } from './routes/_main/system/admin/route'
+import { Route as MainSystemMenuRouteImport } from './routes/_main/system/menu'
+import { Route as MainSystemRoleRouteRouteImport } from './routes/_main/system/role/route'
+import { Route as MainAgentDistrictIndexRouteImport } from './routes/_main/agent/district/index'
+import { Route as MainAgentDistrictActiveRouteImport } from './routes/_main/agent/district/active'
+import { Route as MainAgentDistrictActivesRouteImport } from './routes/_main/agent/district/actives'
+import { Route as MainAgentDistrictPendingsRouteImport } from './routes/_main/agent/district/pendings'
+import { Route as MainMemberMemberIdIndexRouteImport } from './routes/_main/member/$memberId/index'
+import { Route as MainMemberMemberIdIdentityLevelHistoryRouteImport } from './routes/_main/member/$memberId/identity-level-history'
+import { Route as MainShopAuditIndexRouteImport } from './routes/_main/shop/audit/index'
+import { Route as MainShopAuditShopApplicationsRouteImport } from './routes/_main/shop/audit/shop-applications'
+import { Route as MainShopAuditStoreApplicationsRouteImport } from './routes/_main/shop/audit/store-applications'
+import { Route as MainSystemAdminIndexRouteImport } from './routes/_main/system/admin/index'
+import { Route as MainSystemAdminUserIdRouteImport } from './routes/_main/system/admin/$userId'
+import { Route as MainSystemAdminNewRouteImport } from './routes/_main/system/admin/new'
+import { Route as MainSystemRoleIndexRouteImport } from './routes/_main/system/role/index'
+import { Route as MainSystemRoleRoleIdRouteImport } from './routes/_main/system/role/$roleId'
 
 const MainRoute = MainRouteImport.update({
   id: '/_main',
@@ -73,61 +73,39 @@ const MainAccountRoute = MainAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => MainRoute,
 } as any)
-const MainMembersRouteRoute = MainMembersRouteRouteImport.update({
-  id: '/members',
-  path: '/members',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainMenusRoute = MainMenusRouteImport.update({
-  id: '/menus',
-  path: '/menus',
-  getParentRoute: () => MainRoute,
-} as any)
 const MainRegionRouteRoute = MainRegionRouteRouteImport.update({
   id: '/region',
   path: '/region',
   getParentRoute: () => MainRoute,
 } as any)
-const MainRolesRouteRoute = MainRolesRouteRouteImport.update({
-  id: '/roles',
-  path: '/roles',
+const MainGeoChannelRoute = MainGeoChannelRouteImport.update({
+  id: '/geo/channel',
+  path: '/geo/channel',
   getParentRoute: () => MainRoute,
 } as any)
-const MainUsersRouteRoute = MainUsersRouteRouteImport.update({
-  id: '/users',
-  path: '/users',
+const MainMemberMemberIdRouteRoute = MainMemberMemberIdRouteRouteImport.update({
+  id: '/member/$memberId',
+  path: '/member/$memberId',
   getParentRoute: () => MainRoute,
 } as any)
-const MainGeoChannelsRoute = MainGeoChannelsRouteImport.update({
-  id: '/geo/channels',
-  path: '/geo/channels',
+const MainMemberIdentityLevelRoute = MainMemberIdentityLevelRouteImport.update({
+  id: '/member/identity-level',
+  path: '/member/identity-level',
   getParentRoute: () => MainRoute,
 } as any)
-const MainMemberidentityLevelsRoute =
-  MainMemberidentityLevelsRouteImport.update({
-    id: '/memberidentity/levels',
-    path: '/memberidentity/levels',
-    getParentRoute: () => MainRoute,
-  } as any)
-const MainMembersIndexRoute = MainMembersIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MainMembersRouteRoute,
+const MainMemberListRoute = MainMemberListRouteImport.update({
+  id: '/member/list',
+  path: '/member/list',
+  getParentRoute: () => MainRoute,
 } as any)
-const MainMembersMemberIdRouteRoute =
-  MainMembersMemberIdRouteRouteImport.update({
-    id: '/$memberId',
-    path: '/$memberId',
-    getParentRoute: () => MainMembersRouteRoute,
-  } as any)
 const MainRegionIndexRoute = MainRegionIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => MainRegionRouteRoute,
 } as any)
-const MainRegionQueryRoute = MainRegionQueryRouteImport.update({
-  id: '/query',
-  path: '/query',
+const MainRegionListRoute = MainRegionListRouteImport.update({
+  id: '/list',
+  path: '/list',
   getParentRoute: () => MainRegionRouteRoute,
 } as any)
 const MainRegionSyncRoute = MainRegionSyncRouteImport.update({
@@ -135,19 +113,9 @@ const MainRegionSyncRoute = MainRegionSyncRouteImport.update({
   path: '/sync',
   getParentRoute: () => MainRegionRouteRoute,
 } as any)
-const MainRolesIndexRoute = MainRolesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MainRolesRouteRoute,
-} as any)
-const MainRolesRoleIdRoute = MainRolesRoleIdRouteImport.update({
-  id: '/$roleId',
-  path: '/$roleId',
-  getParentRoute: () => MainRolesRouteRoute,
-} as any)
-const MainShopAuditsRouteRoute = MainShopAuditsRouteRouteImport.update({
-  id: '/shop/audits',
-  path: '/shop/audits',
+const MainShopAuditRouteRoute = MainShopAuditRouteRouteImport.update({
+  id: '/shop/audit',
+  path: '/shop/audit',
   getParentRoute: () => MainRoute,
 } as any)
 const MainSmsBlacklistRoute = MainSmsBlacklistRouteImport.update({
@@ -155,9 +123,9 @@ const MainSmsBlacklistRoute = MainSmsBlacklistRouteImport.update({
   path: '/sms/blacklist',
   getParentRoute: () => MainRoute,
 } as any)
-const MainSmsChannelsRoute = MainSmsChannelsRouteImport.update({
-  id: '/sms/channels',
-  path: '/sms/channels',
+const MainSmsChannelRoute = MainSmsChannelRouteImport.update({
+  id: '/sms/channel',
+  path: '/sms/channel',
   getParentRoute: () => MainRoute,
 } as any)
 const MainSmsConfigRoute = MainSmsConfigRouteImport.update({
@@ -165,326 +133,356 @@ const MainSmsConfigRoute = MainSmsConfigRouteImport.update({
   path: '/sms/config',
   getParentRoute: () => MainRoute,
 } as any)
-const MainSmsRecordsRoute = MainSmsRecordsRouteImport.update({
-  id: '/sms/records',
-  path: '/sms/records',
+const MainSmsRecordRoute = MainSmsRecordRouteImport.update({
+  id: '/sms/record',
+  path: '/sms/record',
   getParentRoute: () => MainRoute,
 } as any)
-const MainSmsTemplatesRoute = MainSmsTemplatesRouteImport.update({
-  id: '/sms/templates',
-  path: '/sms/templates',
+const MainSmsTemplateRoute = MainSmsTemplateRouteImport.update({
+  id: '/sms/template',
+  path: '/sms/template',
   getParentRoute: () => MainRoute,
 } as any)
-const MainStorageChannelsRoute = MainStorageChannelsRouteImport.update({
-  id: '/storage/channels',
-  path: '/storage/channels',
+const MainStorageChannelRoute = MainStorageChannelRouteImport.update({
+  id: '/storage/channel',
+  path: '/storage/channel',
   getParentRoute: () => MainRoute,
 } as any)
-const MainStorageRecordsRoute = MainStorageRecordsRouteImport.update({
-  id: '/storage/records',
-  path: '/storage/records',
+const MainStorageRecordRoute = MainStorageRecordRouteImport.update({
+  id: '/storage/record',
+  path: '/storage/record',
   getParentRoute: () => MainRoute,
 } as any)
-const MainStorageZonesRoute = MainStorageZonesRouteImport.update({
-  id: '/storage/zones',
-  path: '/storage/zones',
+const MainStorageZoneRoute = MainStorageZoneRouteImport.update({
+  id: '/storage/zone',
+  path: '/storage/zone',
   getParentRoute: () => MainRoute,
 } as any)
-const MainUsersIndexRoute = MainUsersIndexRouteImport.update({
+const MainSystemAdminRouteRoute = MainSystemAdminRouteRouteImport.update({
+  id: '/system/admin',
+  path: '/system/admin',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainSystemMenuRoute = MainSystemMenuRouteImport.update({
+  id: '/system/menu',
+  path: '/system/menu',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainSystemRoleRouteRoute = MainSystemRoleRouteRouteImport.update({
+  id: '/system/role',
+  path: '/system/role',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainAgentDistrictIndexRoute = MainAgentDistrictIndexRouteImport.update({
+  id: '/agent/district/',
+  path: '/agent/district/',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainAgentDistrictActiveRoute = MainAgentDistrictActiveRouteImport.update({
+  id: '/agent/district/active',
+  path: '/agent/district/active',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainAgentDistrictActivesRoute =
+  MainAgentDistrictActivesRouteImport.update({
+    id: '/agent/district/actives',
+    path: '/agent/district/actives',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainAgentDistrictPendingsRoute =
+  MainAgentDistrictPendingsRouteImport.update({
+    id: '/agent/district/pendings',
+    path: '/agent/district/pendings',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMemberMemberIdIndexRoute = MainMemberMemberIdIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => MainUsersRouteRoute,
+  getParentRoute: () => MainMemberMemberIdRouteRoute,
 } as any)
-const MainUsersUserIdRoute = MainUsersUserIdRouteImport.update({
-  id: '/$userId',
-  path: '/$userId',
-  getParentRoute: () => MainUsersRouteRoute,
-} as any)
-const MainUsersNewRoute = MainUsersNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => MainUsersRouteRoute,
-} as any)
-const MainAgentDistrictAgentsActiveRoute =
-  MainAgentDistrictAgentsActiveRouteImport.update({
-    id: '/agent/district-agents/active',
-    path: '/agent/district-agents/active',
-    getParentRoute: () => MainRoute,
-  } as any)
-const MainAgentDistrictAgentsActivesRoute =
-  MainAgentDistrictAgentsActivesRouteImport.update({
-    id: '/agent/district-agents/actives',
-    path: '/agent/district-agents/actives',
-    getParentRoute: () => MainRoute,
-  } as any)
-const MainAgentDistrictAgentsPendingsRoute =
-  MainAgentDistrictAgentsPendingsRouteImport.update({
-    id: '/agent/district-agents/pendings',
-    path: '/agent/district-agents/pendings',
-    getParentRoute: () => MainRoute,
-  } as any)
-const MainMembersMemberIdIndexRoute =
-  MainMembersMemberIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => MainMembersMemberIdRouteRoute,
-  } as any)
-const MainMembersMemberIdIdentityLevelHistoryRoute =
-  MainMembersMemberIdIdentityLevelHistoryRouteImport.update({
+const MainMemberMemberIdIdentityLevelHistoryRoute =
+  MainMemberMemberIdIdentityLevelHistoryRouteImport.update({
     id: '/identity-level-history',
     path: '/identity-level-history',
-    getParentRoute: () => MainMembersMemberIdRouteRoute,
+    getParentRoute: () => MainMemberMemberIdRouteRoute,
   } as any)
-const MainShopAuditsIndexRoute = MainShopAuditsIndexRouteImport.update({
+const MainShopAuditIndexRoute = MainShopAuditIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => MainShopAuditsRouteRoute,
+  getParentRoute: () => MainShopAuditRouteRoute,
 } as any)
-const MainShopAuditsShopApplicationsRoute =
-  MainShopAuditsShopApplicationsRouteImport.update({
+const MainShopAuditShopApplicationsRoute =
+  MainShopAuditShopApplicationsRouteImport.update({
     id: '/shop-applications',
     path: '/shop-applications',
-    getParentRoute: () => MainShopAuditsRouteRoute,
+    getParentRoute: () => MainShopAuditRouteRoute,
   } as any)
-const MainShopAuditsStoreApplicationsRoute =
-  MainShopAuditsStoreApplicationsRouteImport.update({
+const MainShopAuditStoreApplicationsRoute =
+  MainShopAuditStoreApplicationsRouteImport.update({
     id: '/store-applications',
     path: '/store-applications',
-    getParentRoute: () => MainShopAuditsRouteRoute,
+    getParentRoute: () => MainShopAuditRouteRoute,
   } as any)
+const MainSystemAdminIndexRoute = MainSystemAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainSystemAdminRouteRoute,
+} as any)
+const MainSystemAdminUserIdRoute = MainSystemAdminUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => MainSystemAdminRouteRoute,
+} as any)
+const MainSystemAdminNewRoute = MainSystemAdminNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => MainSystemAdminRouteRoute,
+} as any)
+const MainSystemRoleIndexRoute = MainSystemRoleIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainSystemRoleRouteRoute,
+} as any)
+const MainSystemRoleRoleIdRoute = MainSystemRoleRoleIdRouteImport.update({
+  id: '/$roleId',
+  path: '/$roleId',
+  getParentRoute: () => MainSystemRoleRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
   '/login': typeof LoginRoute
-  '/members': typeof MainMembersRouteRouteWithChildren
   '/region': typeof MainRegionRouteRouteWithChildren
-  '/roles': typeof MainRolesRouteRouteWithChildren
-  '/users': typeof MainUsersRouteRouteWithChildren
   '/about': typeof MainAboutRoute
   '/account': typeof MainAccountRoute
-  '/menus': typeof MainMenusRoute
-  '/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
-  '/shop/audits': typeof MainShopAuditsRouteRouteWithChildren
-  '/geo/channels': typeof MainGeoChannelsRoute
-  '/memberidentity/levels': typeof MainMemberidentityLevelsRoute
-  '/region/query': typeof MainRegionQueryRoute
+  '/member/$memberId': typeof MainMemberMemberIdRouteRouteWithChildren
+  '/shop/audit': typeof MainShopAuditRouteRouteWithChildren
+  '/system/admin': typeof MainSystemAdminRouteRouteWithChildren
+  '/system/role': typeof MainSystemRoleRouteRouteWithChildren
+  '/geo/channel': typeof MainGeoChannelRoute
+  '/member/identity-level': typeof MainMemberIdentityLevelRoute
+  '/member/list': typeof MainMemberListRoute
+  '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
-  '/roles/$roleId': typeof MainRolesRoleIdRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
-  '/sms/channels': typeof MainSmsChannelsRoute
+  '/sms/channel': typeof MainSmsChannelRoute
   '/sms/config': typeof MainSmsConfigRoute
-  '/sms/records': typeof MainSmsRecordsRoute
-  '/sms/templates': typeof MainSmsTemplatesRoute
-  '/storage/channels': typeof MainStorageChannelsRoute
-  '/storage/records': typeof MainStorageRecordsRoute
-  '/storage/zones': typeof MainStorageZonesRoute
-  '/users/$userId': typeof MainUsersUserIdRoute
-  '/users/new': typeof MainUsersNewRoute
-  '/members/': typeof MainMembersIndexRoute
+  '/sms/record': typeof MainSmsRecordRoute
+  '/sms/template': typeof MainSmsTemplateRoute
+  '/storage/channel': typeof MainStorageChannelRoute
+  '/storage/record': typeof MainStorageRecordRoute
+  '/storage/zone': typeof MainStorageZoneRoute
+  '/system/menu': typeof MainSystemMenuRoute
   '/region/': typeof MainRegionIndexRoute
-  '/roles/': typeof MainRolesIndexRoute
-  '/users/': typeof MainUsersIndexRoute
-  '/agent/district-agents/active': typeof MainAgentDistrictAgentsActiveRoute
-  '/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
-  '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
-  '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
-  '/shop/audits/shop-applications': typeof MainShopAuditsShopApplicationsRoute
-  '/shop/audits/store-applications': typeof MainShopAuditsStoreApplicationsRoute
-  '/members/$memberId/': typeof MainMembersMemberIdIndexRoute
-  '/shop/audits/': typeof MainShopAuditsIndexRoute
+  '/agent/district/active': typeof MainAgentDistrictActiveRoute
+  '/agent/district/actives': typeof MainAgentDistrictActivesRoute
+  '/agent/district/pendings': typeof MainAgentDistrictPendingsRoute
+  '/member/$memberId/identity-level-history': typeof MainMemberMemberIdIdentityLevelHistoryRoute
+  '/shop/audit/shop-applications': typeof MainShopAuditShopApplicationsRoute
+  '/shop/audit/store-applications': typeof MainShopAuditStoreApplicationsRoute
+  '/system/admin/$userId': typeof MainSystemAdminUserIdRoute
+  '/system/admin/new': typeof MainSystemAdminNewRoute
+  '/system/role/$roleId': typeof MainSystemRoleRoleIdRoute
+  '/agent/district/': typeof MainAgentDistrictIndexRoute
+  '/member/$memberId/': typeof MainMemberMemberIdIndexRoute
+  '/shop/audit/': typeof MainShopAuditIndexRoute
+  '/system/admin/': typeof MainSystemAdminIndexRoute
+  '/system/role/': typeof MainSystemRoleIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof MainAboutRoute
   '/account': typeof MainAccountRoute
-  '/menus': typeof MainMenusRoute
   '/': typeof MainIndexRoute
-  '/geo/channels': typeof MainGeoChannelsRoute
-  '/memberidentity/levels': typeof MainMemberidentityLevelsRoute
-  '/region/query': typeof MainRegionQueryRoute
+  '/geo/channel': typeof MainGeoChannelRoute
+  '/member/identity-level': typeof MainMemberIdentityLevelRoute
+  '/member/list': typeof MainMemberListRoute
+  '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
-  '/roles/$roleId': typeof MainRolesRoleIdRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
-  '/sms/channels': typeof MainSmsChannelsRoute
+  '/sms/channel': typeof MainSmsChannelRoute
   '/sms/config': typeof MainSmsConfigRoute
-  '/sms/records': typeof MainSmsRecordsRoute
-  '/sms/templates': typeof MainSmsTemplatesRoute
-  '/storage/channels': typeof MainStorageChannelsRoute
-  '/storage/records': typeof MainStorageRecordsRoute
-  '/storage/zones': typeof MainStorageZonesRoute
-  '/users/$userId': typeof MainUsersUserIdRoute
-  '/users/new': typeof MainUsersNewRoute
-  '/members': typeof MainMembersIndexRoute
+  '/sms/record': typeof MainSmsRecordRoute
+  '/sms/template': typeof MainSmsTemplateRoute
+  '/storage/channel': typeof MainStorageChannelRoute
+  '/storage/record': typeof MainStorageRecordRoute
+  '/storage/zone': typeof MainStorageZoneRoute
+  '/system/menu': typeof MainSystemMenuRoute
   '/region': typeof MainRegionIndexRoute
-  '/roles': typeof MainRolesIndexRoute
-  '/users': typeof MainUsersIndexRoute
-  '/agent/district-agents/active': typeof MainAgentDistrictAgentsActiveRoute
-  '/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
-  '/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
-  '/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
-  '/shop/audits/shop-applications': typeof MainShopAuditsShopApplicationsRoute
-  '/shop/audits/store-applications': typeof MainShopAuditsStoreApplicationsRoute
-  '/members/$memberId': typeof MainMembersMemberIdIndexRoute
-  '/shop/audits': typeof MainShopAuditsIndexRoute
+  '/agent/district/active': typeof MainAgentDistrictActiveRoute
+  '/agent/district/actives': typeof MainAgentDistrictActivesRoute
+  '/agent/district/pendings': typeof MainAgentDistrictPendingsRoute
+  '/member/$memberId/identity-level-history': typeof MainMemberMemberIdIdentityLevelHistoryRoute
+  '/shop/audit/shop-applications': typeof MainShopAuditShopApplicationsRoute
+  '/shop/audit/store-applications': typeof MainShopAuditStoreApplicationsRoute
+  '/system/admin/$userId': typeof MainSystemAdminUserIdRoute
+  '/system/admin/new': typeof MainSystemAdminNewRoute
+  '/system/role/$roleId': typeof MainSystemRoleRoleIdRoute
+  '/agent/district': typeof MainAgentDistrictIndexRoute
+  '/member/$memberId': typeof MainMemberMemberIdIndexRoute
+  '/shop/audit': typeof MainShopAuditIndexRoute
+  '/system/admin': typeof MainSystemAdminIndexRoute
+  '/system/role': typeof MainSystemRoleIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_main': typeof MainRouteWithChildren
   '/login': typeof LoginRoute
-  '/_main/members': typeof MainMembersRouteRouteWithChildren
   '/_main/region': typeof MainRegionRouteRouteWithChildren
-  '/_main/roles': typeof MainRolesRouteRouteWithChildren
-  '/_main/users': typeof MainUsersRouteRouteWithChildren
   '/_main/about': typeof MainAboutRoute
   '/_main/account': typeof MainAccountRoute
-  '/_main/menus': typeof MainMenusRoute
   '/_main/': typeof MainIndexRoute
-  '/_main/members/$memberId': typeof MainMembersMemberIdRouteRouteWithChildren
-  '/_main/shop/audits': typeof MainShopAuditsRouteRouteWithChildren
-  '/_main/geo/channels': typeof MainGeoChannelsRoute
-  '/_main/memberidentity/levels': typeof MainMemberidentityLevelsRoute
-  '/_main/region/query': typeof MainRegionQueryRoute
+  '/_main/member/$memberId': typeof MainMemberMemberIdRouteRouteWithChildren
+  '/_main/shop/audit': typeof MainShopAuditRouteRouteWithChildren
+  '/_main/system/admin': typeof MainSystemAdminRouteRouteWithChildren
+  '/_main/system/role': typeof MainSystemRoleRouteRouteWithChildren
+  '/_main/geo/channel': typeof MainGeoChannelRoute
+  '/_main/member/identity-level': typeof MainMemberIdentityLevelRoute
+  '/_main/member/list': typeof MainMemberListRoute
+  '/_main/region/list': typeof MainRegionListRoute
   '/_main/region/sync': typeof MainRegionSyncRoute
-  '/_main/roles/$roleId': typeof MainRolesRoleIdRoute
   '/_main/sms/blacklist': typeof MainSmsBlacklistRoute
-  '/_main/sms/channels': typeof MainSmsChannelsRoute
+  '/_main/sms/channel': typeof MainSmsChannelRoute
   '/_main/sms/config': typeof MainSmsConfigRoute
-  '/_main/sms/records': typeof MainSmsRecordsRoute
-  '/_main/sms/templates': typeof MainSmsTemplatesRoute
-  '/_main/storage/channels': typeof MainStorageChannelsRoute
-  '/_main/storage/records': typeof MainStorageRecordsRoute
-  '/_main/storage/zones': typeof MainStorageZonesRoute
-  '/_main/users/$userId': typeof MainUsersUserIdRoute
-  '/_main/users/new': typeof MainUsersNewRoute
-  '/_main/members/': typeof MainMembersIndexRoute
+  '/_main/sms/record': typeof MainSmsRecordRoute
+  '/_main/sms/template': typeof MainSmsTemplateRoute
+  '/_main/storage/channel': typeof MainStorageChannelRoute
+  '/_main/storage/record': typeof MainStorageRecordRoute
+  '/_main/storage/zone': typeof MainStorageZoneRoute
+  '/_main/system/menu': typeof MainSystemMenuRoute
   '/_main/region/': typeof MainRegionIndexRoute
-  '/_main/roles/': typeof MainRolesIndexRoute
-  '/_main/users/': typeof MainUsersIndexRoute
-  '/_main/agent/district-agents/active': typeof MainAgentDistrictAgentsActiveRoute
-  '/_main/agent/district-agents/actives': typeof MainAgentDistrictAgentsActivesRoute
-  '/_main/agent/district-agents/pendings': typeof MainAgentDistrictAgentsPendingsRoute
-  '/_main/members/$memberId/identity-level-history': typeof MainMembersMemberIdIdentityLevelHistoryRoute
-  '/_main/shop/audits/shop-applications': typeof MainShopAuditsShopApplicationsRoute
-  '/_main/shop/audits/store-applications': typeof MainShopAuditsStoreApplicationsRoute
-  '/_main/members/$memberId/': typeof MainMembersMemberIdIndexRoute
-  '/_main/shop/audits/': typeof MainShopAuditsIndexRoute
+  '/_main/agent/district/active': typeof MainAgentDistrictActiveRoute
+  '/_main/agent/district/actives': typeof MainAgentDistrictActivesRoute
+  '/_main/agent/district/pendings': typeof MainAgentDistrictPendingsRoute
+  '/_main/member/$memberId/identity-level-history': typeof MainMemberMemberIdIdentityLevelHistoryRoute
+  '/_main/shop/audit/shop-applications': typeof MainShopAuditShopApplicationsRoute
+  '/_main/shop/audit/store-applications': typeof MainShopAuditStoreApplicationsRoute
+  '/_main/system/admin/$userId': typeof MainSystemAdminUserIdRoute
+  '/_main/system/admin/new': typeof MainSystemAdminNewRoute
+  '/_main/system/role/$roleId': typeof MainSystemRoleRoleIdRoute
+  '/_main/agent/district/': typeof MainAgentDistrictIndexRoute
+  '/_main/member/$memberId/': typeof MainMemberMemberIdIndexRoute
+  '/_main/shop/audit/': typeof MainShopAuditIndexRoute
+  '/_main/system/admin/': typeof MainSystemAdminIndexRoute
+  '/_main/system/role/': typeof MainSystemRoleIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
-    | '/members'
     | '/region'
-    | '/roles'
-    | '/users'
     | '/about'
     | '/account'
-    | '/menus'
-    | '/members/$memberId'
-    | '/shop/audits'
-    | '/geo/channels'
-    | '/memberidentity/levels'
-    | '/region/query'
+    | '/member/$memberId'
+    | '/shop/audit'
+    | '/system/admin'
+    | '/system/role'
+    | '/geo/channel'
+    | '/member/identity-level'
+    | '/member/list'
+    | '/region/list'
     | '/region/sync'
-    | '/roles/$roleId'
     | '/sms/blacklist'
-    | '/sms/channels'
+    | '/sms/channel'
     | '/sms/config'
-    | '/sms/records'
-    | '/sms/templates'
-    | '/storage/channels'
-    | '/storage/records'
-    | '/storage/zones'
-    | '/users/$userId'
-    | '/users/new'
-    | '/members/'
+    | '/sms/record'
+    | '/sms/template'
+    | '/storage/channel'
+    | '/storage/record'
+    | '/storage/zone'
+    | '/system/menu'
     | '/region/'
-    | '/roles/'
-    | '/users/'
-    | '/agent/district-agents/active'
-    | '/agent/district-agents/actives'
-    | '/agent/district-agents/pendings'
-    | '/members/$memberId/identity-level-history'
-    | '/shop/audits/shop-applications'
-    | '/shop/audits/store-applications'
-    | '/members/$memberId/'
-    | '/shop/audits/'
+    | '/agent/district/active'
+    | '/agent/district/actives'
+    | '/agent/district/pendings'
+    | '/member/$memberId/identity-level-history'
+    | '/shop/audit/shop-applications'
+    | '/shop/audit/store-applications'
+    | '/system/admin/$userId'
+    | '/system/admin/new'
+    | '/system/role/$roleId'
+    | '/agent/district/'
+    | '/member/$memberId/'
+    | '/shop/audit/'
+    | '/system/admin/'
+    | '/system/role/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/about'
     | '/account'
-    | '/menus'
     | '/'
-    | '/geo/channels'
-    | '/memberidentity/levels'
-    | '/region/query'
+    | '/geo/channel'
+    | '/member/identity-level'
+    | '/member/list'
+    | '/region/list'
     | '/region/sync'
-    | '/roles/$roleId'
     | '/sms/blacklist'
-    | '/sms/channels'
+    | '/sms/channel'
     | '/sms/config'
-    | '/sms/records'
-    | '/sms/templates'
-    | '/storage/channels'
-    | '/storage/records'
-    | '/storage/zones'
-    | '/users/$userId'
-    | '/users/new'
-    | '/members'
+    | '/sms/record'
+    | '/sms/template'
+    | '/storage/channel'
+    | '/storage/record'
+    | '/storage/zone'
+    | '/system/menu'
     | '/region'
-    | '/roles'
-    | '/users'
-    | '/agent/district-agents/active'
-    | '/agent/district-agents/actives'
-    | '/agent/district-agents/pendings'
-    | '/members/$memberId/identity-level-history'
-    | '/shop/audits/shop-applications'
-    | '/shop/audits/store-applications'
-    | '/members/$memberId'
-    | '/shop/audits'
+    | '/agent/district/active'
+    | '/agent/district/actives'
+    | '/agent/district/pendings'
+    | '/member/$memberId/identity-level-history'
+    | '/shop/audit/shop-applications'
+    | '/shop/audit/store-applications'
+    | '/system/admin/$userId'
+    | '/system/admin/new'
+    | '/system/role/$roleId'
+    | '/agent/district'
+    | '/member/$memberId'
+    | '/shop/audit'
+    | '/system/admin'
+    | '/system/role'
   id:
     | '__root__'
     | '/_main'
     | '/login'
-    | '/_main/members'
     | '/_main/region'
-    | '/_main/roles'
-    | '/_main/users'
     | '/_main/about'
     | '/_main/account'
-    | '/_main/menus'
     | '/_main/'
-    | '/_main/members/$memberId'
-    | '/_main/shop/audits'
-    | '/_main/geo/channels'
-    | '/_main/memberidentity/levels'
-    | '/_main/region/query'
+    | '/_main/member/$memberId'
+    | '/_main/shop/audit'
+    | '/_main/system/admin'
+    | '/_main/system/role'
+    | '/_main/geo/channel'
+    | '/_main/member/identity-level'
+    | '/_main/member/list'
+    | '/_main/region/list'
     | '/_main/region/sync'
-    | '/_main/roles/$roleId'
     | '/_main/sms/blacklist'
-    | '/_main/sms/channels'
+    | '/_main/sms/channel'
     | '/_main/sms/config'
-    | '/_main/sms/records'
-    | '/_main/sms/templates'
-    | '/_main/storage/channels'
-    | '/_main/storage/records'
-    | '/_main/storage/zones'
-    | '/_main/users/$userId'
-    | '/_main/users/new'
-    | '/_main/members/'
+    | '/_main/sms/record'
+    | '/_main/sms/template'
+    | '/_main/storage/channel'
+    | '/_main/storage/record'
+    | '/_main/storage/zone'
+    | '/_main/system/menu'
     | '/_main/region/'
-    | '/_main/roles/'
-    | '/_main/users/'
-    | '/_main/agent/district-agents/active'
-    | '/_main/agent/district-agents/actives'
-    | '/_main/agent/district-agents/pendings'
-    | '/_main/members/$memberId/identity-level-history'
-    | '/_main/shop/audits/shop-applications'
-    | '/_main/shop/audits/store-applications'
-    | '/_main/members/$memberId/'
-    | '/_main/shop/audits/'
+    | '/_main/agent/district/active'
+    | '/_main/agent/district/actives'
+    | '/_main/agent/district/pendings'
+    | '/_main/member/$memberId/identity-level-history'
+    | '/_main/shop/audit/shop-applications'
+    | '/_main/shop/audit/store-applications'
+    | '/_main/system/admin/$userId'
+    | '/_main/system/admin/new'
+    | '/_main/system/role/$roleId'
+    | '/_main/agent/district/'
+    | '/_main/member/$memberId/'
+    | '/_main/shop/audit/'
+    | '/_main/system/admin/'
+    | '/_main/system/role/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -529,20 +527,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainAccountRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/members': {
-      id: '/_main/members'
-      path: '/members'
-      fullPath: '/members'
-      preLoaderRoute: typeof MainMembersRouteRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/menus': {
-      id: '/_main/menus'
-      path: '/menus'
-      fullPath: '/menus'
-      preLoaderRoute: typeof MainMenusRouteImport
-      parentRoute: typeof MainRoute
-    }
     '/_main/region': {
       id: '/_main/region'
       path: '/region'
@@ -550,47 +534,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainRegionRouteRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/roles': {
-      id: '/_main/roles'
-      path: '/roles'
-      fullPath: '/roles'
-      preLoaderRoute: typeof MainRolesRouteRouteImport
+    '/_main/geo/channel': {
+      id: '/_main/geo/channel'
+      path: '/geo/channel'
+      fullPath: '/geo/channel'
+      preLoaderRoute: typeof MainGeoChannelRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/users': {
-      id: '/_main/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof MainUsersRouteRouteImport
+    '/_main/member/$memberId': {
+      id: '/_main/member/$memberId'
+      path: '/member/$memberId'
+      fullPath: '/member/$memberId'
+      preLoaderRoute: typeof MainMemberMemberIdRouteRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/geo/channels': {
-      id: '/_main/geo/channels'
-      path: '/geo/channels'
-      fullPath: '/geo/channels'
-      preLoaderRoute: typeof MainGeoChannelsRouteImport
+    '/_main/member/identity-level': {
+      id: '/_main/member/identity-level'
+      path: '/member/identity-level'
+      fullPath: '/member/identity-level'
+      preLoaderRoute: typeof MainMemberIdentityLevelRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/memberidentity/levels': {
-      id: '/_main/memberidentity/levels'
-      path: '/memberidentity/levels'
-      fullPath: '/memberidentity/levels'
-      preLoaderRoute: typeof MainMemberidentityLevelsRouteImport
+    '/_main/member/list': {
+      id: '/_main/member/list'
+      path: '/member/list'
+      fullPath: '/member/list'
+      preLoaderRoute: typeof MainMemberListRouteImport
       parentRoute: typeof MainRoute
-    }
-    '/_main/members/': {
-      id: '/_main/members/'
-      path: '/'
-      fullPath: '/members/'
-      preLoaderRoute: typeof MainMembersIndexRouteImport
-      parentRoute: typeof MainMembersRouteRoute
-    }
-    '/_main/members/$memberId': {
-      id: '/_main/members/$memberId'
-      path: '/$memberId'
-      fullPath: '/members/$memberId'
-      preLoaderRoute: typeof MainMembersMemberIdRouteRouteImport
-      parentRoute: typeof MainMembersRouteRoute
     }
     '/_main/region/': {
       id: '/_main/region/'
@@ -599,11 +569,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainRegionIndexRouteImport
       parentRoute: typeof MainRegionRouteRoute
     }
-    '/_main/region/query': {
-      id: '/_main/region/query'
-      path: '/query'
-      fullPath: '/region/query'
-      preLoaderRoute: typeof MainRegionQueryRouteImport
+    '/_main/region/list': {
+      id: '/_main/region/list'
+      path: '/list'
+      fullPath: '/region/list'
+      preLoaderRoute: typeof MainRegionListRouteImport
       parentRoute: typeof MainRegionRouteRoute
     }
     '/_main/region/sync': {
@@ -613,25 +583,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainRegionSyncRouteImport
       parentRoute: typeof MainRegionRouteRoute
     }
-    '/_main/roles/': {
-      id: '/_main/roles/'
-      path: '/'
-      fullPath: '/roles/'
-      preLoaderRoute: typeof MainRolesIndexRouteImport
-      parentRoute: typeof MainRolesRouteRoute
-    }
-    '/_main/roles/$roleId': {
-      id: '/_main/roles/$roleId'
-      path: '/$roleId'
-      fullPath: '/roles/$roleId'
-      preLoaderRoute: typeof MainRolesRoleIdRouteImport
-      parentRoute: typeof MainRolesRouteRoute
-    }
-    '/_main/shop/audits': {
-      id: '/_main/shop/audits'
-      path: '/shop/audits'
-      fullPath: '/shop/audits'
-      preLoaderRoute: typeof MainShopAuditsRouteRouteImport
+    '/_main/shop/audit': {
+      id: '/_main/shop/audit'
+      path: '/shop/audit'
+      fullPath: '/shop/audit'
+      preLoaderRoute: typeof MainShopAuditRouteRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/sms/blacklist': {
@@ -641,11 +597,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSmsBlacklistRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/sms/channels': {
-      id: '/_main/sms/channels'
-      path: '/sms/channels'
-      fullPath: '/sms/channels'
-      preLoaderRoute: typeof MainSmsChannelsRouteImport
+    '/_main/sms/channel': {
+      id: '/_main/sms/channel'
+      path: '/sms/channel'
+      fullPath: '/sms/channel'
+      preLoaderRoute: typeof MainSmsChannelRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/sms/config': {
@@ -655,159 +611,171 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSmsConfigRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/sms/records': {
-      id: '/_main/sms/records'
-      path: '/sms/records'
-      fullPath: '/sms/records'
-      preLoaderRoute: typeof MainSmsRecordsRouteImport
+    '/_main/sms/record': {
+      id: '/_main/sms/record'
+      path: '/sms/record'
+      fullPath: '/sms/record'
+      preLoaderRoute: typeof MainSmsRecordRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/sms/templates': {
-      id: '/_main/sms/templates'
-      path: '/sms/templates'
-      fullPath: '/sms/templates'
-      preLoaderRoute: typeof MainSmsTemplatesRouteImport
+    '/_main/sms/template': {
+      id: '/_main/sms/template'
+      path: '/sms/template'
+      fullPath: '/sms/template'
+      preLoaderRoute: typeof MainSmsTemplateRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/storage/channels': {
-      id: '/_main/storage/channels'
-      path: '/storage/channels'
-      fullPath: '/storage/channels'
-      preLoaderRoute: typeof MainStorageChannelsRouteImport
+    '/_main/storage/channel': {
+      id: '/_main/storage/channel'
+      path: '/storage/channel'
+      fullPath: '/storage/channel'
+      preLoaderRoute: typeof MainStorageChannelRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/storage/records': {
-      id: '/_main/storage/records'
-      path: '/storage/records'
-      fullPath: '/storage/records'
-      preLoaderRoute: typeof MainStorageRecordsRouteImport
+    '/_main/storage/record': {
+      id: '/_main/storage/record'
+      path: '/storage/record'
+      fullPath: '/storage/record'
+      preLoaderRoute: typeof MainStorageRecordRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/storage/zones': {
-      id: '/_main/storage/zones'
-      path: '/storage/zones'
-      fullPath: '/storage/zones'
-      preLoaderRoute: typeof MainStorageZonesRouteImport
+    '/_main/storage/zone': {
+      id: '/_main/storage/zone'
+      path: '/storage/zone'
+      fullPath: '/storage/zone'
+      preLoaderRoute: typeof MainStorageZoneRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/users/': {
-      id: '/_main/users/'
+    '/_main/system/admin': {
+      id: '/_main/system/admin'
+      path: '/system/admin'
+      fullPath: '/system/admin'
+      preLoaderRoute: typeof MainSystemAdminRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/system/menu': {
+      id: '/_main/system/menu'
+      path: '/system/menu'
+      fullPath: '/system/menu'
+      preLoaderRoute: typeof MainSystemMenuRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/system/role': {
+      id: '/_main/system/role'
+      path: '/system/role'
+      fullPath: '/system/role'
+      preLoaderRoute: typeof MainSystemRoleRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/agent/district/': {
+      id: '/_main/agent/district/'
+      path: '/agent/district'
+      fullPath: '/agent/district/'
+      preLoaderRoute: typeof MainAgentDistrictIndexRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/agent/district/active': {
+      id: '/_main/agent/district/active'
+      path: '/agent/district/active'
+      fullPath: '/agent/district/active'
+      preLoaderRoute: typeof MainAgentDistrictActiveRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/agent/district/actives': {
+      id: '/_main/agent/district/actives'
+      path: '/agent/district/actives'
+      fullPath: '/agent/district/actives'
+      preLoaderRoute: typeof MainAgentDistrictActivesRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/agent/district/pendings': {
+      id: '/_main/agent/district/pendings'
+      path: '/agent/district/pendings'
+      fullPath: '/agent/district/pendings'
+      preLoaderRoute: typeof MainAgentDistrictPendingsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/member/$memberId/': {
+      id: '/_main/member/$memberId/'
       path: '/'
-      fullPath: '/users/'
-      preLoaderRoute: typeof MainUsersIndexRouteImport
-      parentRoute: typeof MainUsersRouteRoute
+      fullPath: '/member/$memberId/'
+      preLoaderRoute: typeof MainMemberMemberIdIndexRouteImport
+      parentRoute: typeof MainMemberMemberIdRouteRoute
     }
-    '/_main/users/$userId': {
-      id: '/_main/users/$userId'
-      path: '/$userId'
-      fullPath: '/users/$userId'
-      preLoaderRoute: typeof MainUsersUserIdRouteImport
-      parentRoute: typeof MainUsersRouteRoute
-    }
-    '/_main/users/new': {
-      id: '/_main/users/new'
-      path: '/new'
-      fullPath: '/users/new'
-      preLoaderRoute: typeof MainUsersNewRouteImport
-      parentRoute: typeof MainUsersRouteRoute
-    }
-    '/_main/agent/district-agents/active': {
-      id: '/_main/agent/district-agents/active'
-      path: '/agent/district-agents/active'
-      fullPath: '/agent/district-agents/active'
-      preLoaderRoute: typeof MainAgentDistrictAgentsActiveRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/agent/district-agents/actives': {
-      id: '/_main/agent/district-agents/actives'
-      path: '/agent/district-agents/actives'
-      fullPath: '/agent/district-agents/actives'
-      preLoaderRoute: typeof MainAgentDistrictAgentsActivesRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/agent/district-agents/pendings': {
-      id: '/_main/agent/district-agents/pendings'
-      path: '/agent/district-agents/pendings'
-      fullPath: '/agent/district-agents/pendings'
-      preLoaderRoute: typeof MainAgentDistrictAgentsPendingsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/members/$memberId/': {
-      id: '/_main/members/$memberId/'
-      path: '/'
-      fullPath: '/members/$memberId/'
-      preLoaderRoute: typeof MainMembersMemberIdIndexRouteImport
-      parentRoute: typeof MainMembersMemberIdRouteRoute
-    }
-    '/_main/members/$memberId/identity-level-history': {
-      id: '/_main/members/$memberId/identity-level-history'
+    '/_main/member/$memberId/identity-level-history': {
+      id: '/_main/member/$memberId/identity-level-history'
       path: '/identity-level-history'
-      fullPath: '/members/$memberId/identity-level-history'
-      preLoaderRoute: typeof MainMembersMemberIdIdentityLevelHistoryRouteImport
-      parentRoute: typeof MainMembersMemberIdRouteRoute
+      fullPath: '/member/$memberId/identity-level-history'
+      preLoaderRoute: typeof MainMemberMemberIdIdentityLevelHistoryRouteImport
+      parentRoute: typeof MainMemberMemberIdRouteRoute
     }
-    '/_main/shop/audits/': {
-      id: '/_main/shop/audits/'
+    '/_main/shop/audit/': {
+      id: '/_main/shop/audit/'
       path: '/'
-      fullPath: '/shop/audits/'
-      preLoaderRoute: typeof MainShopAuditsIndexRouteImport
-      parentRoute: typeof MainShopAuditsRouteRoute
+      fullPath: '/shop/audit/'
+      preLoaderRoute: typeof MainShopAuditIndexRouteImport
+      parentRoute: typeof MainShopAuditRouteRoute
     }
-    '/_main/shop/audits/shop-applications': {
-      id: '/_main/shop/audits/shop-applications'
+    '/_main/shop/audit/shop-applications': {
+      id: '/_main/shop/audit/shop-applications'
       path: '/shop-applications'
-      fullPath: '/shop/audits/shop-applications'
-      preLoaderRoute: typeof MainShopAuditsShopApplicationsRouteImport
-      parentRoute: typeof MainShopAuditsRouteRoute
+      fullPath: '/shop/audit/shop-applications'
+      preLoaderRoute: typeof MainShopAuditShopApplicationsRouteImport
+      parentRoute: typeof MainShopAuditRouteRoute
     }
-    '/_main/shop/audits/store-applications': {
-      id: '/_main/shop/audits/store-applications'
+    '/_main/shop/audit/store-applications': {
+      id: '/_main/shop/audit/store-applications'
       path: '/store-applications'
-      fullPath: '/shop/audits/store-applications'
-      preLoaderRoute: typeof MainShopAuditsStoreApplicationsRouteImport
-      parentRoute: typeof MainShopAuditsRouteRoute
+      fullPath: '/shop/audit/store-applications'
+      preLoaderRoute: typeof MainShopAuditStoreApplicationsRouteImport
+      parentRoute: typeof MainShopAuditRouteRoute
+    }
+    '/_main/system/admin/': {
+      id: '/_main/system/admin/'
+      path: '/'
+      fullPath: '/system/admin/'
+      preLoaderRoute: typeof MainSystemAdminIndexRouteImport
+      parentRoute: typeof MainSystemAdminRouteRoute
+    }
+    '/_main/system/admin/$userId': {
+      id: '/_main/system/admin/$userId'
+      path: '/$userId'
+      fullPath: '/system/admin/$userId'
+      preLoaderRoute: typeof MainSystemAdminUserIdRouteImport
+      parentRoute: typeof MainSystemAdminRouteRoute
+    }
+    '/_main/system/admin/new': {
+      id: '/_main/system/admin/new'
+      path: '/new'
+      fullPath: '/system/admin/new'
+      preLoaderRoute: typeof MainSystemAdminNewRouteImport
+      parentRoute: typeof MainSystemAdminRouteRoute
+    }
+    '/_main/system/role/': {
+      id: '/_main/system/role/'
+      path: '/'
+      fullPath: '/system/role/'
+      preLoaderRoute: typeof MainSystemRoleIndexRouteImport
+      parentRoute: typeof MainSystemRoleRouteRoute
+    }
+    '/_main/system/role/$roleId': {
+      id: '/_main/system/role/$roleId'
+      path: '/$roleId'
+      fullPath: '/system/role/$roleId'
+      preLoaderRoute: typeof MainSystemRoleRoleIdRouteImport
+      parentRoute: typeof MainSystemRoleRouteRoute
     }
   }
 }
-
-interface MainMembersMemberIdRouteRouteChildren {
-  MainMembersMemberIdIdentityLevelHistoryRoute: typeof MainMembersMemberIdIdentityLevelHistoryRoute
-  MainMembersMemberIdIndexRoute: typeof MainMembersMemberIdIndexRoute
-}
-
-const MainMembersMemberIdRouteRouteChildren: MainMembersMemberIdRouteRouteChildren =
-  {
-    MainMembersMemberIdIdentityLevelHistoryRoute:
-      MainMembersMemberIdIdentityLevelHistoryRoute,
-    MainMembersMemberIdIndexRoute: MainMembersMemberIdIndexRoute,
-  }
-
-const MainMembersMemberIdRouteRouteWithChildren =
-  MainMembersMemberIdRouteRoute._addFileChildren(
-    MainMembersMemberIdRouteRouteChildren,
-  )
-
-interface MainMembersRouteRouteChildren {
-  MainMembersMemberIdRouteRoute: typeof MainMembersMemberIdRouteRouteWithChildren
-  MainMembersIndexRoute: typeof MainMembersIndexRoute
-}
-
-const MainMembersRouteRouteChildren: MainMembersRouteRouteChildren = {
-  MainMembersMemberIdRouteRoute: MainMembersMemberIdRouteRouteWithChildren,
-  MainMembersIndexRoute: MainMembersIndexRoute,
-}
-
-const MainMembersRouteRouteWithChildren =
-  MainMembersRouteRoute._addFileChildren(MainMembersRouteRouteChildren)
 
 interface MainRegionRouteRouteChildren {
-  MainRegionQueryRoute: typeof MainRegionQueryRoute
+  MainRegionListRoute: typeof MainRegionListRoute
   MainRegionSyncRoute: typeof MainRegionSyncRoute
   MainRegionIndexRoute: typeof MainRegionIndexRoute
 }
 
 const MainRegionRouteRouteChildren: MainRegionRouteRouteChildren = {
-  MainRegionQueryRoute: MainRegionQueryRoute,
+  MainRegionListRoute: MainRegionListRoute,
   MainRegionSyncRoute: MainRegionSyncRoute,
   MainRegionIndexRoute: MainRegionIndexRoute,
 }
@@ -816,99 +784,118 @@ const MainRegionRouteRouteWithChildren = MainRegionRouteRoute._addFileChildren(
   MainRegionRouteRouteChildren,
 )
 
-interface MainRolesRouteRouteChildren {
-  MainRolesRoleIdRoute: typeof MainRolesRoleIdRoute
-  MainRolesIndexRoute: typeof MainRolesIndexRoute
+interface MainMemberMemberIdRouteRouteChildren {
+  MainMemberMemberIdIdentityLevelHistoryRoute: typeof MainMemberMemberIdIdentityLevelHistoryRoute
+  MainMemberMemberIdIndexRoute: typeof MainMemberMemberIdIndexRoute
 }
 
-const MainRolesRouteRouteChildren: MainRolesRouteRouteChildren = {
-  MainRolesRoleIdRoute: MainRolesRoleIdRoute,
-  MainRolesIndexRoute: MainRolesIndexRoute,
+const MainMemberMemberIdRouteRouteChildren: MainMemberMemberIdRouteRouteChildren =
+  {
+    MainMemberMemberIdIdentityLevelHistoryRoute:
+      MainMemberMemberIdIdentityLevelHistoryRoute,
+    MainMemberMemberIdIndexRoute: MainMemberMemberIdIndexRoute,
+  }
+
+const MainMemberMemberIdRouteRouteWithChildren =
+  MainMemberMemberIdRouteRoute._addFileChildren(
+    MainMemberMemberIdRouteRouteChildren,
+  )
+
+interface MainShopAuditRouteRouteChildren {
+  MainShopAuditShopApplicationsRoute: typeof MainShopAuditShopApplicationsRoute
+  MainShopAuditStoreApplicationsRoute: typeof MainShopAuditStoreApplicationsRoute
+  MainShopAuditIndexRoute: typeof MainShopAuditIndexRoute
 }
 
-const MainRolesRouteRouteWithChildren = MainRolesRouteRoute._addFileChildren(
-  MainRolesRouteRouteChildren,
-)
-
-interface MainUsersRouteRouteChildren {
-  MainUsersUserIdRoute: typeof MainUsersUserIdRoute
-  MainUsersNewRoute: typeof MainUsersNewRoute
-  MainUsersIndexRoute: typeof MainUsersIndexRoute
+const MainShopAuditRouteRouteChildren: MainShopAuditRouteRouteChildren = {
+  MainShopAuditShopApplicationsRoute: MainShopAuditShopApplicationsRoute,
+  MainShopAuditStoreApplicationsRoute: MainShopAuditStoreApplicationsRoute,
+  MainShopAuditIndexRoute: MainShopAuditIndexRoute,
 }
 
-const MainUsersRouteRouteChildren: MainUsersRouteRouteChildren = {
-  MainUsersUserIdRoute: MainUsersUserIdRoute,
-  MainUsersNewRoute: MainUsersNewRoute,
-  MainUsersIndexRoute: MainUsersIndexRoute,
+const MainShopAuditRouteRouteWithChildren =
+  MainShopAuditRouteRoute._addFileChildren(MainShopAuditRouteRouteChildren)
+
+interface MainSystemAdminRouteRouteChildren {
+  MainSystemAdminUserIdRoute: typeof MainSystemAdminUserIdRoute
+  MainSystemAdminNewRoute: typeof MainSystemAdminNewRoute
+  MainSystemAdminIndexRoute: typeof MainSystemAdminIndexRoute
 }
 
-const MainUsersRouteRouteWithChildren = MainUsersRouteRoute._addFileChildren(
-  MainUsersRouteRouteChildren,
-)
-
-interface MainShopAuditsRouteRouteChildren {
-  MainShopAuditsShopApplicationsRoute: typeof MainShopAuditsShopApplicationsRoute
-  MainShopAuditsStoreApplicationsRoute: typeof MainShopAuditsStoreApplicationsRoute
-  MainShopAuditsIndexRoute: typeof MainShopAuditsIndexRoute
+const MainSystemAdminRouteRouteChildren: MainSystemAdminRouteRouteChildren = {
+  MainSystemAdminUserIdRoute: MainSystemAdminUserIdRoute,
+  MainSystemAdminNewRoute: MainSystemAdminNewRoute,
+  MainSystemAdminIndexRoute: MainSystemAdminIndexRoute,
 }
 
-const MainShopAuditsRouteRouteChildren: MainShopAuditsRouteRouteChildren = {
-  MainShopAuditsShopApplicationsRoute: MainShopAuditsShopApplicationsRoute,
-  MainShopAuditsStoreApplicationsRoute: MainShopAuditsStoreApplicationsRoute,
-  MainShopAuditsIndexRoute: MainShopAuditsIndexRoute,
+const MainSystemAdminRouteRouteWithChildren =
+  MainSystemAdminRouteRoute._addFileChildren(MainSystemAdminRouteRouteChildren)
+
+interface MainSystemRoleRouteRouteChildren {
+  MainSystemRoleRoleIdRoute: typeof MainSystemRoleRoleIdRoute
+  MainSystemRoleIndexRoute: typeof MainSystemRoleIndexRoute
 }
 
-const MainShopAuditsRouteRouteWithChildren =
-  MainShopAuditsRouteRoute._addFileChildren(MainShopAuditsRouteRouteChildren)
+const MainSystemRoleRouteRouteChildren: MainSystemRoleRouteRouteChildren = {
+  MainSystemRoleRoleIdRoute: MainSystemRoleRoleIdRoute,
+  MainSystemRoleIndexRoute: MainSystemRoleIndexRoute,
+}
+
+const MainSystemRoleRouteRouteWithChildren =
+  MainSystemRoleRouteRoute._addFileChildren(MainSystemRoleRouteRouteChildren)
 
 interface MainRouteChildren {
-  MainMembersRouteRoute: typeof MainMembersRouteRouteWithChildren
   MainRegionRouteRoute: typeof MainRegionRouteRouteWithChildren
-  MainRolesRouteRoute: typeof MainRolesRouteRouteWithChildren
-  MainUsersRouteRoute: typeof MainUsersRouteRouteWithChildren
   MainAboutRoute: typeof MainAboutRoute
   MainAccountRoute: typeof MainAccountRoute
-  MainMenusRoute: typeof MainMenusRoute
   MainIndexRoute: typeof MainIndexRoute
-  MainShopAuditsRouteRoute: typeof MainShopAuditsRouteRouteWithChildren
-  MainGeoChannelsRoute: typeof MainGeoChannelsRoute
-  MainMemberidentityLevelsRoute: typeof MainMemberidentityLevelsRoute
+  MainMemberMemberIdRouteRoute: typeof MainMemberMemberIdRouteRouteWithChildren
+  MainShopAuditRouteRoute: typeof MainShopAuditRouteRouteWithChildren
+  MainSystemAdminRouteRoute: typeof MainSystemAdminRouteRouteWithChildren
+  MainSystemRoleRouteRoute: typeof MainSystemRoleRouteRouteWithChildren
+  MainGeoChannelRoute: typeof MainGeoChannelRoute
+  MainMemberIdentityLevelRoute: typeof MainMemberIdentityLevelRoute
+  MainMemberListRoute: typeof MainMemberListRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
-  MainSmsChannelsRoute: typeof MainSmsChannelsRoute
+  MainSmsChannelRoute: typeof MainSmsChannelRoute
   MainSmsConfigRoute: typeof MainSmsConfigRoute
-  MainSmsRecordsRoute: typeof MainSmsRecordsRoute
-  MainSmsTemplatesRoute: typeof MainSmsTemplatesRoute
-  MainStorageChannelsRoute: typeof MainStorageChannelsRoute
-  MainStorageRecordsRoute: typeof MainStorageRecordsRoute
-  MainStorageZonesRoute: typeof MainStorageZonesRoute
-  MainAgentDistrictAgentsActiveRoute: typeof MainAgentDistrictAgentsActiveRoute
-  MainAgentDistrictAgentsActivesRoute: typeof MainAgentDistrictAgentsActivesRoute
-  MainAgentDistrictAgentsPendingsRoute: typeof MainAgentDistrictAgentsPendingsRoute
+  MainSmsRecordRoute: typeof MainSmsRecordRoute
+  MainSmsTemplateRoute: typeof MainSmsTemplateRoute
+  MainStorageChannelRoute: typeof MainStorageChannelRoute
+  MainStorageRecordRoute: typeof MainStorageRecordRoute
+  MainStorageZoneRoute: typeof MainStorageZoneRoute
+  MainSystemMenuRoute: typeof MainSystemMenuRoute
+  MainAgentDistrictActiveRoute: typeof MainAgentDistrictActiveRoute
+  MainAgentDistrictActivesRoute: typeof MainAgentDistrictActivesRoute
+  MainAgentDistrictPendingsRoute: typeof MainAgentDistrictPendingsRoute
+  MainAgentDistrictIndexRoute: typeof MainAgentDistrictIndexRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
-  MainMembersRouteRoute: MainMembersRouteRouteWithChildren,
   MainRegionRouteRoute: MainRegionRouteRouteWithChildren,
-  MainRolesRouteRoute: MainRolesRouteRouteWithChildren,
-  MainUsersRouteRoute: MainUsersRouteRouteWithChildren,
   MainAboutRoute: MainAboutRoute,
   MainAccountRoute: MainAccountRoute,
-  MainMenusRoute: MainMenusRoute,
   MainIndexRoute: MainIndexRoute,
-  MainShopAuditsRouteRoute: MainShopAuditsRouteRouteWithChildren,
-  MainGeoChannelsRoute: MainGeoChannelsRoute,
-  MainMemberidentityLevelsRoute: MainMemberidentityLevelsRoute,
+  MainMemberMemberIdRouteRoute: MainMemberMemberIdRouteRouteWithChildren,
+  MainShopAuditRouteRoute: MainShopAuditRouteRouteWithChildren,
+  MainSystemAdminRouteRoute: MainSystemAdminRouteRouteWithChildren,
+  MainSystemRoleRouteRoute: MainSystemRoleRouteRouteWithChildren,
+  MainGeoChannelRoute: MainGeoChannelRoute,
+  MainMemberIdentityLevelRoute: MainMemberIdentityLevelRoute,
+  MainMemberListRoute: MainMemberListRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,
-  MainSmsChannelsRoute: MainSmsChannelsRoute,
+  MainSmsChannelRoute: MainSmsChannelRoute,
   MainSmsConfigRoute: MainSmsConfigRoute,
-  MainSmsRecordsRoute: MainSmsRecordsRoute,
-  MainSmsTemplatesRoute: MainSmsTemplatesRoute,
-  MainStorageChannelsRoute: MainStorageChannelsRoute,
-  MainStorageRecordsRoute: MainStorageRecordsRoute,
-  MainStorageZonesRoute: MainStorageZonesRoute,
-  MainAgentDistrictAgentsActiveRoute: MainAgentDistrictAgentsActiveRoute,
-  MainAgentDistrictAgentsActivesRoute: MainAgentDistrictAgentsActivesRoute,
-  MainAgentDistrictAgentsPendingsRoute: MainAgentDistrictAgentsPendingsRoute,
+  MainSmsRecordRoute: MainSmsRecordRoute,
+  MainSmsTemplateRoute: MainSmsTemplateRoute,
+  MainStorageChannelRoute: MainStorageChannelRoute,
+  MainStorageRecordRoute: MainStorageRecordRoute,
+  MainStorageZoneRoute: MainStorageZoneRoute,
+  MainSystemMenuRoute: MainSystemMenuRoute,
+  MainAgentDistrictActiveRoute: MainAgentDistrictActiveRoute,
+  MainAgentDistrictActivesRoute: MainAgentDistrictActivesRoute,
+  MainAgentDistrictPendingsRoute: MainAgentDistrictPendingsRoute,
+  MainAgentDistrictIndexRoute: MainAgentDistrictIndexRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)

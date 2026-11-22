@@ -32,7 +32,7 @@ function toInitialValues(agent: DistrictAgent): DistrictAgentAttachmentsFormValu
 
 /**
  * 区代附件编辑弹窗：每行独立实例，trigger 为行内「附件」。
- * 提交走 PUT /admin/agent/district-agents/{agentId}/attachments（仅待审可改），
+ * 提交走 PUT /admin/agent/district/{agentId}/attachments（仅待审可改），
  * 后端按提交列表全量覆盖，删除全部即清空附件。
  */
 export function DistrictAgentAttachmentsModal({

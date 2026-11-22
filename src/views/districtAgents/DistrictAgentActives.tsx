@@ -18,11 +18,11 @@ interface RegionFilter {
 }
 
 /**
- * 全部在任区代列表页（/agent/district-agents/actives）：
- * - 列表：GET /admin/agent/district-agents/actives（page/pageSize 分页）
+ * 全部在任区代列表页（/agent/district/actives）：
+ * - 列表：GET /admin/agent/district/actives（page/pageSize 分页）
  * - 筛选：cityId（城市筛选节点 id）与 regionId（区/县 id），可选、不过滤不传；
  *   两者语义重叠（区县必属于某市），因此做成二选一：选城市清区域、选区域清城市。
- * - 撤销：POST /admin/agent/district-agents/{agentId}/revoke
+ * - 撤销：POST /admin/agent/district/{agentId}/revoke
  *
  * 行内可跳单区在任查询页（带 regionId/regionCode 回显）与会员详情。
  */
@@ -99,7 +99,7 @@ export function DistrictAgentActives() {
         record.regionId ? (
           <Link
             key="detail"
-            to="/agent/district-agents/active"
+            to="/agent/district/active"
             search={{
               regionId: record.regionId,
               regionCode: record.region?.code,
@@ -132,10 +132,10 @@ export function DistrictAgentActives() {
         title: '全部在任区代',
         subTitle: '分页查看平台在任区代，可按城市 / 区县筛选，支持撤销与跳转核对。',
         extra: [
-          <Link key="pendings" to="/agent/district-agents/pendings">
+          <Link key="pendings" to="/agent/district/pendings">
             <Button>待审区代</Button>
           </Link>,
-          <Link key="active" to="/agent/district-agents/active">
+          <Link key="active" to="/agent/district/active">
             <Button>单区在任查询</Button>
           </Link>,
         ],

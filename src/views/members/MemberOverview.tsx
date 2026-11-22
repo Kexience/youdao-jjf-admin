@@ -51,7 +51,7 @@ const TIME_COLUMNS: DetailColumn[] = [
 ];
 
 /**
- * 会员详情·概览（/members/$memberId 的 index 子路由）。
+ * 会员详情·概览（/member/$memberId 的 index 子路由）。
  * 布局参考 ant-design-pro 高级资料页的主体：外层一张 Card，内部按分组排列
  * Descriptions；后续「订单」等子页作为兄弟子路由在此布局的 <Outlet /> 内切换。
  */

@@ -46,7 +46,7 @@ const DETAIL_COLUMNS: ProDescriptionsColumn<DistrictAgent>[] = [
         renderMember(record.member)
       ) : record.memberId ? (
         <Link
-          to="/members/$memberId"
+          to="/member/$memberId"
           params={{ memberId: String(record.memberId) }}
         >
           会员 {record.memberId}
@@ -89,11 +89,11 @@ const DETAIL_COLUMNS: ProDescriptionsColumn<DistrictAgent>[] = [
 ]
 
 /**
- * 在任区代查询（/agent/district-agents/active）：
+ * 在任区代查询（/agent/district/active）：
  * - 区域选择：复用行政区划接口（GET /admin/region/children）做省/市/区县级联，
  *   选中区县后取其 sys_region.id 作为 regionId；
- * - 查询：GET /admin/agent/district-agents/active?regionId={regionId}
- * - 撤销：POST /admin/agent/district-agents/{agentId}/revoke
+ * - 查询：GET /admin/agent/district/active?regionId={regionId}
+ * - 撤销：POST /admin/agent/district/{agentId}/revoke
  *
  * regionId 与区划码同时写入 URL search，刷新/分享后可直接复现查询与级联回显。
  * 待审区代列表的行内「在任区代」入口会带参跳到本页。
@@ -101,7 +101,7 @@ const DETAIL_COLUMNS: ProDescriptionsColumn<DistrictAgent>[] = [
 export function DistrictAgentActive() {
   const { message } = App.useApp()
   const navigate = useNavigate()
-  const search = getRouteApi('/_main/agent/district-agents/active').useSearch()
+  const search = getRouteApi('/_main/agent/district/active').useSearch()
   const regionId = search.regionId
   const regionCode = search.regionCode
 
@@ -128,7 +128,7 @@ export function DistrictAgentActive() {
 
   const handleRegionChange = (district: RegionChild | undefined) => {
     if (!district) {
-      void navigate({ to: '/agent/district-agents/active', search: {} })
+      void navigate({ to: '/agent/district/active', search: {} })
       return
     }
     if (!district.id) {
@@ -136,7 +136,7 @@ export function DistrictAgentActive() {
       return
     }
     void navigate({
-      to: '/agent/district-agents/active',
+      to: '/agent/district/active',
       search: { regionId: district.id, regionCode: district.code },
     })
   }
@@ -154,10 +154,10 @@ export function DistrictAgentActive() {
         subTitle:
           '选择省 / 市 / 区县，查询该区当前在任的区代，可核对材料并撤销。',
         extra: [
-          <Link key="pendings" to="/agent/district-agents/pendings">
+          <Link key="pendings" to="/agent/district/pendings">
             <Button>待审区代</Button>
           </Link>,
-          <Link key="actives" to="/agent/district-agents/actives">
+          <Link key="actives" to="/agent/district/actives">
             <Button>全部在任区代</Button>
           </Link>,
         ],
@@ -195,7 +195,7 @@ export function DistrictAgentActive() {
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description="该区域当前没有在任区代"
           >
-            <Link to="/agent/district-agents/pendings">
+            <Link to="/agent/district/pendings">
               <Button type="primary">查看待审区代</Button>
             </Link>
           </Empty>
@@ -207,7 +207,7 @@ export function DistrictAgentActive() {
             <Space>
               {agent.member && (
                 <Link
-                  to="/members/$memberId"
+                  to="/member/$memberId"
                   params={{ memberId: String(agent.member.id) }}
                 >
                   <Button>会员详情</Button>

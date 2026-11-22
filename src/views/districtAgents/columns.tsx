@@ -32,13 +32,13 @@ const REGION_LEVEL_TEXT: Record<number, string> = {
 
 /**
  * 会员展示：头像 + 昵称/用户名 + 手机号。
- * 点击整块会员信息跳到会员详情主 Tab（/members/$memberId，即「用户身份」）。
+ * 点击整块会员信息跳到会员详情主 Tab（/member/$memberId，即「用户身份」）。
  */
 export function renderMember(member?: MemberBrief) {
   if (!member) return '-'
   const name = member.nickname || member.username || member.mobile || `会员 ${member.id}`
   return (
-    <Link to="/members/$memberId" params={{ memberId: String(member.id) }}>
+    <Link to="/member/$memberId" params={{ memberId: String(member.id) }}>
       <Space>
         <Avatar src={member.avatar || undefined}>{name.slice(0, 1)}</Avatar>
         <div>
@@ -73,7 +73,7 @@ export function renderRegion(region?: RegionView) {
 }
 
 /**
- * 待审区代列（GET /admin/agent/district-agents/pendings）。
+ * 待审区代列（GET /admin/agent/district/pendings）。
  * 该页只有待审数据，检索条件由页面决定；操作列在页面内追加。
  */
 export const DISTRICT_AGENT_PENDING_COLUMNS: ProColumns<DistrictAgent>[] = [
@@ -127,7 +127,7 @@ export const DISTRICT_AGENT_PENDING_COLUMNS: ProColumns<DistrictAgent>[] = [
 ]
 
 /**
- * 全部在任区代列（GET /admin/agent/district-agents/actives）。
+ * 全部在任区代列（GET /admin/agent/district/actives）。
  * 与待审列的差异：在任数据无待审态，补「上任时间」；检索由页面的
  * 城市 / 区域级联条件提供，操作列在页面内追加。
  */

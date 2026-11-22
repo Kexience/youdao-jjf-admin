@@ -50,7 +50,7 @@ export function Members() {
             size="small"
             onClick={() =>
               void navigate({
-                to: '/members/$memberId',
+                to: '/member/$memberId',
                 params: { memberId: String(record.id) },
               })
             }

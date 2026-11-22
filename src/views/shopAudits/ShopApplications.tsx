@@ -9,10 +9,10 @@ import { SHOP_APPLY_COLUMNS } from './columns'
 import { ShopApplyAuditModal } from './ShopApplyAuditModal'
 
 /**
- * 店铺申请单终审页（/shop/audits/shop-applications）：
- * - 列表：GET /admin/shop/audits/shop-applications（page/pageSize 分页）
+ * 店铺申请单终审页（/shop/audit/shop-applications）：
+ * - 列表：GET /admin/shop/audit/shop-applications（page/pageSize 分页）
  *   statuses 不传时后端默认查全部非 approved 单（pending_admin 与 rejected_agent 同列）；
- * - 终审：POST /admin/shop/audits/shop-applications/{applyId}/audit
+ * - 终审：POST /admin/shop/audit/shop-applications/{applyId}/audit
  *   通过=开通店铺；驳回=终态（必填原因）；rejected_agent 单通过即推翻区代驳回。
  */
 export function ShopApplications() {

@@ -17,7 +17,7 @@ interface MemberIdentityLevelHistoryProps {
 }
 
 /**
- * 会员身份档位调整历史（/members/$memberId/identity-level-history）：
+ * 会员身份档位调整历史（/member/$memberId/identity-level-history）：
  * GET /admin/member/{memberId}/identity-level-history 分页，时间倒序；
  * 顶部「调整身份档位」按钮走 PUT /admin/member/{memberId}/identity-level。
  * 档位 id → 名称取自档位列表（MemberIdentityLevelVo），未知档位退回展示 id。

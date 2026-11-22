@@ -24,7 +24,7 @@ interface ShopApplyAuditModalProps {
  * - 通过 = 开通店铺（approved=true）；
  * - 驳回 = 终态 rejected_admin（approved=false，reason 必填）；
  * - rejected_agent（区代驳回待复核）单可一键推翻：直接选「通过」提交。
- * 提交走 POST /admin/shop/audits/shop-applications/{applyId}/audit。
+ * 提交走 POST /admin/shop/audit/shop-applications/{applyId}/audit。
  */
 export function ShopApplyAuditModal({
   application,

@@ -43,7 +43,7 @@ export function Roles() {
           size="small"
           onClick={() =>
             void navigate({
-              to: '/roles/$roleId',
+              to: '/system/role/$roleId',
               params: { roleId: String(record.id) },
             })
           }

@@ -50,7 +50,7 @@ export function AdminUsers() {
             size="small"
             onClick={() =>
               void navigate({
-                to: '/users/$userId',
+                to: '/system/admin/$userId',
                 params: { userId: String(record.id) },
               })
             }
@@ -145,7 +145,7 @@ export function AdminUsers() {
           <Button
             key="create"
             type="primary"
-            onClick={() => void navigate({ to: '/users/new' })}
+            onClick={() => void navigate({ to: '/system/admin/new' })}
           >
             新建管理员
           </Button>,

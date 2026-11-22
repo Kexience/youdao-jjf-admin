@@ -30,7 +30,7 @@ interface StoreApplyAuditModalProps {
  * - rejected_agent（区代驳回待复核）单可一键推翻：直接选「通过」提交；
  * - 打开时按 applyId 查保证金余额（GET /admin/shop/deposits/apply/{applyId}/balance），
  *   未缴清时给出警示（后端仍是最终权威校验，提示仅供参考）。
- * 提交走 POST /admin/shop/audits/store-applications/{applyId}/audit。
+ * 提交走 POST /admin/shop/audit/store-applications/{applyId}/audit。
  */
 export function StoreApplyAuditModal({
   application,

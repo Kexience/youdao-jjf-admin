@@ -37,7 +37,7 @@ function AttachmentsPreview({ attachments }: { attachments?: DistrictAgentAttach
 /**
  * 审核区代申请弹窗：每行独立实例，trigger 为行内「审核」。
  * 过审后区代立即上任；驳回必须填写原因（≤255）。
- * 提交走 POST /admin/agent/district-agents/{agentId}/audit。
+ * 提交走 POST /admin/agent/district/{agentId}/audit。
  */
 export function DistrictAgentAuditModal({
   agent,

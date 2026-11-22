@@ -15,10 +15,10 @@ import { DistrictAgentAttachmentsModal } from './DistrictAgentAttachmentsModal'
 import { DistrictAgentAuditModal } from './DistrictAgentAuditModal'
 
 /**
- * 待审区代页（/agent/district-agents/pendings）：
- * - 列表：GET /admin/agent/district-agents/pendings（page/pageSize 分页）
- * - 审核：POST /admin/agent/district-agents/{agentId}/audit（过审/驳回）
- * - 附件：PUT /admin/agent/district-agents/{agentId}/attachments（仅待审，全量覆盖）
+ * 待审区代页（/agent/district/pendings）：
+ * - 列表：GET /admin/agent/district/pendings（page/pageSize 分页）
+ * - 审核：POST /admin/agent/district/{agentId}/audit（过审/驳回）
+ * - 附件：PUT /admin/agent/district/{agentId}/attachments（仅待审，全量覆盖）
  *
  * 列表只有待审数据，检索暂不提供；需要按区域核对时，
  * 可点行内「在任区代」带着 regionId 跳到在任区代查询页。
@@ -78,7 +78,7 @@ export function DistrictAgentPendings() {
         record.regionId ? (
           <Link
             key="active"
-            to="/agent/district-agents/active"
+            to="/agent/district/active"
             search={{
               regionId: record.regionId,
               regionCode: record.region?.code,

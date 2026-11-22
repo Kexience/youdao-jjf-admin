@@ -122,7 +122,7 @@ export const SHOP_APPLY_STATUS_COLUMN: ProColumns<ShopApplyVo | StoreApplyVo> = 
 }
 
 /**
- * 店铺申请单列（GET /admin/shop/audits/shop-applications）。
+ * 店铺申请单列（GET /admin/shop/audit/shop-applications）。
  * 状态列同时作检索项（valueEnum 多选，search.transform 转成 statuses 逗号分隔）；操作列在页面内追加。
  */
 export const SHOP_APPLY_COLUMNS: ProColumns<ShopApplyVo>[] = [
@@ -145,7 +145,7 @@ export const SHOP_APPLY_COLUMNS: ProColumns<ShopApplyVo>[] = [
     width: 140,
     ellipsis: true,
     search: false,
-    // 有会员 id 时整块可点，跳会员详情（/members/$memberId）；只有昵称/无信息时原样展示
+    // 有会员 id 时整块可点，跳会员详情（/member/$memberId）；只有昵称/无信息时原样展示
     render: (_, record) => {
       const dom = record.ownerName || record.ownerMemberId ? (
         <span>
@@ -160,7 +160,7 @@ export const SHOP_APPLY_COLUMNS: ProColumns<ShopApplyVo>[] = [
         '-'
       )
       return record.ownerMemberId ? (
-        <Link to="/members/$memberId" params={{ memberId: String(record.ownerMemberId) }}>
+        <Link to="/member/$memberId" params={{ memberId: String(record.ownerMemberId) }}>
           {dom}
         </Link>
       ) : (
@@ -217,7 +217,7 @@ export const SHOP_APPLY_COLUMNS: ProColumns<ShopApplyVo>[] = [
 ]
 
 /**
- * 门店申请单列（GET /admin/shop/audits/store-applications）。
+ * 门店申请单列（GET /admin/shop/audit/store-applications）。
  * 口径同店铺单，额外展示门店类型与应缴保证金；操作列在页面内追加。
  */
 export const STORE_APPLY_COLUMNS: ProColumns<StoreApplyVo>[] = [

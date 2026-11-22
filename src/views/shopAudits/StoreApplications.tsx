@@ -9,10 +9,10 @@ import { STORE_APPLY_COLUMNS } from './columns'
 import { StoreApplyAuditModal } from './StoreApplyAuditModal'
 
 /**
- * 门店申请单终审页（/shop/audits/store-applications）：
- * - 列表：GET /admin/shop/audits/store-applications（page/pageSize 分页）
+ * 门店申请单终审页（/shop/audit/store-applications）：
+ * - 列表：GET /admin/shop/audit/store-applications（page/pageSize 分页）
  *   statuses 不传时后端默认查全部非 approved 单（口径同店铺单）；
- * - 终审：POST /admin/shop/audits/store-applications/{applyId}/audit
+ * - 终审：POST /admin/shop/audit/store-applications/{applyId}/audit
  *   通过前须保证金缴清（后端校验），通过后同事务建 store 并回填 storeId；
  *   驳回=终态（必填原因）；rejected_agent 单通过即推翻区代驳回。
  */

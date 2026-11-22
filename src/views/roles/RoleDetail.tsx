@@ -71,7 +71,7 @@ export function RoleDetail({ roleId }: RoleDetailProps) {
         title: '角色详情',
         subTitle: '角色基础信息与已授予权限码。',
         extra: [
-          <Link key="back" to="/roles">
+          <Link key="back" to="/system/role">
             <Button>返回列表</Button>
           </Link>,
           detail && (
