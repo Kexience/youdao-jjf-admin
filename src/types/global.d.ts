@@ -1425,6 +1425,41 @@ declare global {
     /** 缴纳累计 */
     paid?: number
   }
+
+  /** 设置项取值（见文档 SysOptionSaveDto.value：JSON 标量） */
+  type SysOptionValue = string | number | boolean | null
+
+  /** 设置项（见文档 SysOptionVo：GET /admin/options，登记项驱动） */
+  interface SysOption {
+    /** 归属域 */
+    scope: string
+    /** 设置键 */
+    optionKey: string
+    /** 取值类型 */
+    valueType?: string
+    /** 当前值（JSON 文本），未配置时为空 */
+    value?: string
+    /** 当前版本号，未配置时为空 */
+    version?: number
+    /** 最后更新人（后台管理员 id） */
+    operatorId?: number
+    /** 最后更新时间 */
+    updatedAt?: string
+  }
+
+  /** 设置项分页查询入参（分页 1 起，scope 为空=全部归属域） */
+  interface SysOptionQueryParams extends PageParams {
+    /** 归属域过滤 */
+    scope?: string
+  }
+
+  /** 设置项写入入参（见文档 SysOptionSaveDto） */
+  interface SysOptionSaveParams {
+    /** 设置值（JSON 标量） */
+    value: SysOptionValue
+    /** 预期版本号；首次写入不传（表示该键尚无值） */
+    expectedVersion?: number
+  }
 }
 
 export {}

@@ -19,6 +19,7 @@ import { Route as MainGeoChannelRouteImport } from './routes/_main/geo/channel'
 import { Route as MainMemberMemberIdRouteRouteImport } from './routes/_main/member/$memberId/route'
 import { Route as MainMemberIdentityLevelRouteImport } from './routes/_main/member/identity-level'
 import { Route as MainMemberListRouteImport } from './routes/_main/member/list'
+import { Route as MainOptionsOptionRouteImport } from './routes/_main/options/option'
 import { Route as MainRegionIndexRouteImport } from './routes/_main/region/index'
 import { Route as MainRegionListRouteImport } from './routes/_main/region/list'
 import { Route as MainRegionSyncRouteImport } from './routes/_main/region/sync'
@@ -96,6 +97,11 @@ const MainMemberIdentityLevelRoute = MainMemberIdentityLevelRouteImport.update({
 const MainMemberListRoute = MainMemberListRouteImport.update({
   id: '/member/list',
   path: '/member/list',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainOptionsOptionRoute = MainOptionsOptionRouteImport.update({
+  id: '/options/option',
+  path: '/options/option',
   getParentRoute: () => MainRoute,
 } as any)
 const MainRegionIndexRoute = MainRegionIndexRouteImport.update({
@@ -262,6 +268,7 @@ export interface FileRoutesByFullPath {
   '/geo/channel': typeof MainGeoChannelRoute
   '/member/identity-level': typeof MainMemberIdentityLevelRoute
   '/member/list': typeof MainMemberListRoute
+  '/options/option': typeof MainOptionsOptionRoute
   '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
@@ -297,6 +304,7 @@ export interface FileRoutesByTo {
   '/geo/channel': typeof MainGeoChannelRoute
   '/member/identity-level': typeof MainMemberIdentityLevelRoute
   '/member/list': typeof MainMemberListRoute
+  '/options/option': typeof MainOptionsOptionRoute
   '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
@@ -339,6 +347,7 @@ export interface FileRoutesById {
   '/_main/geo/channel': typeof MainGeoChannelRoute
   '/_main/member/identity-level': typeof MainMemberIdentityLevelRoute
   '/_main/member/list': typeof MainMemberListRoute
+  '/_main/options/option': typeof MainOptionsOptionRoute
   '/_main/region/list': typeof MainRegionListRoute
   '/_main/region/sync': typeof MainRegionSyncRoute
   '/_main/sms/blacklist': typeof MainSmsBlacklistRoute
@@ -381,6 +390,7 @@ export interface FileRouteTypes {
     | '/geo/channel'
     | '/member/identity-level'
     | '/member/list'
+    | '/options/option'
     | '/region/list'
     | '/region/sync'
     | '/sms/blacklist'
@@ -416,6 +426,7 @@ export interface FileRouteTypes {
     | '/geo/channel'
     | '/member/identity-level'
     | '/member/list'
+    | '/options/option'
     | '/region/list'
     | '/region/sync'
     | '/sms/blacklist'
@@ -457,6 +468,7 @@ export interface FileRouteTypes {
     | '/_main/geo/channel'
     | '/_main/member/identity-level'
     | '/_main/member/list'
+    | '/_main/options/option'
     | '/_main/region/list'
     | '/_main/region/sync'
     | '/_main/sms/blacklist'
@@ -560,6 +572,13 @@ declare module '@tanstack/react-router' {
       path: '/member/list'
       fullPath: '/member/list'
       preLoaderRoute: typeof MainMemberListRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/options/option': {
+      id: '/_main/options/option'
+      path: '/options/option'
+      fullPath: '/options/option'
+      preLoaderRoute: typeof MainOptionsOptionRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/region/': {
@@ -856,6 +875,7 @@ interface MainRouteChildren {
   MainGeoChannelRoute: typeof MainGeoChannelRoute
   MainMemberIdentityLevelRoute: typeof MainMemberIdentityLevelRoute
   MainMemberListRoute: typeof MainMemberListRoute
+  MainOptionsOptionRoute: typeof MainOptionsOptionRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
   MainSmsChannelRoute: typeof MainSmsChannelRoute
   MainSmsConfigRoute: typeof MainSmsConfigRoute
@@ -883,6 +903,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainGeoChannelRoute: MainGeoChannelRoute,
   MainMemberIdentityLevelRoute: MainMemberIdentityLevelRoute,
   MainMemberListRoute: MainMemberListRoute,
+  MainOptionsOptionRoute: MainOptionsOptionRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,
   MainSmsChannelRoute: MainSmsChannelRoute,
   MainSmsConfigRoute: MainSmsConfigRoute,
