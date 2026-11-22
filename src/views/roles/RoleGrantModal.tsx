@@ -60,7 +60,9 @@ function toTreeData(nodes: GrantMenuNode[]): TreeProps['treeData'] {
 }
 
 /**
- * 编辑角色授权弹窗：可勾选菜单树（checkStrictly，父子不联动，按权限码提交）。
+ * 编辑角色授权弹窗：可勾选菜单树（checkStrictly + 手动向下联动，按权限码提交）。
+ * 勾选/取消父级会连带勾选/取消其下全部子孙；子级变化不回推父级，
+ * 这样「只授予菜单、不给按钮」的既有授权不会被打开弹窗后误升级。
  * 可选权限来自菜单全量树（GET /admin/menus）的 permissionCode；
  * 已授予但不在树中的码单独列出并默认保留，可手动移除（全不选+移除=清空授权）。
  */
@@ -90,6 +92,22 @@ export function RoleGrantModal({ role, saving, onSubmit }: RoleGrantModalProps) 
     return { idToCode, codeToId }
   }, [grantNodes])
 
+  // 父级 id → 其下所有可勾选子孙 id（向下联动用；无权限码的目录节点不入结果）
+  const descendantsOf = useMemo(() => {
+    const map = new Map<string, string[]>()
+    const walk = (node: GrantMenuNode): string[] => {
+      const ids: string[] = []
+      for (const child of node.children) {
+        if (child.code) ids.push(String(child.id))
+        ids.push(...walk(child))
+      }
+      map.set(String(node.id), ids)
+      return ids
+    }
+    grantNodes.forEach(walk)
+    return map
+  }, [grantNodes])
+
   /** 打开时以最新详情数据同步勾选态（树可能晚于弹窗加载，加载完成前禁用提交防误清空） */
   function syncFromRole() {
     const granted = role.permissionCodes ?? []
@@ -108,9 +126,23 @@ export function RoleGrantModal({ role, saving, onSubmit }: RoleGrantModalProps) 
     setQuery('')
   }
 
+  /** 勾选/取消父级时连带勾选/取消其全部子孙（子级变化不回推父级） */
   const handleCheck: TreeProps['onCheck'] = (checked) => {
-    const keys = Array.isArray(checked) ? checked : checked.checked
-    setCheckedIds(keys.map(String))
+    const keys = (Array.isArray(checked) ? checked : checked.checked).map(String)
+    const added = keys.filter((key) => !checkedIds.includes(key))
+    const removed = checkedIds.filter((key) => !keys.includes(key))
+    if (added.length === 0 && removed.length === 0) {
+      setCheckedIds(keys)
+      return
+    }
+    const next = new Set(keys)
+    for (const key of added) {
+      for (const childKey of descendantsOf.get(key) ?? []) next.add(childKey)
+    }
+    for (const key of removed) {
+      for (const childKey of descendantsOf.get(key) ?? []) next.delete(childKey)
+    }
+    setCheckedIds([...next])
   }
 
   const visibleTreeData = useMemo(
@@ -177,7 +209,7 @@ export function RoleGrantModal({ role, saving, onSubmit }: RoleGrantModalProps) 
           <div style={{ marginTop: 8, fontSize: 12, color: '#8c8c8c' }}>
             已选 {checkedIds.length} 项
             {unknownCodes.length > 0 ? '（不含下方树外权限）' : ''}
-            ，保存为整体重写。
+            ，勾选父级会自动带上其下全部子级；保存为整体重写。
           </div>
           {unknownCodes.length > 0 && (
             <Alert
