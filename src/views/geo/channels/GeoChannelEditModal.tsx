@@ -33,7 +33,7 @@ export function GeoChannelEditModal({ channel, saving, onSubmit }: GeoChannelEdi
   return (
     <ModalForm<GeoChannelFormValues>
       name={`geo-channel-edit-form-${channel.id}`}
-      title="编辑地图通道"
+      title="编辑厂商配置"
       trigger={
         <Button type="link" size="small">
           编辑

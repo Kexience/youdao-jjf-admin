@@ -29,7 +29,7 @@ export function GeoChannels() {
 
   const createMutation = useCreateGeoChannel({
     onSuccess: () => {
-      message.success('地图通道新建成功')
+      message.success('厂商配置新建成功')
     },
     onError: (error) => {
       message.error(error instanceof ApiError ? error.message : '保存失败，请重试')
@@ -38,7 +38,7 @@ export function GeoChannels() {
 
   const updateMutation = useUpdateGeoChannel({
     onSuccess: () => {
-      message.success('地图通道更新成功')
+      message.success('厂商配置更新成功')
     },
     onError: (error) => {
       message.error(error instanceof ApiError ? error.message : '保存失败，请重试')
@@ -47,7 +47,7 @@ export function GeoChannels() {
 
   const enabledMutation = useSetGeoChannelEnabled({
     onSuccess: (_, vars) => {
-      message.success(vars.enabled ? '通道已启用' : '通道已停用')
+      message.success(vars.enabled ? '厂商已启用' : '厂商已停用')
       setTogglingId(null)
     },
     onError: (error) => {
@@ -117,7 +117,7 @@ export function GeoChannels() {
   return (
     <PageContainer
       header={{
-        title: '地图通道',
+        title: '厂商配置',
         subTitle:
           '按优先级升序排列，优先级 1 最高，支持新增 / 编辑 / 启用停用 / 连通性测试。',
       }}
@@ -130,7 +130,7 @@ export function GeoChannels() {
         pagination={false}
         search={false}
         dateFormatter={false}
-        headerTitle="通道列表"
+        headerTitle="厂商列表"
         options={{
           reload: () => void channelsQuery.refetch(),
           density: true,
@@ -142,7 +142,7 @@ export function GeoChannels() {
             onSubmit={createMutation.mutateAsync}
           />,
         ]}
-        locale={{ emptyText: channelsQuery.isError ? '加载失败，请重试' : '暂无通道数据' }}
+        locale={{ emptyText: channelsQuery.isError ? '加载失败，请重试' : '暂无厂商数据' }}
       />
     </PageContainer>
   )

@@ -30,7 +30,7 @@ export function GeoChannelModal({ saving, onSubmit }: GeoChannelModalProps) {
   return (
     <ModalForm<GeoChannelFormValues>
       name="geo-channel-modal-form"
-      title="新增地图通道"
+      title="新增厂商配置"
       trigger={
         <Button type="primary">
           <PlusOutlined />
