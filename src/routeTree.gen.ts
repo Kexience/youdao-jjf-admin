@@ -24,6 +24,11 @@ import { Route as MainRegionIndexRouteImport } from './routes/_main/region/index
 import { Route as MainRegionListRouteImport } from './routes/_main/region/list'
 import { Route as MainRegionSyncRouteImport } from './routes/_main/region/sync'
 import { Route as MainShopAuditRouteRouteImport } from './routes/_main/shop/audit/route'
+import { Route as MainShopCategoryRouteImport } from './routes/_main/shop/category'
+import { Route as MainShopDepositRouteImport } from './routes/_main/shop/deposit'
+import { Route as MainShopLabelRouteImport } from './routes/_main/shop/label'
+import { Route as MainShopLifecycleRouteImport } from './routes/_main/shop/lifecycle'
+import { Route as MainShopListRouteImport } from './routes/_main/shop/list'
 import { Route as MainShopStoreRouteImport } from './routes/_main/shop/store'
 import { Route as MainSmsBlacklistRouteImport } from './routes/_main/sms/blacklist'
 import { Route as MainSmsChannelRouteImport } from './routes/_main/sms/channel'
@@ -123,6 +128,31 @@ const MainRegionSyncRoute = MainRegionSyncRouteImport.update({
 const MainShopAuditRouteRoute = MainShopAuditRouteRouteImport.update({
   id: '/shop/audit',
   path: '/shop/audit',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainShopCategoryRoute = MainShopCategoryRouteImport.update({
+  id: '/shop/category',
+  path: '/shop/category',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainShopDepositRoute = MainShopDepositRouteImport.update({
+  id: '/shop/deposit',
+  path: '/shop/deposit',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainShopLabelRoute = MainShopLabelRouteImport.update({
+  id: '/shop/label',
+  path: '/shop/label',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainShopLifecycleRoute = MainShopLifecycleRouteImport.update({
+  id: '/shop/lifecycle',
+  path: '/shop/lifecycle',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainShopListRoute = MainShopListRouteImport.update({
+  id: '/shop/list',
+  path: '/shop/list',
   getParentRoute: () => MainRoute,
 } as any)
 const MainShopStoreRoute = MainShopStoreRouteImport.update({
@@ -277,6 +307,11 @@ export interface FileRoutesByFullPath {
   '/options/option': typeof MainOptionsOptionRoute
   '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
+  '/shop/category': typeof MainShopCategoryRoute
+  '/shop/deposit': typeof MainShopDepositRoute
+  '/shop/label': typeof MainShopLabelRoute
+  '/shop/lifecycle': typeof MainShopLifecycleRoute
+  '/shop/list': typeof MainShopListRoute
   '/shop/store': typeof MainShopStoreRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channel': typeof MainSmsChannelRoute
@@ -314,6 +349,11 @@ export interface FileRoutesByTo {
   '/options/option': typeof MainOptionsOptionRoute
   '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
+  '/shop/category': typeof MainShopCategoryRoute
+  '/shop/deposit': typeof MainShopDepositRoute
+  '/shop/label': typeof MainShopLabelRoute
+  '/shop/lifecycle': typeof MainShopLifecycleRoute
+  '/shop/list': typeof MainShopListRoute
   '/shop/store': typeof MainShopStoreRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channel': typeof MainSmsChannelRoute
@@ -358,6 +398,11 @@ export interface FileRoutesById {
   '/_main/options/option': typeof MainOptionsOptionRoute
   '/_main/region/list': typeof MainRegionListRoute
   '/_main/region/sync': typeof MainRegionSyncRoute
+  '/_main/shop/category': typeof MainShopCategoryRoute
+  '/_main/shop/deposit': typeof MainShopDepositRoute
+  '/_main/shop/label': typeof MainShopLabelRoute
+  '/_main/shop/lifecycle': typeof MainShopLifecycleRoute
+  '/_main/shop/list': typeof MainShopListRoute
   '/_main/shop/store': typeof MainShopStoreRoute
   '/_main/sms/blacklist': typeof MainSmsBlacklistRoute
   '/_main/sms/channel': typeof MainSmsChannelRoute
@@ -402,6 +447,11 @@ export interface FileRouteTypes {
     | '/options/option'
     | '/region/list'
     | '/region/sync'
+    | '/shop/category'
+    | '/shop/deposit'
+    | '/shop/label'
+    | '/shop/lifecycle'
+    | '/shop/list'
     | '/shop/store'
     | '/sms/blacklist'
     | '/sms/channel'
@@ -439,6 +489,11 @@ export interface FileRouteTypes {
     | '/options/option'
     | '/region/list'
     | '/region/sync'
+    | '/shop/category'
+    | '/shop/deposit'
+    | '/shop/label'
+    | '/shop/lifecycle'
+    | '/shop/list'
     | '/shop/store'
     | '/sms/blacklist'
     | '/sms/channel'
@@ -482,6 +537,11 @@ export interface FileRouteTypes {
     | '/_main/options/option'
     | '/_main/region/list'
     | '/_main/region/sync'
+    | '/_main/shop/category'
+    | '/_main/shop/deposit'
+    | '/_main/shop/label'
+    | '/_main/shop/lifecycle'
+    | '/_main/shop/list'
     | '/_main/shop/store'
     | '/_main/sms/blacklist'
     | '/_main/sms/channel'
@@ -619,6 +679,41 @@ declare module '@tanstack/react-router' {
       path: '/shop/audit'
       fullPath: '/shop/audit'
       preLoaderRoute: typeof MainShopAuditRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/shop/category': {
+      id: '/_main/shop/category'
+      path: '/shop/category'
+      fullPath: '/shop/category'
+      preLoaderRoute: typeof MainShopCategoryRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/shop/deposit': {
+      id: '/_main/shop/deposit'
+      path: '/shop/deposit'
+      fullPath: '/shop/deposit'
+      preLoaderRoute: typeof MainShopDepositRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/shop/label': {
+      id: '/_main/shop/label'
+      path: '/shop/label'
+      fullPath: '/shop/label'
+      preLoaderRoute: typeof MainShopLabelRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/shop/lifecycle': {
+      id: '/_main/shop/lifecycle'
+      path: '/shop/lifecycle'
+      fullPath: '/shop/lifecycle'
+      preLoaderRoute: typeof MainShopLifecycleRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/shop/list': {
+      id: '/_main/shop/list'
+      path: '/shop/list'
+      fullPath: '/shop/list'
+      preLoaderRoute: typeof MainShopListRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/shop/store': {
@@ -895,6 +990,11 @@ interface MainRouteChildren {
   MainMemberIdentityLevelRoute: typeof MainMemberIdentityLevelRoute
   MainMemberListRoute: typeof MainMemberListRoute
   MainOptionsOptionRoute: typeof MainOptionsOptionRoute
+  MainShopCategoryRoute: typeof MainShopCategoryRoute
+  MainShopDepositRoute: typeof MainShopDepositRoute
+  MainShopLabelRoute: typeof MainShopLabelRoute
+  MainShopLifecycleRoute: typeof MainShopLifecycleRoute
+  MainShopListRoute: typeof MainShopListRoute
   MainShopStoreRoute: typeof MainShopStoreRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
   MainSmsChannelRoute: typeof MainSmsChannelRoute
@@ -924,6 +1024,11 @@ const MainRouteChildren: MainRouteChildren = {
   MainMemberIdentityLevelRoute: MainMemberIdentityLevelRoute,
   MainMemberListRoute: MainMemberListRoute,
   MainOptionsOptionRoute: MainOptionsOptionRoute,
+  MainShopCategoryRoute: MainShopCategoryRoute,
+  MainShopDepositRoute: MainShopDepositRoute,
+  MainShopLabelRoute: MainShopLabelRoute,
+  MainShopLifecycleRoute: MainShopLifecycleRoute,
+  MainShopListRoute: MainShopListRoute,
   MainShopStoreRoute: MainShopStoreRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,
   MainSmsChannelRoute: MainSmsChannelRoute,
