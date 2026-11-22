@@ -12,6 +12,8 @@ import type { ApiError } from '../lib/request'
  * 这里只写 /admin 之后的路径，即文档路径去掉 /admin 前缀。
  *
  * 覆盖接口：
+ * - GET  /admin/shop                                      店铺列表分页（店铺列表页数据源）
+ * - GET  /admin/shop/stores                               门店列表分页（支持按店铺 / 状态 / 关键词过滤）
  * - GET  /admin/shop/lifecycle/shops/{shopId}/stores      按店铺查门店列表（含已关店）
  * - POST /admin/shop/lifecycle/shops/{shopId}/freeze     冻结店铺
  * - POST /admin/shop/lifecycle/shops/{shopId}/suspend    停业店铺
@@ -32,13 +34,20 @@ import type { ApiError } from '../lib/request'
  * - 店铺关店要求其下所有门店均已关店；
  * - 门店关店要求保证金已结清（余额归零）。
  *
- * 权限码：店铺 admin:shop:shop:{freeze,suspend,resume,close}，
- * 门店 admin:shop:store:{freeze,suspend,resume,close}，门店列表 admin:shop:store:list。
+ * 权限码：店铺 admin:shop:shop:{list,freeze,suspend,resume,close}，
+ * 门店 admin:shop:store:{list,freeze,suspend,resume,close}。
  *
- * 页面取数说明：后台暂无「店铺列表」接口，生命周期页需先从已通过的店铺申请单
- * （GET /admin/shop/audits/shop-applications，statuses=approved）取 shopId，
- * 再用本模块按 shopId 查门店列表；门店列表接口不分页。
+ * 页面取数说明：
+ * - 店铺列表页（/shop/list）直接分页查店铺列表（GET /admin/shop），
+ *   支持经营状态与名称/联系电话关键词过滤；
+ * - 门店列表页（/shop/store）直接分页查门店列表（GET /admin/shop/stores），
+ *   支持按归属店铺、经营状态与名称/联系电话关键词过滤（不传 shopId 即跨店铺）；
+ * - 按店铺查门店（GET /admin/shop/lifecycle/shops/{shopId}/stores）返回全量列表不分页，
+ *   供需要单店铺全量门店的场景使用。
  */
+
+/** 店铺列表查询键前缀（生命周期动作后据此失效刷新） */
+export const SHOP_LIFECYCLE_SHOPS_QUERY_KEY = ['shop-lifecycle-shops'] as const
 
 /** 门店列表查询键前缀（按店铺 id 分片；生命周期动作后据此失效刷新） */
 export const SHOP_LIFECYCLE_STORES_QUERY_KEY = ['shop-lifecycle-stores'] as const
@@ -47,6 +56,24 @@ export const SHOP_LIFECYCLE_STORES_QUERY_KEY = ['shop-lifecycle-stores'] as cons
 export type ShopLifecycleAction = 'freeze' | 'suspend' | 'resume' | 'close'
 
 type ShopLifecycleQueryOptions<T> = Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>
+
+/**
+ * 店铺列表分页：GET /admin/shop。
+ * 供店铺列表页 ProTable request 直接使用（PageResult 与全局分页结构对齐）。
+ * statuses 为逗号分隔串（axios 对数组会展开成 statuses[]=xxx，后端解析不到）。
+ */
+export function fetchShops(params: ShopListQueryParams) {
+  return get<PageResult<ShopVo>>('/shop', params)
+}
+
+/**
+ * 门店列表分页：GET /admin/shop/stores。
+ * 不传 shopId 即跨店铺查询；statuses 同样用逗号分隔串。
+ * 供门店列表页 ProTable request 直接使用。
+ */
+export function fetchStores(params: StoreListQueryParams) {
+  return get<PageResult<StoreVo>>('/shop/stores', params)
+}
 
 /**
  * 按店铺查门店列表：GET /admin/shop/lifecycle/shops/{shopId}/stores。
@@ -70,27 +97,8 @@ export function useGetStoresOfShop(
 }
 
 /**
- * 批量查多个店铺的门店列表（并行）：GET /admin/shop/lifecycle/shops/{shopId}/stores。
- * 门店经营页用它在店铺清单确定后一次性聚合成一张门店总表。
+ * 店铺生命周期动作入参：店铺 id + 动作
  */
-export function fetchStoresOfShops(shopIds: number[]) {
-  return Promise.all(shopIds.map((shopId) => fetchStoresOfShop(shopId)))
-}
-
-/** 批量门店列表 hook：shopIds 为空时不发请求；生命周期动作后按前缀失效刷新 */
-export function useGetStoresOfShops(
-  shopIds: number[],
-  options?: ShopLifecycleQueryOptions<StoreVo[][]>,
-) {
-  return useQuery({
-    ...options,
-    queryKey: [...SHOP_LIFECYCLE_STORES_QUERY_KEY, 'shops', shopIds],
-    queryFn: () => fetchStoresOfShops(shopIds),
-    enabled: shopIds.length > 0 && (options?.enabled ?? true),
-  })
-}
-
-/** 店铺生命周期动作入参：店铺 id + 动作 */
 export interface ShopLifecycleVars {
   shopId: number
   action: ShopLifecycleAction
@@ -131,6 +139,7 @@ export function useChangeShopLifecycle(
     mutationFn: changeShopLifecycle,
     ...rest,
     onSuccess: (...args) => {
+      void queryClient.invalidateQueries({ queryKey: SHOP_LIFECYCLE_SHOPS_QUERY_KEY })
       void queryClient.invalidateQueries({ queryKey: SHOP_LIFECYCLE_STORES_QUERY_KEY })
       onSuccess?.(...args)
     },
