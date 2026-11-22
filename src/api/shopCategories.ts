@@ -30,6 +30,13 @@ import type { ApiError } from '../lib/request'
 /** 分类树查询键：建/改/启停成功后按此键失效缓存 */
 export const SHOP_CATEGORIES_QUERY_KEY = ['shop-categories'] as const
 
+/**
+ * 分类图标上传 zone。
+ * 后端没有行业分类专用 zone，复用已存在的 AUTH_USER + PUBLIC 的 `goods/`：
+ * icon 字段存绝对 URL（文档为「图标 URL」，上限 255），PUBLIC zone 的裸链不会过期。
+ */
+export const SHOP_CATEGORY_ICON_ZONE = 'goods/'
+
 type ShopCategoriesQueryOptions = Omit<
   UseQueryOptions<ShopCategoryNode[]>,
   'queryKey' | 'queryFn'

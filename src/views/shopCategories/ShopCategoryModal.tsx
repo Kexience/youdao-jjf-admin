@@ -1,5 +1,17 @@
-import { ModalForm, ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-components'
-import { useMemo } from 'react'
+import { UploadOutlined } from '@ant-design/icons'
+import {
+  ModalForm,
+  ProForm,
+  ProFormDigit,
+  ProFormSelect,
+  ProFormText,
+} from '@ant-design/pro-components'
+import { App, Button, Image, Space, Upload } from 'antd'
+import { useMemo, useState } from 'react'
+
+import { SHOP_CATEGORY_ICON_ZONE } from '../../api/shopCategories'
+import { uploadImageViaCredential } from '../../api/storageUpload'
+import { ApiError } from '../../lib/request'
 
 /** 弹窗表单值：与 ShopCategoryCreateParams / ShopCategoryUpdateParams 对齐 */
 export interface ShopCategoryFormValues {
@@ -131,14 +143,9 @@ export function ShopCategoryModal({
           { max: 64, message: '分类名称最多 64 个字符' },
         ]}
       />
-      <ProFormText
-        name="icon"
-        label="图标"
-        placeholder="图标 URL 或标识（可选）"
-        fieldProps={{ maxLength: 255 }}
-        rules={[{ max: 255, message: '图标最多 255 个字符' }]}
-        extra="可留空；编辑时清空即清除图标"
-      />
+      <ProForm.Item name="icon" label="图标">
+        <CategoryIconUpload />
+      </ProForm.Item>
       <ProFormDigit
         name="sort"
         label="排序"
@@ -148,5 +155,81 @@ export function ShopCategoryModal({
         extra="相同排序按后端返回顺序排列"
       />
     </ModalForm>
+  )
+}
+
+/** 是否为可直接预览的绝对地址（历史数据可能是对象 key 或标识，预览不了） */
+function isHttpUrl(value: unknown): value is string {
+  return typeof value === 'string' && /^https?:\/\//.test(value)
+}
+
+/**
+ * 图标上传字段（由 ProForm.Item 注入 value / onChange）。
+ * 直传 OSS 后把可读地址回填到 icon 字段；编辑时可重新上传或移除。
+ * icon 落库存 URL 字符串，上限 255，超长直接提示不写入。
+ */
+function CategoryIconUpload({
+  value,
+  onChange,
+}: {
+  value?: string
+  onChange?: (value?: string) => void
+}) {
+  const { message } = App.useApp()
+  const [uploading, setUploading] = useState(false)
+
+  const handleFile = async (file: File) => {
+    setUploading(true)
+    try {
+      const { viewUrl } = await uploadImageViaCredential(file, SHOP_CATEGORY_ICON_ZONE)
+      if (viewUrl.length > 255) {
+        message.error('图标地址超过 255 个字符，请换一张图片后重试')
+        return
+      }
+      onChange?.(viewUrl)
+    } catch (error) {
+      message.error(error instanceof ApiError ? error.message : '图标上传失败，请重试')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  return (
+    <Space align="start" size={16}>
+      {isHttpUrl(value) && (
+        <Image
+          src={value}
+          width={64}
+          height={64}
+          style={{ objectFit: 'contain', border: '1px solid #f0f0f0', borderRadius: 6 }}
+          alt="分类图标"
+        />
+      )}
+      <Space direction="vertical" size={8}>
+        <Space size={8}>
+          <Upload
+            accept="image/*"
+            showUploadList={false}
+            disabled={uploading}
+            beforeUpload={(file) => {
+              void handleFile(file)
+              return false
+            }}
+          >
+            <Button icon={<UploadOutlined />} loading={uploading}>
+              {uploading ? '上传中' : value ? '重新上传' : '上传图标'}
+            </Button>
+          </Upload>
+          {value && !uploading && (
+            <Button type="link" danger onClick={() => onChange?.(undefined)}>
+              移除
+            </Button>
+          )}
+        </Space>
+        <span style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 12 }}>
+          支持 JPG / PNG 等图片，上传成功后自动回填图标地址
+        </span>
+      </Space>
+    </Space>
   )
 }

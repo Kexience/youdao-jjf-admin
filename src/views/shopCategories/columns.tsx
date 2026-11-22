@@ -1,4 +1,5 @@
 import type { ProColumns } from '@ant-design/pro-components'
+import { Image } from 'antd'
 
 /** 行业分类树列定义（展示用，与 CategoryNodeVo 字段对齐） */
 export const SHOP_CATEGORY_COLUMNS: ProColumns<ShopCategoryNode>[] = [
@@ -11,10 +12,20 @@ export const SHOP_CATEGORY_COLUMNS: ProColumns<ShopCategoryNode>[] = [
   {
     title: '图标',
     dataIndex: 'icon',
-    width: 200,
-    ellipsis: true,
-    // 后端为「图标 URL/标识」字符串，可空
-    render: (_, record) => record.icon || '-',
+    width: 100,
+    // icon 上传后是绝对 URL；历史数据可能是对象 key 或纯标识，只有 http(s) 才按图片预览
+    render: (_, record) =>
+      record.icon && /^https?:\/\//.test(record.icon) ? (
+        <Image
+          src={record.icon}
+          alt="分类图标"
+          width={40}
+          height={40}
+          style={{ objectFit: 'contain', borderRadius: 4 }}
+        />
+      ) : (
+        (record.icon || '-')
+      ),
   },
   {
     title: '排序',
