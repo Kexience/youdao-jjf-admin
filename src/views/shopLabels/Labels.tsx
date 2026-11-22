@@ -108,7 +108,6 @@ export function Labels() {
     <PageContainer
       header={{
         title: '店铺标签',
-        subTitle: '店铺申请与门店可选的标签，按排序升序展示，支持新建 / 编辑 / 启用停用。',
       }}
     >
       {labelsQuery.isError && (
@@ -132,7 +131,6 @@ export function Labels() {
         pagination={false}
         search={false}
         dateFormatter={false}
-        headerTitle={`标签列表（${labels.length} 个）`}
         options={{
           reload: () => void labelsQuery.refetch(),
           density: true,

@@ -159,8 +159,6 @@ export function ShopCategories() {
     <PageContainer
       header={{
         title: '行业分类',
-        subTitle:
-          '店铺与门店共用的两级行业分类树；分类不支持删除，不再使用请停用。带子级的一级分类须先停用子分类。',
       }}
     >
       {categoriesQuery.isError && (
