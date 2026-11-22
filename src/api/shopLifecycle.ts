@@ -69,6 +69,27 @@ export function useGetStoresOfShop(
   })
 }
 
+/**
+ * 批量查多个店铺的门店列表（并行）：GET /admin/shop/lifecycle/shops/{shopId}/stores。
+ * 门店经营页用它在店铺清单确定后一次性聚合成一张门店总表。
+ */
+export function fetchStoresOfShops(shopIds: number[]) {
+  return Promise.all(shopIds.map((shopId) => fetchStoresOfShop(shopId)))
+}
+
+/** 批量门店列表 hook：shopIds 为空时不发请求；生命周期动作后按前缀失效刷新 */
+export function useGetStoresOfShops(
+  shopIds: number[],
+  options?: ShopLifecycleQueryOptions<StoreVo[][]>,
+) {
+  return useQuery({
+    ...options,
+    queryKey: [...SHOP_LIFECYCLE_STORES_QUERY_KEY, 'shops', shopIds],
+    queryFn: () => fetchStoresOfShops(shopIds),
+    enabled: shopIds.length > 0 && (options?.enabled ?? true),
+  })
+}
+
 /** 店铺生命周期动作入参：店铺 id + 动作 */
 export interface ShopLifecycleVars {
   shopId: number

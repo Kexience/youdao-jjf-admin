@@ -34,6 +34,12 @@ export const SHOP_APPLY_AUDITS_QUERY_KEY = ['shop-apply-audits'] as const
 /** 门店申请单分页查询键（终审后据此失效刷新） */
 export const STORE_APPLY_AUDITS_QUERY_KEY = ['store-apply-audits'] as const
 
+/** 全部已通过店铺申请单查询键（门店经营页据此取店铺清单） */
+export const APPROVED_SHOP_APPLICATIONS_QUERY_KEY = [
+  ...SHOP_APPLY_AUDITS_QUERY_KEY,
+  'approved-all',
+] as const
+
 /** 门店申请单保证金余额查询键前缀（按申请单分片） */
 export const STORE_DEPOSIT_BALANCE_QUERY_KEY = ['store-deposit-balance'] as const
 
@@ -56,6 +62,33 @@ export function useGetShopApplyAudits(
     ...options,
     queryKey: [...SHOP_APPLY_AUDITS_QUERY_KEY, params],
     queryFn: () => fetchShopApplyAudits(params),
+  })
+}
+
+/**
+ * 拉取全部已通过店铺申请单：后台暂无「店铺列表」接口，门店经营页靠它拿到
+ * shopId 清单，再用生命周期接口按店铺查门店。
+ * 该接口单页上限 100，按 total 循环翻页取齐；循环上限做防御，避免异常 total 死循环。
+ */
+export async function fetchAllApprovedShopApplications(): Promise<ShopApplyVo[]> {
+  const pageSize = 100
+  const records: ShopApplyVo[] = []
+  for (let page = 1; page <= 50; page += 1) {
+    const data = await fetchShopApplyAudits({ statuses: 'approved', page, pageSize })
+    records.push(...data.records)
+    if (data.records.length < pageSize || records.length >= data.total) break
+  }
+  return records
+}
+
+/** 全部已通过店铺申请单查询 hook（门店经营页的店铺清单来源） */
+export function useGetAllApprovedShopApplications(
+  options?: ShopAuditsQueryOptions<ShopApplyVo[]>,
+) {
+  return useQuery({
+    ...options,
+    queryKey: APPROVED_SHOP_APPLICATIONS_QUERY_KEY,
+    queryFn: fetchAllApprovedShopApplications,
   })
 }
 

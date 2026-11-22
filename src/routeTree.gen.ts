@@ -24,6 +24,7 @@ import { Route as MainRegionIndexRouteImport } from './routes/_main/region/index
 import { Route as MainRegionListRouteImport } from './routes/_main/region/list'
 import { Route as MainRegionSyncRouteImport } from './routes/_main/region/sync'
 import { Route as MainShopAuditRouteRouteImport } from './routes/_main/shop/audit/route'
+import { Route as MainShopStoreRouteImport } from './routes/_main/shop/store'
 import { Route as MainSmsBlacklistRouteImport } from './routes/_main/sms/blacklist'
 import { Route as MainSmsChannelRouteImport } from './routes/_main/sms/channel'
 import { Route as MainSmsConfigRouteImport } from './routes/_main/sms/config'
@@ -122,6 +123,11 @@ const MainRegionSyncRoute = MainRegionSyncRouteImport.update({
 const MainShopAuditRouteRoute = MainShopAuditRouteRouteImport.update({
   id: '/shop/audit',
   path: '/shop/audit',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainShopStoreRoute = MainShopStoreRouteImport.update({
+  id: '/shop/store',
+  path: '/shop/store',
   getParentRoute: () => MainRoute,
 } as any)
 const MainSmsBlacklistRoute = MainSmsBlacklistRouteImport.update({
@@ -271,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/options/option': typeof MainOptionsOptionRoute
   '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
+  '/shop/store': typeof MainShopStoreRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channel': typeof MainSmsChannelRoute
   '/sms/config': typeof MainSmsConfigRoute
@@ -307,6 +314,7 @@ export interface FileRoutesByTo {
   '/options/option': typeof MainOptionsOptionRoute
   '/region/list': typeof MainRegionListRoute
   '/region/sync': typeof MainRegionSyncRoute
+  '/shop/store': typeof MainShopStoreRoute
   '/sms/blacklist': typeof MainSmsBlacklistRoute
   '/sms/channel': typeof MainSmsChannelRoute
   '/sms/config': typeof MainSmsConfigRoute
@@ -350,6 +358,7 @@ export interface FileRoutesById {
   '/_main/options/option': typeof MainOptionsOptionRoute
   '/_main/region/list': typeof MainRegionListRoute
   '/_main/region/sync': typeof MainRegionSyncRoute
+  '/_main/shop/store': typeof MainShopStoreRoute
   '/_main/sms/blacklist': typeof MainSmsBlacklistRoute
   '/_main/sms/channel': typeof MainSmsChannelRoute
   '/_main/sms/config': typeof MainSmsConfigRoute
@@ -393,6 +402,7 @@ export interface FileRouteTypes {
     | '/options/option'
     | '/region/list'
     | '/region/sync'
+    | '/shop/store'
     | '/sms/blacklist'
     | '/sms/channel'
     | '/sms/config'
@@ -429,6 +439,7 @@ export interface FileRouteTypes {
     | '/options/option'
     | '/region/list'
     | '/region/sync'
+    | '/shop/store'
     | '/sms/blacklist'
     | '/sms/channel'
     | '/sms/config'
@@ -471,6 +482,7 @@ export interface FileRouteTypes {
     | '/_main/options/option'
     | '/_main/region/list'
     | '/_main/region/sync'
+    | '/_main/shop/store'
     | '/_main/sms/blacklist'
     | '/_main/sms/channel'
     | '/_main/sms/config'
@@ -607,6 +619,13 @@ declare module '@tanstack/react-router' {
       path: '/shop/audit'
       fullPath: '/shop/audit'
       preLoaderRoute: typeof MainShopAuditRouteRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/shop/store': {
+      id: '/_main/shop/store'
+      path: '/shop/store'
+      fullPath: '/shop/store'
+      preLoaderRoute: typeof MainShopStoreRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/sms/blacklist': {
@@ -876,6 +895,7 @@ interface MainRouteChildren {
   MainMemberIdentityLevelRoute: typeof MainMemberIdentityLevelRoute
   MainMemberListRoute: typeof MainMemberListRoute
   MainOptionsOptionRoute: typeof MainOptionsOptionRoute
+  MainShopStoreRoute: typeof MainShopStoreRoute
   MainSmsBlacklistRoute: typeof MainSmsBlacklistRoute
   MainSmsChannelRoute: typeof MainSmsChannelRoute
   MainSmsConfigRoute: typeof MainSmsConfigRoute
@@ -904,6 +924,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainMemberIdentityLevelRoute: MainMemberIdentityLevelRoute,
   MainMemberListRoute: MainMemberListRoute,
   MainOptionsOptionRoute: MainOptionsOptionRoute,
+  MainShopStoreRoute: MainShopStoreRoute,
   MainSmsBlacklistRoute: MainSmsBlacklistRoute,
   MainSmsChannelRoute: MainSmsChannelRoute,
   MainSmsConfigRoute: MainSmsConfigRoute,
