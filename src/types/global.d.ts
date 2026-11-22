@@ -1347,6 +1347,8 @@ declare global {
     id: number
     /** 归属店铺 id */
     shopId?: number
+    /** 归属店铺名称 */
+    shopName?: string
     /** 门店名称 */
     storeName?: string
     /** 联系电话 */
@@ -1394,6 +1396,38 @@ declare global {
   }
 
   /**
+   * 店铺列表查询入参（见文档 GET /admin/shop）。
+   * 注意：该接口分页字段是 page/pageSize，与全局 PageParams 的 page/size 不同。
+   */
+  interface ShopListQueryParams {
+    /** 经营状态：多选 active/suspended/frozen/closed，逗号分隔 */
+    statuses?: string
+    /** 店铺名称 / 联系电话模糊匹配 */
+    keyword?: string
+    /** 页码，1 起，默认 1 */
+    page?: number
+    /** 每页条数，默认 20，范围 1-100 */
+    pageSize?: number
+  }
+
+  /**
+   * 门店列表查询入参（见文档 GET /admin/shop/stores）。
+   * 注意：该接口分页字段是 page/pageSize，与全局 PageParams 的 page/size 不同。
+   */
+  interface StoreListQueryParams {
+    /** 归属店铺 id，不传=跨店铺查询 */
+    shopId?: number
+    /** 经营状态：多选 active/suspended/frozen/closed，逗号分隔 */
+    statuses?: string
+    /** 门店名称 / 联系电话模糊匹配 */
+    keyword?: string
+    /** 页码，1 起，默认 1 */
+    page?: number
+    /** 每页条数，默认 20，范围 1-100 */
+    pageSize?: number
+  }
+
+  /**
    * 店铺/门店申请单分页查询入参
    * （见文档 GET /admin/shop/audits/shop-applications、/store-applications）。
    * 注意：该组接口分页字段是 page/pageSize，与全局 PageParams 的 page/size 不同。
@@ -1424,6 +1458,45 @@ declare global {
     balance?: number
     /** 缴纳累计 */
     paid?: number
+  }
+
+  /** 保证金动作（见文档 StoreDepositRequest.action：pay 缴纳 / refund 退还 / deduct 扣减） */
+  type StoreDepositAction = 'pay' | 'refund' | 'deduct'
+
+  /** 保证金台账流水（见文档 StoreDepositVo：GET /admin/shop/deposits/apply/{applyId}/records） */
+  interface StoreDepositVo {
+    /** 台账行 id */
+    id: number
+    /** 已开通门店 id，申请期为空 */
+    storeId?: number
+    /** 关联门店申请单 id */
+    applyId?: number
+    /** 动作：pay/refund/deduct */
+    action?: StoreDepositAction
+    /** 动作金额（正数） */
+    amount?: number
+    /** 动作后余额 */
+    balanceAfter?: number
+    /** 线下凭证图片 URL */
+    voucherUrl?: string
+    /** 备注 */
+    remark?: string
+    /** 登记管理员 id */
+    operatorId?: number
+    /** 登记时间 */
+    createdAt?: string
+  }
+
+  /** 保证金登记入参（见文档 StoreDepositRequest：POST /admin/shop/deposits/apply/{applyId}/records） */
+  interface StoreDepositRegisterParams {
+    /** 动作：pay/refund/deduct */
+    action: StoreDepositAction
+    /** 动作金额，正数，最小 0.01 */
+    amount: number
+    /** 线下凭证图片 URL，可空（≤2048） */
+    voucherUrl?: string
+    /** 备注，可空（≤255） */
+    remark?: string
   }
 
   /** 设置项取值（见文档 SysOptionSaveDto.value：JSON 标量） */
@@ -1459,6 +1532,87 @@ declare global {
     value: SysOptionValue
     /** 预期版本号；首次写入不传（表示该键尚无值） */
     expectedVersion?: number
+  }
+
+  /** 店铺标签（见文档 LabelVo：GET /admin/shop/taxonomy/labels） */
+  interface ShopLabel {
+    /** 标签 id */
+    id: number
+    /** 标签名称 */
+    labelName?: string
+    /** 排序（升序） */
+    sort?: number
+    /** 状态：1 启用 0 停用 */
+    status?: number
+  }
+
+  /** 标签新建入参（见文档 LabelRequest：POST /admin/shop/taxonomy/labels） */
+  interface ShopLabelCreateParams {
+    /** 标签名称，必填，≤64 */
+    labelName: string
+    /** 排序，可空默认 0 */
+    sort?: number
+  }
+
+  /** 标签修改入参（见文档 LabelUpdateRequest：POST /admin/shop/taxonomy/labels/{id}） */
+  interface ShopLabelUpdateParams {
+    /** 标签名称，不传保持原值 */
+    labelName?: string
+    /** 排序，不传保持原值 */
+    sort?: number
+  }
+
+  /** 启停入参（见文档 StatusRequest，标签/行业分类共用） */
+  interface EnabledStatusParams {
+    /** true 启用 / false 停用 */
+    enabled: boolean
+  }
+
+  /** 行业分类视图（见文档 CategoryVo：店铺与门店共用的两级行业树节点） */
+  interface ShopCategory {
+    /** 分类 id */
+    id: number
+    /** 父分类 id，0 为一级 */
+    pid: number
+    /** 分类名称 */
+    categoryName?: string
+    /** 图标 URL/标识，可空 */
+    icon?: string
+    /** 排序（升序在前） */
+    sort?: number
+    /** 状态：1 启用 0 停用 */
+    status?: number
+  }
+
+  /**
+   * 行业分类树节点（见文档 CategoryNodeVo：GET /admin/shop/taxonomy/categories）。
+   * 一级节点 children 挂二级；二级 children 为空数组。
+   */
+  interface ShopCategoryNode extends ShopCategory {
+    /** 子分类 */
+    children?: ShopCategoryNode[]
+  }
+
+  /** 行业分类新建入参（见文档 CategoryRequest） */
+  interface ShopCategoryCreateParams {
+    /** 父分类 id，0 为一级 */
+    pid: number
+    /** 分类名称，必填，≤64 */
+    categoryName: string
+    /** 图标 URL/标识，可空，≤255 */
+    icon?: string
+    /** 排序，可空默认 0 */
+    sort?: number
+  }
+
+  /** 行业分类修改入参（见文档 CategoryUpdateRequest：未传字段保持原值） */
+  interface ShopCategoryUpdateParams {
+    /** 分类名称，不传保持原值 */
+    categoryName?: string
+    /** 图标，不传保持原值 */
+    icon?: string
+    /** 排序，不传保持原值 */
+    sort?: number
   }
 }
 
